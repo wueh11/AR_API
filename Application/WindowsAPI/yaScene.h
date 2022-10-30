@@ -18,10 +18,13 @@ namespace ya
 		virtual void Enter(); ///scene 진입시 동작
 		virtual void Exit();
 
-		void AddGameObject(GameObject* object);
+		void AddGameObject(GameObject* object, eColliderLayer type);
+
+		std::vector<GameObject*>& GetGameObjects(eColliderLayer type) { return mObjects[(UINT)type]; }
+
 
 	private:
-		std::vector<GameObject*> mObjects;
+		std::vector<std::vector<GameObject*>> mObjects;
 	};
 }
 

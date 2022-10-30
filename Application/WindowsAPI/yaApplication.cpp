@@ -3,6 +3,7 @@
 #include "yaTime.h"
 #include "yaInput.h"
 #include "yaResources.h"
+#include "yaCollisionManager.h"
 
 namespace ya
 {
@@ -26,6 +27,8 @@ namespace ya
 		Rectangle(mWindowData.backBuffer, -1, -1, mWindowData.width + 1, mWindowData.height + 1);
 		
 		SceneManager::Tick();
+		CollisionManager::Tick();
+
 		SceneManager::Render(mWindowData.backBuffer);
 
 		Input::Render(mWindowData.backBuffer);

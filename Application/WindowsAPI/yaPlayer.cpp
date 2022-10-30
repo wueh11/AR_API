@@ -65,7 +65,7 @@ namespace ya
 			Missile* missile = new Missile();
 
 			Scene* playScene = SceneManager::GetPlayScene();
-			playScene->AddGameObject(missile);
+			playScene->AddGameObject(missile, eColliderLayer::Player_Projecttile);
 
 			Vector2 playerPos = GetPos();
 			Vector2 playerScale = GetScale() / 2.0f;
@@ -80,7 +80,7 @@ namespace ya
 			Rock* rock = new Rock();
 
 			Scene* playScene = SceneManager::GetPlayScene();
-			playScene->AddGameObject(rock);
+			playScene->AddGameObject(rock, eColliderLayer::Monster_Projecttile);
 		}
 
 		SetPos(pos);

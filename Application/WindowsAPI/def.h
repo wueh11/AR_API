@@ -40,3 +40,18 @@ enum class eComponentType ///컴포넌트 종류들
 	Sound,
 	End,
 };
+
+#define _COLLIDER_LAYER 16
+enum class eColliderLayer
+{
+	Default,
+	Background, /// 뒤에 그려질 애들 먼저..
+	Tile,
+	Player,
+	Player_Projecttile,
+	Monster,
+	Monster_Projecttile,
+
+	UI = _COLLIDER_LAYER - 1, /// 화면 제일 앞에 그려져야함
+	End = _COLLIDER_LAYER,
+};

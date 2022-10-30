@@ -9,6 +9,7 @@ namespace ya
 		, mOffset(Vector2::Zero)
 		, mPos(Vector2::Zero)
 		, mScale(Vector2::One)
+		, mColor(RGB(0, 255, 0))
 	{
 		mScale = Vector2(100.0f, 100.0f);
 	}
@@ -25,7 +26,7 @@ namespace ya
 
 	void Collider::Render(HDC hdc)
 	{
-		HPEN green = Application::GetInstance().GetPen(ePenColor::Green);
+		HPEN green = CreatePen(PS_SOLID, 2, mColor);
 		Pen pen(hdc, green);
 		HBRUSH tr = Application::GetInstance().GetBrush(eBrushColor::Transparent);
 		Brush brush(hdc, tr);

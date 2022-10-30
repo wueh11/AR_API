@@ -1,7 +1,5 @@
-﻿  yaCollider.cpp
+﻿  yaApplication.cpp
 C:\Git\assortrock\windowsAPI\Application\WindowsAPI\Common.h(95,1): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Git\assortrock\windowsAPI\Application\WindowsAPI\yaCollider.cpp(34,41): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Git\assortrock\windowsAPI\Application\WindowsAPI\yaCollider.cpp(34,13): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Git\assortrock\windowsAPI\Application\WindowsAPI\yaCollider.cpp(33,53): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Git\assortrock\windowsAPI\Application\WindowsAPI\yaCollider.cpp(33,25): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Git\assortrock\windowsAPI\Application\WindowsAPI\yaApplication.cpp(58,34): warning C4838: 'UINT'에서 'LONG'(으)로의 변환에는 축소 변환이 필요합니다.
+C:\Git\assortrock\windowsAPI\Application\WindowsAPI\yaApplication.cpp(58,53): warning C4838: 'UINT'에서 'LONG'(으)로의 변환에는 축소 변환이 필요합니다.
   WindowsAPI.vcxproj -> C:\Git\assortrock\windowsAPI\Application\x64\Debug\WindowsAPI.exe

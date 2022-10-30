@@ -18,7 +18,7 @@ namespace ya
 		bg->SetImage(L"TitleBG", L"TitleBG.bmp");
 		bg->Initialize();
 
-		AddGameObject(bg);
+		AddGameObject(bg, eColliderLayer::Background);
 	}
 	void TitleScene::Tick()
 	{

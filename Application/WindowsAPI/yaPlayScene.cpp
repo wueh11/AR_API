@@ -1,8 +1,12 @@
 #include "yaPlayScene.h"
-#include "yaPlayer.h"
 #include "yaInput.h"
+
+#include "yaCollisionManager.h"
 #include "yaSceneManager.h"
+
 #include "yaBgImageObject.h"
+#include "yaPlayer.h"
+#include "yaMonster.h"
 
 namespace ya
 {
@@ -21,10 +25,13 @@ namespace ya
 		bg->SetImage(L"PlayBG", L"PlayBG.bmp");
 		bg->Initialize();
 
-		AddGameObject(bg);
+		AddGameObject(bg, eColliderLayer::Background);
 
 		// player
-		AddGameObject(new Player());
+		AddGameObject(new Player(), eColliderLayer::Player);
+		AddGameObject(new Monster(), eColliderLayer::Monster);
+
+		CollisionManager::SetLayer(eColliderLayer::Player, eColliderLayer::Monster, true);
 	}
 
 	void PlayScene::Tick()

@@ -16,7 +16,7 @@ namespace ya
 		bg->SetImage(L"EndBG", L"EndBG.bmp");
 		bg->Initialize();
 
-		AddGameObject(bg);
+		AddGameObject(bg, eColliderLayer::Background);
 	}
 	void EndScene::Tick()
 	{

@@ -18,7 +18,7 @@ void ya::LogoScene::Initialize()
 	bg->SetImage(L"LogoBG", L"LogoBG.bmp");
 	bg->Initialize();
 
-	AddGameObject(bg);
+	AddGameObject(bg, eColliderLayer::Background);
 }
 
 void ya::LogoScene::Tick()
