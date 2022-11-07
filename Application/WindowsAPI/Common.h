@@ -5,9 +5,12 @@
 #include <vector>
 #include <list>
 #include <map>
+#include <set>
+#include <bitset>
 
-#include "Maths.h"
 #include "def.h"
+#include "Maths.h"
+#include <functional>
 
 #pragma comment(lib, "Msimg32.lib") 
 

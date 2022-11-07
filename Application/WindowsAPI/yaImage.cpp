@@ -1,5 +1,6 @@
 #include "yaImage.h"
 #include "yaApplication.h"
+#include "yaResources.h"
 
 namespace ya
 {
@@ -15,6 +16,41 @@ namespace ya
 	{
 		HWND hWnd = Application::GetInstance().GetWindowData().hWnd;
 		ReleaseDC(hWnd, mHdc);
+	}
+
+	Image* Image::Create(const std::wstring& key, UINT width, UINT height)
+	{
+		Image* image = Resources::Find<Image>(key);
+
+		if (image != nullptr)
+		{
+			MessageBox(nullptr, L"중복키 이미지 생성", L"이미지 생성 실패!", MB_OK);
+			return nullptr;
+		}
+
+		image = new Image();
+		HDC mainHdc = Application::GetInstance().GetHdc();
+
+		image->mBitmap = CreateCompatibleBitmap(mainHdc, width, height);
+		image->mHdc = CreateCompatibleDC(mainHdc);
+
+		if (image->mBitmap == NULL || image->mHdc == NULL)
+			return nullptr;
+
+		// 새로 생성한 비트맵과 DC를 서로 연결
+		HBITMAP defaultBitmap = (HBITMAP)SelectObject(image->mHdc, image->mBitmap);
+		DeleteObject(defaultBitmap);
+
+		BITMAP bitmap = {};
+		GetObject(image->mBitmap, sizeof(BITMAP), &bitmap);
+
+		image->mWidth = bitmap.bmWidth;
+		image->mHeight = bitmap.bmHeight;
+		image->SetKey(key);
+
+		Resources::Insert<Image>(key, image);
+
+		return image;
 	}
 
 	HRESULT Image::Load(const std::wstring& path)

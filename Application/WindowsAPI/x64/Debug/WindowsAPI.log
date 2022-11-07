@@ -1,5 +1,28 @@
-﻿  yaApplication.cpp
-C:\Git\assortrock\windowsAPI\Application\WindowsAPI\Common.h(95,1): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Git\assortrock\windowsAPI\Application\WindowsAPI\yaApplication.cpp(58,34): warning C4838: 'UINT'에서 'LONG'(으)로의 변환에는 축소 변환이 필요합니다.
-C:\Git\assortrock\windowsAPI\Application\WindowsAPI\yaApplication.cpp(58,53): warning C4838: 'UINT'에서 'LONG'(으)로의 변환에는 축소 변환이 필요합니다.
+﻿  yaCollider.cpp
+C:\Git\assortrock\windowsAPI\Application\WindowsAPI\Common.h(98,1): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Git\assortrock\windowsAPI\Application\WindowsAPI\yaCollider.cpp(50,40): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Git\assortrock\windowsAPI\Application\WindowsAPI\yaCollider.cpp(50,13): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Git\assortrock\windowsAPI\Application\WindowsAPI\yaCollider.cpp(49,52): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Git\assortrock\windowsAPI\Application\WindowsAPI\yaCollider.cpp(49,25): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  yaCollisionManager.cpp
+C:\Git\assortrock\windowsAPI\Application\WindowsAPI\Common.h(98,1): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  yaMissile.cpp
+C:\Git\assortrock\windowsAPI\Application\WindowsAPI\Common.h(98,1): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Git\assortrock\windowsAPI\Application\WindowsAPI\yaMissile.cpp(52,70): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Git\assortrock\windowsAPI\Application\WindowsAPI\yaMissile.cpp(52,54): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Git\assortrock\windowsAPI\Application\WindowsAPI\yaMissile.cpp(52,38): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Git\assortrock\windowsAPI\Application\WindowsAPI\yaMissile.cpp(52,22): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  yaMonster.cpp
+C:\Git\assortrock\windowsAPI\Application\WindowsAPI\Common.h(98,1): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Git\assortrock\windowsAPI\Application\WindowsAPI\yaMonster.cpp(72,18): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Git\assortrock\windowsAPI\Application\WindowsAPI\yaMonster.cpp(72,10): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Git\assortrock\windowsAPI\Application\WindowsAPI\yaMonster.cpp(71,43): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Git\assortrock\windowsAPI\Application\WindowsAPI\yaMonster.cpp(71,31): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  yaPlayer.cpp
+C:\Git\assortrock\windowsAPI\Application\WindowsAPI\Common.h(98,1): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Git\assortrock\windowsAPI\Application\WindowsAPI\yaPlayer.cpp(131,18): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Git\assortrock\windowsAPI\Application\WindowsAPI\yaPlayer.cpp(131,10): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Git\assortrock\windowsAPI\Application\WindowsAPI\yaPlayer.cpp(130,43): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Git\assortrock\windowsAPI\Application\WindowsAPI\yaPlayer.cpp(130,31): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  코드를 생성하고 있습니다...
   WindowsAPI.vcxproj -> C:\Git\assortrock\windowsAPI\Application\x64\Debug\WindowsAPI.exe

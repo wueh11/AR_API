@@ -1,10 +1,12 @@
 #include "yaScene.h"
 #include "yaGameObject.h"
+#include "yaSceneManager.h"
 
 namespace ya
 {
 	Scene::Scene()
 	{
+		SceneManager::SetPlayScene(this);
 		mObjects.resize(_COLLIDER_LAYER);
 	}
 
@@ -26,6 +28,12 @@ namespace ya
 		{
 			for (size_t i = 0; i < mObjects[j].size(); i++)
 			{
+				if (mObjects[j][i] == nullptr)
+					continue;
+
+				if (mObjects[j][i]->IsDeath())
+					continue;
+
 				mObjects[j][i]->Initialize();
 			}
 		}
@@ -37,6 +45,11 @@ namespace ya
 		{
 			for (size_t i = 0; i < mObjects[j].size(); i++)
 			{
+				if (mObjects[j][i] == nullptr)
+					continue;
+				if (mObjects[j][i]->IsDeath())
+					continue;
+
 				mObjects[j][i]->Tick();
 			}
 		}
@@ -48,6 +61,11 @@ namespace ya
 		{
 			for (size_t i = 0; i < mObjects[j].size(); i++)
 			{
+				if (mObjects[j][i] == nullptr)
+					continue;
+				if (mObjects[j][i]->IsDeath())
+					continue;
+
 				mObjects[j][i]->Render(hdc);
 			}
 		}

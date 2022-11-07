@@ -8,6 +8,7 @@ namespace ya
 	public:
 		static Application& GetInstance()
 		{
+			static Application mInstance;
 			return mInstance;
 		}
 
@@ -15,6 +16,7 @@ namespace ya
 		void Tick(); //update
 
 		WindowData GetWindowData() { return mWindowData; }
+		HDC GetHdc() { return mWindowData.hdc; }
 		HPEN GetPen(ePenColor color) { return mPens[(UINT)color]; }
 		HBRUSH GetBrush(eBrushColor color) { return mBrushs[(UINT)color]; }
 

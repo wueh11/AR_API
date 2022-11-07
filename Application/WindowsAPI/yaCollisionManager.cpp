@@ -7,6 +7,7 @@
 namespace ya
 {
     WORD CollisionManager::mMatrix[_COLLIDER_LAYER] = {};
+    std::map<UINT64, bool> CollisionManager::mCollisionInformation;
 
     void CollisionManager::Tick()
     {
@@ -66,42 +67,85 @@ namespace ya
 
         for (auto leftObject : lefts)
         {
-            if (leftObject->GetComponent<Collider>() == nullptr)
+            Collider* leftCollider = leftObject->GetComponent<Collider>();
+            if (leftCollider == nullptr)
                 continue;
 
             for (auto rightObject : rights)
             {
-                if (rightObject->GetComponent<Collider>() == nullptr)
+                Collider* rightCollider = rightObject->GetComponent<Collider>();
+
+                if (rightCollider == nullptr)
                     continue;
 
                 if (leftObject == rightObject)
                     continue;
 
-                if (Intersect(leftObject->GetComponent<Collider>(), rightObject->GetComponent<Collider>())) ///충돌체크
-                {
-                    // 충돌
-                    int a = 0;
-                    leftObject->GetComponent<Collider>()->SetColor(RGB(255, 0, 0));
-                    rightObject->GetComponent<Collider>()->SetColor(RGB(255, 0, 0));
-                }
-                else
-                {
-                    // 충돌X
-                    int a = 0;
-                    leftObject->GetComponent<Collider>()->SetColor(RGB(0, 255, 0));
-                    rightObject->GetComponent<Collider>()->SetColor(RGB(0, 255, 0));
-                }
+                ColliderCollision(leftCollider, rightCollider);
+            }
+        }
+    }
+
+    void CollisionManager::ColliderCollision(Collider* left, Collider* right)
+    {
+        ColliderID id; /// left, right의 id가 합쳐진 값인 colliderid가 생성된다.
+        id.left = left->GetID();
+        id.right = right->GetID();
+
+        std::map<UINT64, bool>::iterator iter = mCollisionInformation.find(id.ID);
+
+        if (iter == mCollisionInformation.end())
+        {
+            mCollisionInformation.insert(std::make_pair(id.ID, false));
+            iter = mCollisionInformation.find(id.ID);
+        }
+
+        if (Intersect(left, right)) ///충돌체크
+        {
+            // 충돌
+            if (iter->second == false)
+            {
+                //최초 한번 충돌
+                left->OnCollisionEnter(right);
+                right->OnCollisionEnter(left);
+
+                iter->second = true; /// 충돌중
+            }
+            else
+            {
+                //충돌중일때
+                left->OnCollisionStay(right);
+                right->OnCollisionStay(left);
+            }
+        }
+        else
+        {
+            // 충돌X
+            if (iter->second == true)
+            {
+                // 충돌에서 빠져나왔을때
+                left->OnCollisionExit(right);
+                right->OnCollisionExit(left);
+
+                iter->second = false;
             }
         }
     }
 
     bool CollisionManager::Intersect(Collider* left, Collider* right)
     {
+        if (left->GetOwner()->IsDeath())
+            return false;
+        if (right->GetOwner()->IsDeath())
+            return false;
+
         Vector2 leftPos = left->GetPos();
-        Vector2 leftScale = left->GetScale();
+        Vector2 leftScale = left->GetSize();
+        //Vector2 leftScale = left->GetScale();
 
         Vector2 rightPos = right->GetPos();
-        Vector2 rightScale = right->GetScale();
+      //  Vector2 rightScale = right->GetScale();
+        Vector2 rightScale = right->GetSize();
 
         if (fabs(leftPos.x - rightPos.x) < fabs(leftScale.x / 2.0f + rightScale.x / 2.0f)
             && fabs(leftPos.y - rightPos.y) < fabs(leftScale.y / 2.0f + rightScale.y / 2.0f))

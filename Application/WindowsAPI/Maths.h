@@ -20,10 +20,13 @@ namespace ya
             this->y = y;
         }
 
-        Vector2& operator+=(Vector2 other)
+        Vector2 operator+=(const Vector2& other)
         {
-            x += other.x;
-            y += other.y;
+            Vector2 temp;
+            temp.x = x + other.x;
+            temp.y = y + other.y;
+
+            return temp;
         }
 
         Vector2 operator +(const Vector2& other)

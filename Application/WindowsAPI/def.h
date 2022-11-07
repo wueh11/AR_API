@@ -52,6 +52,24 @@ enum class eColliderLayer
 	Monster,
 	Monster_Projecttile,
 
+	Backpack,
 	UI = _COLLIDER_LAYER - 1, /// 화면 제일 앞에 그려져야함
 	End = _COLLIDER_LAYER,
+};
+
+enum class eCameraEffect
+{
+	FadeIn,
+	FadeOut,
+	None,
+};
+
+union ColliderID ///union -> 메모리 데이터 영역을 공유한다
+{
+	struct
+	{
+		UINT32 left;
+		UINT32 right;
+	};
+	UINT64 ID;
 };

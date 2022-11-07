@@ -1,6 +1,7 @@
 #include "yaCollider.h"
 #include "yaGameObject.h"
 #include "yaApplication.h"
+#include "yaCamera.h"
 
 namespace ya
 {
@@ -9,7 +10,7 @@ namespace ya
 		, mOffset(Vector2::Zero)
 		, mPos(Vector2::Zero)
 		, mScale(Vector2::One)
-		, mColor(RGB(0, 255, 0))
+		, mCollisionCount(0)
 	{
 		mScale = Vector2(100.0f, 100.0f);
 	}
@@ -26,12 +27,49 @@ namespace ya
 
 	void Collider::Render(HDC hdc)
 	{
-		HPEN green = CreatePen(PS_SOLID, 2, mColor);
-		Pen pen(hdc, green);
+		///brush
 		HBRUSH tr = Application::GetInstance().GetBrush(eBrushColor::Transparent);
 		Brush brush(hdc, tr);
 
-		Rectangle(hdc, mPos.x - (mScale.x / 2.0f), mPos.y - (mScale.y / 2.0f)
-			, mPos.x + (mScale.x / 2.0f), mPos.y + (mScale.y / 2.0f));
+		///pen
+		HPEN greenPen = CreatePen(PS_SOLID, 2, RGB(0, 255, 0));
+		HPEN redPen = CreatePen(PS_SOLID, 2, RGB(255, 0, 0));
+		HPEN oldPen = NULL;
+
+		if (mCollisionCount > 0) /// 충돌이 있으면 펜을 빨간색으로
+			oldPen = (HPEN)SelectObject(hdc, redPen);
+		else
+			oldPen = (HPEN)SelectObject(hdc, greenPen);
+
+		mPos = Camera::CalculatePos(mPos);
+
+		GameObject* owner = GetOwner();
+		mSize = owner->GetSize();
+
+		Rectangle(hdc, mPos.x - (mSize.x / 2.0f), mPos.y - (mSize.y / 2.0f)
+			, mPos.x + (mSize.x / 2.0f), mPos.y + (mSize.y / 2.0f));
+		/*Rectangle(hdc, mPos.x - (mScale.x / 2.0f), mPos.y - (mScale.y / 2.0f)
+			, mPos.x + (mScale.x / 2.0f), mPos.y + (mScale.y / 2.0f));*/
+
+		SelectObject(hdc, oldPen);
+		DeleteObject(redPen);
+		DeleteObject(greenPen);
+	}
+
+	void Collider::OnCollisionEnter(Collider* other)
+	{
+		mCollisionCount++;
+		GetOwner()->OnCollisionEnter(other);
+	}
+
+	void Collider::OnCollisionStay(Collider* other)
+	{
+		GetOwner()->OnCollisionStay(other);
+	}
+
+	void Collider::OnCollisionExit(Collider* other)
+	{
+		mCollisionCount--;
+		GetOwner()->OnCollisionExit(other);
 	}
 }

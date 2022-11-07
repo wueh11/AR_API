@@ -8,6 +8,8 @@
 #include "yaPlayer.h"
 #include "yaMonster.h"
 
+#include "yaObject.h"
+
 namespace ya
 {
 	PlayScene::PlayScene()
@@ -24,14 +26,14 @@ namespace ya
 		BgImageObject* bg = new BgImageObject();
 		bg->SetImage(L"PlayBG", L"PlayBG.bmp");
 		bg->Initialize();
+		//AddGameObject(bg, eColliderLayer::Background);
 
-		AddGameObject(bg, eColliderLayer::Background);
+		ya::object::Instantiate<Player>(eColliderLayer::Player);
+		mons[0] = ya::object::Instantiate<Monster>(eColliderLayer::Monster);
+		mons[1] = ya::object::Instantiate<Monster>({ 300.0f, 100.0f }, eColliderLayer::Monster);
 
-		// player
-		AddGameObject(new Player(), eColliderLayer::Player);
-		AddGameObject(new Monster(), eColliderLayer::Monster);
-
-		CollisionManager::SetLayer(eColliderLayer::Player, eColliderLayer::Monster, true);
+		CollisionManager::SetLayer(eColliderLayer::Monster, eColliderLayer::Player, true);
+		CollisionManager::SetLayer(eColliderLayer::Monster, eColliderLayer::Player_Projecttile, true);
 	}
 
 	void PlayScene::Tick()

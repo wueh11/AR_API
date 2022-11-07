@@ -23,6 +23,8 @@ namespace ya
 		mScenes[(UINT)eSceneType::End] = new EndScene();
 		mScenes[(UINT)eSceneType::End]->Initialize();
 		mPlayScene = mScenes[(UINT)eSceneType::Logo];
+
+		ChangeScene(eSceneType::Logo);
 	}
 
 	void SceneManager::Tick()
@@ -33,6 +35,10 @@ namespace ya
 	void SceneManager::Render(HDC hdc)
 	{
 		mPlayScene->Render(hdc);
+	}
+
+	void SceneManager::DestroyGameObject()
+	{
 	}
 
 	void SceneManager::Release()
@@ -49,16 +55,13 @@ namespace ya
 
 	void SceneManager::ChangeScene(eSceneType type)
 	{ 
+		if (mScenes[(UINT)type] == nullptr)
+		{
+			return;
+		}
 
-		if (mPlayScene == nullptr)
-		{
-			mPlayScene = mScenes[(UINT)eSceneType::Logo];
-		}
-		else
-		{
-			mPlayScene->Exit();
-			mPlayScene = mScenes[(UINT)type];
-		}
+		mPlayScene->Exit();
+		mPlayScene = mScenes[(UINT)type];
 
 		mPlayScene->Enter();
 	}

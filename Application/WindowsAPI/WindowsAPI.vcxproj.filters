@@ -14,9 +14,6 @@
     <Filter Include="Engine\Common">
       <UniqueIdentifier>{3c008eeb-551d-46b3-b184-88553c898c1d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Common\Base">
-      <UniqueIdentifier>{8750f0fc-6a61-41ba-b1d6-251e2acaaf8e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\highLevelInterface">
       <UniqueIdentifier>{a30ec551-9bc5-4ea3-9632-cefc5e731e09}</UniqueIdentifier>
     </Filter>
@@ -139,6 +136,18 @@
     <ClInclude Include="yaMonster.h">
       <Filter>Engine\GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="yaAnimation.h">
+      <Filter>Engine\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="yaCamera.h">
+      <Filter>Engine\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="yaBackpack.h">
+      <Filter>Engine\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="yaEffect.h">
+      <Filter>Engine\GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -214,6 +223,21 @@
       <Filter>Engine\Manager</Filter>
     </ClCompile>
     <ClCompile Include="yaMonster.cpp">
+      <Filter>Engine\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="yaObject.h">
+      <Filter>Engine\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="yaAnimation.cpp">
+      <Filter>Engine\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="yaCamera.cpp">
+      <Filter>Engine\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="yaBackpack.cpp">
+      <Filter>Engine\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="yaEffect.cpp">
       <Filter>Engine\GameObject</Filter>
     </ClCompile>
   </ItemGroup>

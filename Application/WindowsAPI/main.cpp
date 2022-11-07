@@ -104,8 +104,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
    windowData.hWnd = hWnd;
    windowData.hdc = nullptr;
-   windowData.width = 1600;
-   windowData.height = 900;
+   windowData.width = 1280;
+   windowData.height = 720;
 
    if (!hWnd)
    {

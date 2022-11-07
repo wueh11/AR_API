@@ -12,6 +12,8 @@ namespace ya
 		void SetName(const std::wstring name) { mName = name; }
 		std::wstring getName() { return mName; }
 
+		UINT32 GetID() { return mId; }
+
 	private:
 		std::wstring mName;
 		UINT mId;

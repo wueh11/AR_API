@@ -9,6 +9,8 @@
 
 #include "yaMissile.h"
 #include "yaRock.h"
+#include "yaBackpack.h"
+#include "yaEffect.h"
 
 #include "yaAnimator.h"
 #include "yaCollider.h"
@@ -18,6 +20,7 @@ namespace ya
 	Player::Player()
 		: mSpeed(200.0f)
 	{
+		SetName(L"Player");
 		SetPos({ 500.0f, 400.0f });
 		SetScale({ 2.0f, 2.0f });
 
@@ -25,8 +28,17 @@ namespace ya
 		{
 			mImage = Resources::Load<Image>(L"Player", L"..\\Resources\\Image\\Player.bmp");
 		}
+		SetSize({ (float)(mImage->GetWidth() * GetScale().x), (float)(mImage->GetHeight() * GetScale().y) });
 
-		AddComponent(new Animator());
+		mAnimator = new Animator();
+
+		mAnimator->CreateAnimation(L"Idle", mImage
+			, Vector2(0.0f, 0.0f), Vector2(120.0f, 130.0f)
+			, Vector2(5.0f, -20.0f), 3, 0.1f);
+
+		mAnimator->Play(L"Idle", true);
+
+		AddComponent(mAnimator);
 		AddComponent(new Collider());
 	}
 
@@ -75,13 +87,20 @@ namespace ya
 			missile->SetPos(playerPos + playerScale - (missileScale / 2.0f));
 		}
 		
-		if (rand() % 2000 > 1990)
+		if (KEY_DOWN(eKeyCode::I))
+		{
+			Backpack* backPack = new Backpack();
+			Scene* playScene = SceneManager::GetPlayScene();
+			playScene->AddGameObject(backPack, eColliderLayer::Backpack);
+		}
+
+		/*if (rand() % 2000 > 1990)
 		{
 			Rock* rock = new Rock();
 
 			Scene* playScene = SceneManager::GetPlayScene();
 			playScene->AddGameObject(rock, eColliderLayer::Monster_Projecttile);
-		}
+		}*/
 
 		SetPos(pos);
 	}
@@ -114,5 +133,35 @@ namespace ya
 			, RGB(255, 255, 255)); ///crTransparent의 인자를 제외시키고 출력한다.(투명처리)
 
 		GameObject::Render(hdc); /// 자식이 먼저그려져양함
+	}
+
+	void Player::OnCollisionEnter(Collider* other)
+	{
+	}
+
+	void Player::OnCollisionStay(Collider* other)
+	{
+	}
+
+	void Player::OnCollisionExit(Collider* other)
+	{
+	}
+
+	void Player::WalkComplete()
+	{
+		Effect* effect = new Effect();
+
+		Scene* playScene = SceneManager::GetPlayScene();
+		playScene->AddGameObject(effect, eColliderLayer::Player_Projecttile);
+
+		Vector2 playerPos = GetPos();
+		Vector2 playerScale = GetScale();
+		Vector2 footprintScale = effect->GetScale();
+
+		effect->SetPos((playerPos + playerScale) - (footprintScale / 2.0f));
+	}
+
+	void Player::Walking()
+	{
 	}
 }

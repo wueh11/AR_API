@@ -4,11 +4,10 @@
 #include "yaInput.h"
 #include "yaResources.h"
 #include "yaCollisionManager.h"
+#include "yaCamera.h"
 
 namespace ya
 {
-	Application Application::mInstance;
-
 	void Application::Inititalize(WindowData& data)
 	{
 		initializeWindow(data);
@@ -22,20 +21,23 @@ namespace ya
 	{
 		Time::Tick();
 		Input::Tick();
-
-		// clear
-		Rectangle(mWindowData.backBuffer, -1, -1, mWindowData.width + 1, mWindowData.height + 1);
 		
+		Camera::Tick();
 		SceneManager::Tick();
 		CollisionManager::Tick();
 
+		Brush brush(mWindowData.backBuffer, mBrushs[(UINT)eBrushColor::Gray]);
+		Rectangle(mWindowData.backBuffer, -1, -1, mWindowData.width + 1, mWindowData.height + 1);
+		
 		SceneManager::Render(mWindowData.backBuffer);
-
+		Camera::Render(mWindowData.backBuffer);
 		Input::Render(mWindowData.backBuffer);
 		Time::Render(mWindowData.backBuffer);
 
 		// BitBlt는 DC간의 이미지를 복사해주는 함수
 		BitBlt(mWindowData.hdc, 0, 0, mWindowData.width, mWindowData.height, mWindowData.backBuffer, 0, 0, SRCCOPY); ///backbuffer에 있는 이미지를 hdc에 복사
+
+		SceneManager::DestroyGameObject();
 	}
 
 	Application::Application()
@@ -46,7 +48,10 @@ namespace ya
 	Application::~Application()
 	{
 		SceneManager::Release();
+		Resources::Release();
+
 		ReleaseDC(mWindowData.hWnd, mWindowData.hdc);
+		ReleaseDC(mWindowData.hWnd, mWindowData.backBuffer);
 	}
 
 	void Application::initializeWindow(WindowData& data)
