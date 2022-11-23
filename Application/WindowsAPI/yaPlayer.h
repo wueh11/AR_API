@@ -25,8 +25,8 @@ namespace ya
 
 	private:
 		float mSpeed;
-		Image* mImage;
-		Animator* mAnimator;
+		Image* mImage[2]; //0:upper, 1:lower
+		Animator* mAnimator[2];
 
 		Backpack* mBackpack;
 	};

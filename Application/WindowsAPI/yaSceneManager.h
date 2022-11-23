@@ -18,8 +18,13 @@ namespace ya
 		static Scene* GetPlayScene() { return mPlayScene; }
 		static void SetPlayScene(Scene* playScene) { mPlayScene = playScene; }
 
+		static Scene* GetScene(eSceneType type) { return mScenes[(UINT)type]; }
+		static eSceneType GetPlaySceneType() { return mType; }
+
 	private:
 		static Scene* mScenes[(UINT)eSceneType::MAX];
+
 		static Scene* mPlayScene;
+		static eSceneType mType;
 	};
 }

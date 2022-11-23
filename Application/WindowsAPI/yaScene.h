@@ -26,6 +26,7 @@ namespace ya
 
 	private:
 		std::vector<std::vector<GameObject*>> mObjects;
+		WindowData windowData;
 	};
 
 	typedef std::vector<std::vector<GameObject*>> GameObjects;

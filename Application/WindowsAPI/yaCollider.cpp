@@ -9,6 +9,7 @@ namespace ya
 		:Component(eComponentType::Collider)
 		, mOffset(Vector2::Zero)
 		, mPos(Vector2::Zero)
+		, mSize(Vector2(100.0f, 100.0f))
 		, mScale(Vector2::One)
 		, mCollisionCount(0)
 	{

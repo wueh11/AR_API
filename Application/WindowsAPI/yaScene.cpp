@@ -1,6 +1,9 @@
 #include "yaScene.h"
 #include "yaGameObject.h"
 #include "yaSceneManager.h"
+#include "yaCollisionManager.h"
+#include "yaCamera.h"
+#include "yaApplication.h"
 
 namespace ya
 {
@@ -24,6 +27,8 @@ namespace ya
 
 	void Scene::Initialize()
 	{
+		WindowData windowData = Application::GetInstance().GetWindowData();
+
 		for (size_t j = 0; j < _COLLIDER_LAYER; j++)
 		{
 			for (size_t i = 0; i < mObjects[j].size(); i++)
@@ -66,6 +71,15 @@ namespace ya
 				if (mObjects[j][i]->IsDeath())
 					continue;
 
+				mObjects[j][i]->Render(hdc);/// 카메라 밖에있는 오브젝트들 렌더 X
+				Vector2 pos = mObjects[j][i]->GetPos();
+				pos = Camera::CalculatePos(pos);
+
+				if (pos.x < -100 || pos.y < -100)
+					continue;
+				if (pos.x > windowData.width + 100 || pos.y > windowData.height + 100)
+					continue;
+
 				mObjects[j][i]->Render(hdc);
 			}
 		}
@@ -77,6 +91,7 @@ namespace ya
 
 	void Scene::Exit()
 	{
+		CollisionManager::Clear();
 	}
 
 	void Scene::AddGameObject(GameObject* object, eColliderLayer type)

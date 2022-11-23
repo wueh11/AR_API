@@ -3,38 +3,62 @@
 #include "yaInput.h"
 #include "yaSceneManager.h"
 #include "yaBgImageObject.h"
+#include "yaImageObject.h"
+#include "yaApplication.h"
 
-ya::LogoScene::LogoScene()
+namespace ya
 {
-}
-
-ya::LogoScene::~LogoScene()
-{
-}
-
-void ya::LogoScene::Initialize()
-{
-	BgImageObject* bg = new BgImageObject();
-	bg->SetImage(L"LogoBG", L"LogoBG.bmp");
-	bg->Initialize();
-
-	AddGameObject(bg, eColliderLayer::Background);
-}
-
-void ya::LogoScene::Tick()
-{
-	//오브젝트 tick을 호출한다.
-	Scene::Tick();
-
-	if (KEY_DOWN(eKeyCode::N))
+	LogoScene::LogoScene()
 	{
-		SceneManager::ChangeScene(eSceneType::Title);
 	}
-}
 
-void ya::LogoScene::Render(HDC hdc)
-{
-	Scene::Render(hdc);
+	LogoScene::~LogoScene()
+	{
+	}
 
-	Text text(hdc, L"Logo Scene", 10, 30);
+	void LogoScene::Initialize()
+	{
+		mBackground = Image::Create(L"LogoBg", 1600, 900);
+
+		float width = (float)Application::GetInstance().GetWindowData().width;
+		float height = (float)Application::GetInstance().GetWindowData().height;
+
+		ImageObject* title = new ImageObject();
+		title->SetImage(L"Title", L"title.bmp");
+		title->SetPos({ (width / 2.0f) - (title->GetSize().x / 2.0f), 100.0f});
+
+		AddGameObject(title, eColliderLayer::Default);
+	}
+
+	void LogoScene::Tick()
+	{
+		Scene::Tick();
+
+	}
+
+	void LogoScene::Render(HDC hdc)
+	{
+		{//배경
+			Vector2 rect;
+			rect.x = Application::GetInstance().GetWindowData().width;
+			rect.y = Application::GetInstance().GetWindowData().height;
+
+			TransparentBlt(hdc, 0, 0
+				, rect.x, rect.y, mBackground->GetDC()
+				, 0, 0, mBackground->GetWidth(), mBackground->GetHeight()
+				, RGB(255, 0, 255));
+		}
+
+		Scene::Render(hdc);
+
+		Text text(hdc, L"Logo Scene", 10, 30);
+	}
+
+	void LogoScene::Enter()
+	{
+	}
+
+	void LogoScene::Exit()
+	{
+	}
 }

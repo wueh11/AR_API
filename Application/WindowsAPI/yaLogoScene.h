@@ -15,5 +15,10 @@ namespace ya
 		virtual void Tick() override;
 		virtual void Render(HDC hdc) override;
 
+		virtual void Enter();
+		virtual void Exit();
+
+	private:
+		Image* mBackground;
 	};
 }

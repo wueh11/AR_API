@@ -104,6 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -140,6 +141,8 @@
     <ClInclude Include="yaBackpack.h" />
     <ClInclude Include="yaBgImageObject.h" />
     <ClInclude Include="yaCamera.h" />
+    <ClInclude Include="yaCharacterSelectScene.h" />
+    <ClInclude Include="yaChewmein.h" />
     <ClInclude Include="yaCollider.h" />
     <ClInclude Include="yaCollisionManager.h" />
     <ClInclude Include="yaComponent.h" />
@@ -147,20 +150,27 @@
     <ClInclude Include="yaEndScene.h" />
     <ClInclude Include="yaEntity.h" />
     <ClInclude Include="yaGameObject.h" />
+    <ClInclude Include="yaGround.h" />
+    <ClInclude Include="yaHostage.h" />
     <ClInclude Include="yaImage.h" />
+    <ClInclude Include="yaImageObject.h" />
     <ClInclude Include="yaInput.h" />
     <ClInclude Include="yaLogoScene.h" />
     <ClInclude Include="yaMissile.h" />
+    <ClInclude Include="yaMission1Scene.h" />
     <ClInclude Include="yaMonster.h" />
     <ClInclude Include="yaPlayer.h" />
     <ClInclude Include="yaPlayScene.h" />
     <ClInclude Include="yaResource.h" />
     <ClInclude Include="yaResources.h" />
+    <ClInclude Include="yaRigidbody.h" />
     <ClInclude Include="yaRock.h" />
     <ClInclude Include="yaScene.h" />
     <ClInclude Include="yaSceneManager.h" />
     <ClInclude Include="yaTime.h" />
     <ClInclude Include="yaTitleScene.h" />
+    <ClInclude Include="yaUIBase.h" />
+    <ClInclude Include="yaUIManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Maths.cpp" />
@@ -169,6 +179,8 @@
     <ClCompile Include="yaBackpack.cpp" />
     <ClCompile Include="yaBgImageObject.cpp" />
     <ClCompile Include="yaCamera.cpp" />
+    <ClCompile Include="yaCharacterSelectScene.cpp" />
+    <ClCompile Include="yaChewmein.cpp" />
     <ClCompile Include="yaCollider.cpp" />
     <ClCompile Include="yaCollisionManager.cpp" />
     <ClCompile Include="yaComponent.cpp" />
@@ -178,21 +190,28 @@
     <ClCompile Include="yaEndScene.cpp" />
     <ClCompile Include="yaEntity.cpp" />
     <ClCompile Include="yaGameObject.cpp" />
+    <ClCompile Include="yaGround.cpp" />
+    <ClCompile Include="yaHostage.cpp" />
     <ClCompile Include="yaImage.cpp" />
+    <ClCompile Include="yaImageObject.cpp" />
     <ClCompile Include="yaInput.cpp" />
     <ClCompile Include="yaLogoScene.cpp" />
     <ClCompile Include="yaMissile.cpp" />
+    <ClCompile Include="yaMission1Scene.cpp" />
     <ClCompile Include="yaMonster.cpp" />
     <ClCompile Include="yaObject.h" />
     <ClCompile Include="yaPlayer.cpp" />
     <ClCompile Include="yaPlayScene.cpp" />
     <ClCompile Include="yaResource.cpp" />
     <ClCompile Include="yaResources.cpp" />
+    <ClCompile Include="yaRigidbody.cpp" />
     <ClCompile Include="yaRock.cpp" />
     <ClCompile Include="yaScene.cpp" />
     <ClCompile Include="yaSceneManager.cpp" />
     <ClCompile Include="yaTime.cpp" />
     <ClCompile Include="yaTitleScene.cpp" />
+    <ClCompile Include="yaUIBase.cpp" />
+    <ClCompile Include="yaUIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WindowsAPI.rc" />

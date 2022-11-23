@@ -45,7 +45,7 @@ namespace ya
 
 			for (size_t y = 0; y < _COLLIDER_LAYER; y++)
 			{
-				for (LayerObjects::iterator iter = objects[y].begin(); iter != objects[y].end(); ++iter)
+				for (LayerObjects::iterator iter = objects[y].begin(); iter != objects[y].end();)
 				{
 					if ((*iter)->IsDeath() == true)
 					{

@@ -36,12 +36,15 @@ namespace ya
 	void Animation::Render(HDC hdc)
 	{
 		GameObject* gameObj = mAnimator->GetOwner();
+
 		Vector2 pos = gameObj->GetPos();
+		Vector2 scale = gameObj->GetScale();
+		Vector2 animatorOffset = mAnimator->GetOffset();
 
 		if (mbAffectedCamera)
 			pos = Camera::CalculatePos(pos); /// 카메라와 함께 이동하는 경우 ex)UI
 
-		BLENDFUNCTION func = {};
+		/*BLENDFUNCTION func = {};
 		func.BlendOp = AC_SRC_OVER;
 		func.BlendFlags = 0;
 		func.AlphaFormat = AC_SRC_ALPHA;
@@ -50,12 +53,21 @@ namespace ya
 		pos += mSpriteSheet[mSpriteIndex].offset;
 
 		AlphaBlend(hdc
-			, int(pos.x - (mSpriteSheet[mSpriteIndex].size.x / 2.0f)), int(pos.y - (mSpriteSheet[mSpriteIndex].size.y / 2.0f))
+			, int(pos.x + animatorOffset.x - (mSpriteSheet[mSpriteIndex].size.x / 2.0f)), int(pos.y + animatorOffset.y - (mSpriteSheet[mSpriteIndex].size.y / 2.0f))
 			, int(mSpriteSheet[mSpriteIndex].size.x), int(mSpriteSheet[mSpriteIndex].size.y)
 			, mImage->GetDC()
 			, int(mSpriteSheet[mSpriteIndex].leftTop.x), int(mSpriteSheet[mSpriteIndex].leftTop.y)
 			, int(mSpriteSheet[mSpriteIndex].size.x), int(mSpriteSheet[mSpriteIndex].size.y)
-			, func);
+			, func);*/
+
+		TransparentBlt(hdc
+			, int(pos.x + animatorOffset.x - (mSpriteSheet[mSpriteIndex].size.x * scale.x / 2.0f))
+			, int(pos.y + animatorOffset.y - (mSpriteSheet[mSpriteIndex].size.y * scale.y / 2.0f))
+			, int(mSpriteSheet[mSpriteIndex].size.x * scale.x), int(mSpriteSheet[mSpriteIndex].size.y * scale.y)
+			, mImage->GetDC()
+			, int(mSpriteSheet[mSpriteIndex].leftTop.x), int(mSpriteSheet[mSpriteIndex].leftTop.y)
+			, int(mSpriteSheet[mSpriteIndex].size.x), int(mSpriteSheet[mSpriteIndex].size.y)
+			, RGB(255, 0, 255));
 	}
 	
 	void Animation::Create(Image* image, Vector2 leftTop, Vector2 size, Vector2 offset, UINT spriteLength, float duration, bool bAffectedCamera)

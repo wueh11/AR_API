@@ -3,6 +3,7 @@
 
 namespace ya
 {
+	class Image;
 	class TitleScene : public Scene
 	{
 	public:
@@ -15,5 +16,7 @@ namespace ya
 
 		virtual void Enter();
 		virtual void Exit();
+
+	private:
 	};
 }

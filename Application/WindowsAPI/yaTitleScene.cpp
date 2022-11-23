@@ -3,6 +3,7 @@
 #include "yaInput.h"
 #include "yaSceneManager.h"
 #include "yaBgImageObject.h"
+#include "yaApplication.h"
 
 namespace ya
 {
@@ -16,7 +17,6 @@ namespace ya
 	{
 		BgImageObject* bg = new BgImageObject();
 		bg->SetImage(L"TitleBG", L"TitleBG.bmp");
-		bg->Initialize();
 
 		AddGameObject(bg, eColliderLayer::Background);
 	}
@@ -24,10 +24,10 @@ namespace ya
 	{
 		Scene::Tick();
 
-		if (KEY_DOWN(eKeyCode::N))
+		/*if (KEY_DOWN(eKeyCode::N))
 		{
 			SceneManager::ChangeScene(eSceneType::Play);
-		}
+		}*/
 	}
 	void TitleScene::Render(HDC hdc)
 	{

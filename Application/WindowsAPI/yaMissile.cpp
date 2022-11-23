@@ -7,14 +7,13 @@ namespace ya
 {
 	Missile::Missile()
 		: mSpeed(300.0f)
-		, mAliveTime(1.0f)
+		, mAliveTime(5.0f)
 	{
 		SetPos({ 100.0f, 100.0f });
 		SetScale({ 1.0f, 1.0f });
 		SetSize({ 10.0f, 10.0f });
 
 		Collider* col = new Collider();
-		//col->SetScale(Vector2(20.0f, 20.0f));
 
 		AddComponent(col);
 	}

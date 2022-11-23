@@ -140,19 +140,22 @@ namespace ya
             return false;
 
         Vector2 leftPos = left->GetPos();
-        Vector2 leftScale = left->GetSize();
-        //Vector2 leftScale = left->GetScale();
+        Vector2 leftSize = left->GetSize();
 
         Vector2 rightPos = right->GetPos();
-      //  Vector2 rightScale = right->GetScale();
-        Vector2 rightScale = right->GetSize();
+        Vector2 rightSize = right->GetSize();
 
-        if (fabs(leftPos.x - rightPos.x) < fabs(leftScale.x / 2.0f + rightScale.x / 2.0f)
-            && fabs(leftPos.y - rightPos.y) < fabs(leftScale.y / 2.0f + rightScale.y / 2.0f))
+        if (fabs(leftPos.x - rightPos.x) < fabs(leftSize.x / 2.0f + rightSize.x / 2.0f)
+            && fabs(leftPos.y - rightPos.y) < fabs(leftSize.y / 2.0f + rightSize.y / 2.0f))
         {
             return true;
         }
 
         return false;
+    }
+
+    void CollisionManager::Clear()
+    {   /// static인 collider 정보 clear(scene이 변경될 때 적용)
+        memset(mMatrix, 0, sizeof(WORD) * _COLLIDER_LAYER);
     }
 }

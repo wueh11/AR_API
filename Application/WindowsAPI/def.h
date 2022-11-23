@@ -1,5 +1,10 @@
 #pragma once
 
+#define W_WIDTH 800 
+#define W_HEIGHT 600 
+
+#define M_SCALE 1.5f
+
 #define KEY_PRESS(KEY) ya::Input::GetKeyState(KEY) == ya::eKeyState::PRESSED
 #define KEY_DOWN(KEY) ya::Input::GetKeyState(KEY) == ya::eKeyState::DOWN
 #define KEY_UP(KEY) ya::Input::GetKeyState(KEY) == ya::eKeyState::UP
@@ -7,8 +12,9 @@
 enum class eSceneType
 {
 	Logo,
-	Title,
-	Play,
+	Select,
+	//Play,
+	Mission1,
 	End,
 	MAX,
 };
@@ -35,8 +41,9 @@ enum class eBrushColor
 
 enum class eComponentType ///컴포넌트 종류들
 {
-	Animator,
+	Rigidbody,
 	Collider,
+	Animator,
 	Sound,
 	End,
 };
@@ -46,6 +53,7 @@ enum class eColliderLayer
 {
 	Default,
 	Background, /// 뒤에 그려질 애들 먼저..
+	EventPoint,
 	Tile,
 	Player,
 	Player_Projecttile,
@@ -62,6 +70,17 @@ enum class eCameraEffect
 	FadeIn,
 	FadeOut,
 	None,
+};
+
+enum class eUIType
+{
+	HP,
+	MP,
+	SHOP,
+	INVENTORY,
+	OPTION,
+
+	END,
 };
 
 union ColliderID ///union -> 메모리 데이터 영역을 공유한다

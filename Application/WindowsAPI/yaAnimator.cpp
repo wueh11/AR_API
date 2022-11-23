@@ -11,6 +11,7 @@ namespace ya
 		:Component(eComponentType::Animator)
 		, mPlayAnimation(nullptr)
 		, mbLoop(false)
+		, mOffset(Vector2::Zero)
 	{
 	}
 

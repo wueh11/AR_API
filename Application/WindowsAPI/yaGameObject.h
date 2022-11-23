@@ -5,12 +5,16 @@
 
 namespace ya
 {
+	struct info
+	{
+		UINT hp;
+	};
+	
 	class Collider;
 	class GameObject : public Entity
 	{
 	public:
 		GameObject();
-		GameObject(Vector2 position);
 		virtual ~GameObject();
 
 		virtual void Initialize() = 0;
@@ -30,13 +34,22 @@ namespace ya
 		void SetSize(Vector2 size) { mSize = size; }
 		Vector2 GetSize() { return mSize; }
 
-		void AddComponent(Component* component);
-
 		void Death() { mDead = true; }
 		bool IsDeath() { return mDead; }
 		void SetDeathTime(float time);
 
 		void DeathLoop();
+
+		void AddComponent(Component* component);
+
+		template <typename T>
+		__forceinline T* AddComponent()
+		{
+			T* comp = new T();
+			GameObject::AddComponent(comp);
+
+			return comp;
+		}
 
 		template<typename T>
 		__forceinline T* GetComponent()
@@ -52,6 +65,8 @@ namespace ya
 			return nullptr;
 		}
 
+		ObjectInfo GetObjectInfo() { return mObjectInfo; }
+
 	private:
 		std::vector<Component*> mComponents;
 		Vector2 mPos;
@@ -61,6 +76,8 @@ namespace ya
 		bool mDead;
 		float mDeathTime;
 		bool mDeathTimeOn;
+
+		ObjectInfo mObjectInfo;
 	};
 }
 

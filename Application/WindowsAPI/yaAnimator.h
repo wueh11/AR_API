@@ -50,7 +50,12 @@ namespace ya
 		std::function<void()>& GetCompleteEvent(const std::wstring key);
 		std::function<void()>& GetEndEvent(const std::wstring key);
 
+		void SetOffset(Vector2 offset) { mOffset = offset; }
+		Vector2 GetOffset() { return mOffset; }
+
 	private:
+		Vector2 mOffset;
+
 		std::map<std::wstring, Animation*> mAnimations;
 		std::map<std::wstring, Events*> mEvents; 
 
