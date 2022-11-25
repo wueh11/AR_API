@@ -16,9 +16,12 @@ namespace ya
 		virtual void Render(HDC hdc) override;
 
 		void SetImage(const std::wstring& key, const std::wstring& imageName);
+		void SetFullClient(bool fullClient) { mFullClienet = fullClient; }
 
 	private:
 		Image* mImage;
 		const std::wstring mImageName;
+
+		bool mFullClienet;
 	};
 }

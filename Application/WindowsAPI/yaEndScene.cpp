@@ -1,6 +1,5 @@
 #include "yaEndScene.h"
 #include "yaPlayer.h"
-#include "yaBgImageObject.h"
 
 namespace ya
 {
@@ -12,11 +11,11 @@ namespace ya
 	}
 	void EndScene::Initialize()
 	{
-		BgImageObject* bg = new BgImageObject();
+		/*BgImageObject* bg = new BgImageObject();
 		bg->SetImage(L"EndBG", L"EndBG.bmp");
 		bg->Initialize();
 
-		AddGameObject(bg, eColliderLayer::Background);
+		AddGameObject(bg, eColliderLayer::Background);*/
 	}
 	void EndScene::Tick()
 	{

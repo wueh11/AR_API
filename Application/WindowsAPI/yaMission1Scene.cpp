@@ -4,12 +4,13 @@
 #include "yaCollisionManager.h"
 #include "yaSceneManager.h"
 
-#include "yaBgImageObject.h"
 #include "yaImageObject.h"
+#include "yaPixelImageObject.h"
 #include "yaPlayer.h"
 #include "yaMonster.h"
 #include "yaObject.h"
 #include "yaChewmein.h"
+#include "yaApplication.h"
 
 namespace ya
 {
@@ -23,23 +24,36 @@ namespace ya
 
 	void Mission1Scene::Initialize()
 	{
-		//¹è°æ
-		ImageObject* bg = new ImageObject();
-		bg->SetImage(L"Mission1_BG", L"background.bmp");
-		bg->Initialize();
-		bg->SetPos({ 0.0f, -64.0f * M_SCALE });
-		bg->SetScale({ M_SCALE, M_SCALE });
-		AddGameObject(bg, eColliderLayer::Background);
+		Player* player = ya::object::Instantiate<Player>(eColliderLayer::Player);
+		SetPlayer(player);
+		
+		WindowData windowData = Application::GetInstance().GetWindowData();
 
-		ImageObject* bgObj = new ImageObject();
-		bgObj->SetImage(L"Mission1_BG_obj_1", L"bgobj_0.bmp");
-		bgObj->Initialize();
-		bgObj->SetPos({ 0.0f, 00.0f });
-		bgObj->SetScale({ M_SCALE, M_SCALE });
-		AddGameObject(bgObj, eColliderLayer::Background);
+		/*ImageObject* Background = new ImageObject();
+		Background->SetScale({ M_SCALE, M_SCALE });
+		Background->SetImage(L"Mission1_part1_background", L"Background\\part1\\background.bmp");
+		Background->Initialize();
+		Background->SetPos({ 0.0f, -64.0f * M_SCALE });
+		AddGameObject(Background, eColliderLayer::Background);*/
 
-		ya::object::Instantiate<Player>(eColliderLayer::Player);
-		ya::object::Instantiate<Chewmein>(eColliderLayer::Monster);
+		PixelImageObject* BackgroundPixel = new PixelImageObject();
+		//BackgroundPixel->SetScale({ M_SCALE, M_SCALE });
+		BackgroundPixel->SetImage(L"Mission1_part1_background_pixel", L"Background\\part1\\background_pixel.bmp");
+		BackgroundPixel->Initialize();
+		BackgroundPixel->SetPos({ 0.0f, 0.0f});
+		//BackgroundPixel->SetPos({ 0.0f, windowData.height - (BackgroundPixel->GetSize().y * BackgroundPixel->GetScale().y)});
+		AddGameObject(BackgroundPixel, eColliderLayer::Background_pixel);
+
+
+		/*ImageObject* BackgroundObject = new ImageObject();
+		BackgroundObject->SetImage(L"Mission1_part1_backobject", L"Background\\part1\\background_object.bmp");
+		BackgroundObject->Initialize();
+		BackgroundObject->SetPos({ 0.0f, 00.0f });
+		BackgroundObject->SetScale({ M_SCALE, M_SCALE });
+		AddGameObject(BackgroundObject, eColliderLayer::Background);*/
+
+		
+		//ya::object::Instantiate<Chewmein>(eColliderLayer::Monster);
 
 		CollisionManager::SetLayer(eColliderLayer::Monster, eColliderLayer::Player, true);
 	}
@@ -52,7 +66,7 @@ namespace ya
 	void Mission1Scene::Render(HDC hdc)
 	{
 		Scene::Render(hdc);
-		Text text(hdc, L"Mission1", 10, 30);
+		//Text text(hdc, L"Mission1", 10, 30);
 	}
 
 	void Mission1Scene::Enter()

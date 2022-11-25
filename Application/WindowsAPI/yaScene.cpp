@@ -71,14 +71,14 @@ namespace ya
 				if (mObjects[j][i]->IsDeath())
 					continue;
 
-				mObjects[j][i]->Render(hdc);/// 카메라 밖에있는 오브젝트들 렌더 X
-				Vector2 pos = mObjects[j][i]->GetPos();
+				/// 카메라 밖에있는 오브젝트들 렌더 X
+				/*Vector2 pos = mObjects[j][i]->GetPos();
 				pos = Camera::CalculatePos(pos);
 
 				if (pos.x < -100 || pos.y < -100)
 					continue;
 				if (pos.x > windowData.width + 100 || pos.y > windowData.height + 100)
-					continue;
+					continue;*/
 
 				mObjects[j][i]->Render(hdc);
 			}

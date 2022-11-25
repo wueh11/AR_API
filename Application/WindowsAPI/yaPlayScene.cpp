@@ -4,7 +4,6 @@
 #include "yaCollisionManager.h"
 #include "yaSceneManager.h"
 
-#include "yaBgImageObject.h"
 #include "yaPlayer.h"
 #include "yaMonster.h"
 #include "yaRock.h"

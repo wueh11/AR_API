@@ -16,14 +16,14 @@ namespace ya
 	void CharacterSelectScene::Initialize()
 	{
 		ImageObject* bg = new ImageObject();
-		bg->SetImage(L"CharacterSelectBackGround", L"selectScene.bmp");
+		bg->SetImage(L"CharacterSelectBackGround", L"Select\\selectScene.bmp");
 		bg->Initialize();
 		bg->SetPos({ 0.0f, 0.0f * M_SCALE });
 		bg->SetScale({ M_SCALE, M_SCALE });
 		AddGameObject(bg, eColliderLayer::Background);
 
 		ImageObject* select = new ImageObject();
-		select->SetImage(L"CharacterSelect", L"charactersSelect.bmp");
+		select->SetImage(L"CharacterSelect", L"Select\\charactersSelect.bmp");
 		select->Initialize();
 		select->SetPos({ 0.0f, 0.0f * M_SCALE });
 		select->SetScale({ M_SCALE, M_SCALE });

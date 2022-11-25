@@ -1,33 +1,14 @@
-﻿  main.cpp
-C:\Git\assortrock\windowsAPI\Application\WindowsAPI\Maths.h(132,32): warning C4244: 'return': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Git\assortrock\windowsAPI\Application\WindowsAPI\Maths.h(137,27): warning C4244: 'return': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-C:\Git\assortrock\windowsAPI\Application\WindowsAPI\Common.h(123,1): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  yaImageObject.cpp
-C:\Git\assortrock\windowsAPI\Application\WindowsAPI\Maths.h(132,32): warning C4244: 'return': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Git\assortrock\windowsAPI\Application\WindowsAPI\Maths.h(137,27): warning C4244: 'return': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-C:\Git\assortrock\windowsAPI\Application\WindowsAPI\Common.h(123,1): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Git\assortrock\windowsAPI\Application\WindowsAPI\yaImageObject.cpp(40,31): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Git\assortrock\windowsAPI\Application\WindowsAPI\yaImageObject.cpp(40,13): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Git\assortrock\windowsAPI\Application\WindowsAPI\yaImageObject.cpp(39,33): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Git\assortrock\windowsAPI\Application\WindowsAPI\yaImageObject.cpp(39,26): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  yaTitleScene.cpp
-C:\Git\assortrock\windowsAPI\Application\WindowsAPI\Maths.h(132,32): warning C4244: 'return': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Git\assortrock\windowsAPI\Application\WindowsAPI\Maths.h(137,27): warning C4244: 'return': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-C:\Git\assortrock\windowsAPI\Application\WindowsAPI\Common.h(123,1): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  yaUIBase.cpp
-C:\Git\assortrock\windowsAPI\Application\WindowsAPI\Maths.h(132,32): warning C4244: 'return': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Git\assortrock\windowsAPI\Application\WindowsAPI\Maths.h(137,27): warning C4244: 'return': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-C:\Git\assortrock\windowsAPI\Application\WindowsAPI\Common.h(123,1): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Git\assortrock\windowsAPI\Application\WindowsAPI\yaUIBase.cpp(102,56): warning C4244: '인수': 'UINT'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Git\assortrock\windowsAPI\Application\WindowsAPI\yaUIBase.cpp(102,35): warning C4244: '인수': 'UINT'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  yaUIManager.cpp
-C:\Git\assortrock\windowsAPI\Application\WindowsAPI\Maths.h(132,32): warning C4244: 'return': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Git\assortrock\windowsAPI\Application\WindowsAPI\Maths.h(137,27): warning C4244: 'return': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-C:\Git\assortrock\windowsAPI\Application\WindowsAPI\Common.h(123,1): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  코드를 생성하고 있습니다...
-  WindowsAPI.vcxproj -> C:\Git\assortrock\windowsAPI\Application\x64\Debug\WindowsAPI.exe
+﻿  yaPixelImageObject.cpp
+C:\Git\assortrock\AR_API\Application\WindowsAPI\Maths.h(132,32): warning C4244: 'return': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Git\assortrock\AR_API\Application\WindowsAPI\Maths.h(137,27): warning C4244: 'return': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+C:\Git\assortrock\AR_API\Application\WindowsAPI\Common.h(133,1): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Git\assortrock\AR_API\Application\WindowsAPI\yaPixelImageObject.cpp(44,64): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Git\assortrock\AR_API\Application\WindowsAPI\yaPixelImageObject.cpp(44,48): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Git\assortrock\AR_API\Application\WindowsAPI\yaPixelImageObject.cpp(48,74): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Git\assortrock\AR_API\Application\WindowsAPI\yaPixelImageObject.cpp(48,50): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Git\assortrock\AR_API\Application\WindowsAPI\yaPixelImageObject.cpp(76,31): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Git\assortrock\AR_API\Application\WindowsAPI\yaPixelImageObject.cpp(76,13): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Git\assortrock\AR_API\Application\WindowsAPI\yaPixelImageObject.cpp(75,33): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Git\assortrock\AR_API\Application\WindowsAPI\yaPixelImageObject.cpp(75,26): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  WindowsAPI.vcxproj -> C:\Git\assortrock\AR_API\Application\x64\Debug\WindowsAPI.exe

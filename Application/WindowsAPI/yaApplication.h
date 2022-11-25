@@ -20,6 +20,8 @@ namespace ya
 		HPEN GetPen(ePenColor color) { return mPens[(UINT)color]; }
 		HBRUSH GetBrush(eBrushColor color) { return mBrushs[(UINT)color]; }
 
+		eSceneType GetPlaySceneType();
+
 	private:
 		Application();
 		~Application();

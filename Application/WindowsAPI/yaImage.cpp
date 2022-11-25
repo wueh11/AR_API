@@ -79,4 +79,22 @@ namespace ya
 
 		return S_OK;
 	}
+
+	Pixel Image::GetPixelImage(int x, int y)
+	{
+		COLORREF rgba = GetPixel(mHdc, x, y);
+		return Pixel(rgba);
+	}
+
+	void Image::SetPixel(int x, int y, Pixel pixel)
+	{
+		// 비트맵 좌표는 좌측 하단이 0,0
+		// 윈도우 좌표처럼 사용하려면 y를 반대로 바꾸어 주어야 한다.
+		y = mHeight - (y + 1);
+
+		Pixel* bitmapPixel = (Pixel*)mBitmap;
+		bitmapPixel += (mWidth * y + x);
+
+		*bitmapPixel = pixel;
+	}
 }

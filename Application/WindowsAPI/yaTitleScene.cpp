@@ -2,8 +2,8 @@
 #include "yaPlayer.h"
 #include "yaInput.h"
 #include "yaSceneManager.h"
-#include "yaBgImageObject.h"
 #include "yaApplication.h"
+#include "yaImageObject.h"
 
 namespace ya
 {
@@ -15,7 +15,7 @@ namespace ya
 	}
 	void TitleScene::Initialize()
 	{
-		BgImageObject* bg = new BgImageObject();
+		ImageObject* bg = new ImageObject();
 		bg->SetImage(L"TitleBG", L"TitleBG.bmp");
 
 		AddGameObject(bg, eColliderLayer::Background);

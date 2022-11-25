@@ -68,6 +68,9 @@
     <Filter Include="x">
       <UniqueIdentifier>{95e1199c-03d1-4493-9762-b9dbf2aed976}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\GameObject\Image">
+      <UniqueIdentifier>{3168afd1-2616-40bc-9514-ef413f299467}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -169,9 +172,6 @@
     <ClInclude Include="yaPlayer.h">
       <Filter>Engine\GameObject\Game</Filter>
     </ClInclude>
-    <ClInclude Include="yaImageObject.h">
-      <Filter>Engine\GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="yaUIManager.h">
       <Filter>Engine\Manager</Filter>
     </ClInclude>
@@ -190,11 +190,17 @@
     <ClInclude Include="yaHostage.h">
       <Filter>Engine\GameObject\Hostage</Filter>
     </ClInclude>
-    <ClInclude Include="yaBgImageObject.h">
-      <Filter>x</Filter>
-    </ClInclude>
     <ClInclude Include="yaLogoScene.h">
       <Filter>Engine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="yaImageObject.h">
+      <Filter>Engine\GameObject\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="yaPixelImageObject.h">
+      <Filter>Engine\GameObject\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="yaBgImageObject.h">
+      <Filter>x</Filter>
     </ClInclude>
     <ClInclude Include="yaTitleScene.h">
       <Filter>x</Filter>
@@ -288,9 +294,6 @@
     <ClCompile Include="yaRock.cpp">
       <Filter>Engine\GameObject\Game</Filter>
     </ClCompile>
-    <ClCompile Include="yaImageObject.cpp">
-      <Filter>Engine\GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="yaUIManager.cpp">
       <Filter>Engine\Manager</Filter>
     </ClCompile>
@@ -309,11 +312,17 @@
     <ClCompile Include="yaHostage.cpp">
       <Filter>Engine\GameObject\Hostage</Filter>
     </ClCompile>
-    <ClCompile Include="yaBgImageObject.cpp">
-      <Filter>x</Filter>
-    </ClCompile>
     <ClCompile Include="yaLogoScene.cpp">
       <Filter>Engine\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="yaImageObject.cpp">
+      <Filter>Engine\GameObject\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="yaPixelImageObject.cpp">
+      <Filter>Engine\GameObject\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="yaBgImageObject.cpp">
+      <Filter>x</Filter>
     </ClCompile>
     <ClCompile Include="yaTitleScene.cpp">
       <Filter>x</Filter>

@@ -159,6 +159,7 @@
     <ClInclude Include="yaMissile.h" />
     <ClInclude Include="yaMission1Scene.h" />
     <ClInclude Include="yaMonster.h" />
+    <ClInclude Include="yaPixelImageObject.h" />
     <ClInclude Include="yaPlayer.h" />
     <ClInclude Include="yaPlayScene.h" />
     <ClInclude Include="yaResource.h" />
@@ -200,6 +201,7 @@
     <ClCompile Include="yaMission1Scene.cpp" />
     <ClCompile Include="yaMonster.cpp" />
     <ClCompile Include="yaObject.h" />
+    <ClCompile Include="yaPixelImageObject.cpp" />
     <ClCompile Include="yaPlayer.cpp" />
     <ClCompile Include="yaPlayScene.cpp" />
     <ClCompile Include="yaResource.cpp" />

@@ -1,10 +1,17 @@
+#include <Windows.h>
+#include "framework.h"
+#include "WindowsAPI.h"
+
 #include "yaApplication.h"
-#include "yaSceneManager.h"
+
+#include "yaResources.h"
 #include "yaTime.h"
 #include "yaInput.h"
-#include "yaResources.h"
-#include "yaCollisionManager.h"
 #include "yaCamera.h"
+
+#include "yaCollisionManager.h"
+#include "yaSceneManager.h"
+#include "yaUIManager.h"
 
 namespace ya
 {
@@ -14,17 +21,20 @@ namespace ya
 
 		Time::Initialize();
 		Input::Initialize();
+		UIManager::Initialize();
 		SceneManager::Initialize();
+		Camera::Initialize();
 	}
 
 	void Application::Tick()
 	{
 		Time::Tick();
 		Input::Tick();
-		
-		Camera::Tick();
+
 		SceneManager::Tick();
 		CollisionManager::Tick();
+		UIManager::Tick();
+		Camera::Tick();
 
 		Brush brush(mWindowData.backBuffer, mBrushs[(UINT)eBrushColor::Gray]);
 		Rectangle(mWindowData.backBuffer, -1, -1, mWindowData.width + 1, mWindowData.height + 1);
@@ -40,6 +50,11 @@ namespace ya
 		SceneManager::DestroyGameObject();
 	}
 
+	eSceneType Application::GetPlaySceneType()
+	{
+		return SceneManager::GetPlaySceneType();
+	}
+
 	Application::Application()
 	{
 		mWindowData.clear(); //√ ±‚»≠
@@ -49,6 +64,7 @@ namespace ya
 	{
 		SceneManager::Release();
 		Resources::Release();
+		UIManager::Release();
 
 		ReleaseDC(mWindowData.hWnd, mWindowData.hdc);
 		ReleaseDC(mWindowData.hWnd, mWindowData.backBuffer);
@@ -68,7 +84,7 @@ namespace ya
 			, nullptr, 0, 0
 			, rect.right - rect.left
 			, rect.bottom - rect.top
-			, 0
+			, SWP_NOMOVE | SWP_NOZORDER
 		);
 
 		ShowWindow(mWindowData.hWnd, true);

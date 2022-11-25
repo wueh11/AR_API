@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Git\assortrock\windowsAPI\Application\x64\Debug\WindowsAPI.exe</FullPath>
+      <FullPath>C:\Git\assortrock\AR_API\Application\x64\Debug\WindowsAPI.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

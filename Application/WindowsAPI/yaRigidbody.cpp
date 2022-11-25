@@ -94,12 +94,12 @@ namespace ya
 		wchar_t szFloat[50] = {};
 
 		std::wstring strForce = L"Force : " + std::to_wstring(mForce.x) + L", " + std::to_wstring(mForce.y);
-		;		swprintf_s(szFloat, 50, strForce.c_str());
+		swprintf_s(szFloat, 50, strForce.c_str());
 		int strLen = wcsnlen_s(szFloat, 50);
 		TextOut(hdc, 1050, 30, szFloat, strLen);
 
 		std::wstring strVelocity = L"Velocity : " + std::to_wstring(mVelocity.x) + L", " + std::to_wstring(mVelocity.y);
-		;		swprintf_s(szFloat, 50, strVelocity.c_str());
+		swprintf_s(szFloat, 50, strVelocity.c_str());
 		TextOut(hdc, 1050, 50, szFloat, strLen);
 
 		std::wstring isGround = (mbGround ? L"TRUE" : L"FALSE");

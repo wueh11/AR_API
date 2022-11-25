@@ -9,7 +9,7 @@ namespace ya
 
 	void UIManager::Initialize()
 	{
-		
+
 	}
 
 	void UIManager::Tick()

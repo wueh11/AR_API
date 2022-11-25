@@ -8,6 +8,7 @@ namespace ya
 {
 	ImageObject::ImageObject()
 		: mImage(nullptr)
+		, mFullClienet(false)
 	{
 		SetPos(Vector2::Zero);
 		SetScale(Vector2::One);
@@ -36,10 +37,24 @@ namespace ya
 
 		pos = Camera::CalculatePos(pos);
 
-		TransparentBlt(hdc, pos.x, pos.y
-			, size.x * scale.x, size.y * scale.y, mImage->GetDC() 
-			, 0, 0, mImage->GetWidth(), mImage->GetHeight()
-			, RGB(255, 0, 255));
+		if (mFullClienet)
+		{
+			Vector2 rect;
+			rect.x = Application::GetInstance().GetWindowData().width;
+			rect.y = Application::GetInstance().GetWindowData().height;
+
+			TransparentBlt(hdc, pos.x, pos.y
+				, rect.x, rect.y, mImage->GetDC()  ///dc, 시작위치, 이미지 크기, 복사할dc
+				, 0, 0, mImage->GetWidth(), mImage->GetHeight() /// 이미지의 시작, 끝부분 좌표(자르기)
+				, RGB(255, 255, 255)); ///crTransparent의 인자를 제외시키고 출력한다.(투명처리)
+		}
+		else
+		{
+			TransparentBlt(hdc, pos.x, pos.y
+				, size.x * scale.x, size.y * scale.y, mImage->GetDC()
+				, 0, 0, mImage->GetWidth(), mImage->GetHeight()
+				, RGB(255, 0, 255));
+		}
 
 		GameObject::Render(hdc);
 	}

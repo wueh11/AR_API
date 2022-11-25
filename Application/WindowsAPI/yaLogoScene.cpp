@@ -2,7 +2,6 @@
 #include "yaPlayer.h"
 #include "yaInput.h"
 #include "yaSceneManager.h"
-#include "yaBgImageObject.h"
 #include "yaImageObject.h"
 #include "yaApplication.h"
 

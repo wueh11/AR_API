@@ -52,6 +52,7 @@ enum class eComponentType ///컴포넌트 종류들
 enum class eColliderLayer
 {
 	Default,
+	Background_pixel,
 	Background, /// 뒤에 그려질 애들 먼저..
 	EventPoint,
 	Tile,
@@ -59,7 +60,8 @@ enum class eColliderLayer
 	Player_Projecttile,
 	Monster,
 	Monster_Projecttile,
-
+	Background_front, /// 플레이어를 가리는 배경
+	
 	Backpack,
 	UI = _COLLIDER_LAYER - 1, /// 화면 제일 앞에 그려져야함
 	End = _COLLIDER_LAYER,

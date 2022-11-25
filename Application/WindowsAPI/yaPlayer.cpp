@@ -23,43 +23,11 @@ namespace ya
 		: mSpeed(200.0f)
 	{
 		SetName(L"Player");
-		SetPos({ 500.0f, 400.0f });
-		SetScale({ 2.0f, 2.0f });
-		SetSize({ 100.0f, 100.0f });
-		
-		//Upper
-		{
-			if (mImage[0] == nullptr)
-				mImage[0] = Resources::Load<Image>(L"PlayerUpper", L"..\\Resources\\Image\\link.bmp");
-		
-			mAnimator[0] = new Animator();
-			mAnimator[0]->CreateAnimation(L"Idle", mImage[0]
-				, Vector2(0.0f, 0.0f), Vector2(120.0f, 130.0f)
-				, Vector2(5.0f, -20.0f), 3, 0.1f);
+		SetPos({ 40.0f, 60.0f });
+		SetScale({ 1.0f, 1.0f });
+		SetSize({ 40.0f, 60.0f });
 
-			mAnimator[0]->Play(L"Idle", true);
-
-			AddComponent(mAnimator[0]);
-		}
-
-		//Lower
-		{
-			if (mImage[1] == nullptr)
-				mImage[1] = Resources::Load<Image>(L"PlayerLower", L"..\\Resources\\Image\\link.bmp");
-
-			mAnimator[1] = new Animator();
-			mAnimator[1]->SetOffset({ 0.0f, 40.0f });
-			mAnimator[1]->CreateAnimation(L"Idle", mImage[1]
-				, Vector2(0.0f, 0.0f), Vector2(120.0f, 130.0f)
-				, Vector2(5.0f, -20.0f), 3, 0.1f);
-
-			mAnimator[1]->Play(L"Idle", true);
-
-			AddComponent(mAnimator[1]);
-		}
-
-		AddComponent(new Collider());
-		AddComponent(new Rigidbody());
+		Initialize();
 	}
 
 	Player::~Player()
@@ -68,6 +36,43 @@ namespace ya
 
 	void Player::Initialize()
 	{
+		//Lower
+		{
+			if (mImage[1] == nullptr)
+				mImage[1] = Resources::Load<Image>(L"PlayerLower", L"..\\Resources\\Image\\Player\\player1.bmp");
+
+			mAnimator[1] = new Animator();
+			mAnimator[1]->SetOffset({ 0.0f, 30.0f });
+			mAnimator[1]->CreateAnimation(L"Idle", mImage[1]
+				, Vector2(0.0f, 2900.0f), Vector2(42.0f, 32.0f)
+				, Vector2(.0f, .0f), 1, 0.2f);
+
+			mAnimator[1]->Play(L"Idle", true);
+
+			AddComponent(mAnimator[1]);
+		}
+
+		//Upper
+		{
+			if (mImage[0] == nullptr)
+				mImage[0] = Resources::Load<Image>(L"PlayerUpper", L"..\\Resources\\Image\\Player\\player1.bmp");
+
+			mAnimator[0] = new Animator();
+			mAnimator[0]->SetOffset({ 8.0f, 0.0f });
+			mAnimator[0]->CreateAnimation(L"Idle", mImage[0]
+				, Vector2(0.0f, 480.0f), Vector2(62.0f, 58.0f)
+				, Vector2(0.0f, 0.0f), 4, 0.2f);
+
+			mAnimator[0]->Play(L"Idle", true);
+
+			AddComponent(mAnimator[0]);
+		}
+
+		Collider* collider = new Collider();
+		collider->SetSize(GetSize());
+		collider->SetOffset({0.0f, 10.0f});
+		AddComponent(collider);
+		AddComponent(new Rigidbody());
 	}
 
 	void Player::Tick()
@@ -77,22 +82,24 @@ namespace ya
 		Vector2 pos = GetPos();
 		if (KEY_PRESS(eKeyCode::W))
 		{
-			GetComponent<Rigidbody>()->AddForce(Vector2(0.0f, -mSpeed));
+			//GetComponent<Rigidbody>()->AddForce(Vector2(0.0f, -mSpeed));
 		}
 		if (KEY_PRESS(eKeyCode::S))
 		{
-			GetComponent<Rigidbody>()->AddForce(Vector2(0.0f, mSpeed));
+			//GetComponent<Rigidbody>()->AddForce(Vector2(0.0f, mSpeed));
 		}
 		if (KEY_PRESS(eKeyCode::A))
 		{
-			GetComponent<Rigidbody>()->AddForce(Vector2(-mSpeed, 0.0f));
+			pos.x -= 120.0f * Time::DeltaTime();
+			//GetComponent<Rigidbody>()->AddForce(Vector2(-mSpeed, 0.0f));
 		}
 		if (KEY_PRESS(eKeyCode::D))
 		{
-			GetComponent<Rigidbody>()->AddForce(Vector2(mSpeed, 0.0f));
+			pos.x += 120.0f * Time::DeltaTime();
+			//GetComponent<Rigidbody>()->AddForce(Vector2(mSpeed, 0.0f));
 		}
 
-		if (KEY_DOWN(eKeyCode::W))
+		/*if (KEY_DOWN(eKeyCode::W))
 		{
 			mAnimator[0]->Play(L"MoveUp", true);
 			mAnimator[1]->Play(L"MoveUp", true);
@@ -111,14 +118,14 @@ namespace ya
 		{
 			mAnimator[0]->Play(L"MoveRight", true);
 			mAnimator[1]->Play(L"MoveRight", true);
-		}
+		}*/
 
 		if (KEY_DOWN(eKeyCode::SPACE))
 		{
 			Rigidbody* rigidbody = GetComponent<Rigidbody>();
 			Vector2 velocity = rigidbody->GetVelocity();
 
-			if (rigidbody->isGround())
+			//if (rigidbody->isGround())
 			{
 				velocity.y = -500.0f;
 				rigidbody->SetVelocity(velocity);
@@ -154,26 +161,23 @@ namespace ya
 
 	void Player::Render(HDC hdc)
 	{
-		Vector2 pos = GetPos();
+		/*Vector2 pos = GetPos();
 		Vector2 scale = GetScale();
 
 		Vector2 finalPos;
 		finalPos.x = pos.x - mImage[0]->GetWidth() * (scale.x / 2.0f);
 		finalPos.y = pos.y - mImage[0]->GetHeight() * (scale.y / 2.0f);
 
-		/*Vector2 rect;
-		rect.x = mImage[0]->GetWidth() * scale.x;
-		rect.y = mImage[0]->GetHeight() * scale.y;
-
-		TransparentBlt(hdc, finalPos.x, finalPos.y
-			, rect.x, rect.y, mImage[0]->GetDC()  ///dc, 시작위치, 이미지 크기, 복사할dc
-			, 0, 0, mImage[0]->GetWidth(), mImage[0]->GetHeight() /// 이미지의 시작, 끝부분 좌표(자르기)
-			, RGB(255, 0, 255)); ///crTransparent의 인자를 제외시키고 출력한다.(투명처리)
-
 		TransparentBlt(hdc, finalPos.x, finalPos.y + 40.0f
 			, rect.x, rect.y, mImage[1]->GetDC()
 			, 0, 0, mImage[1]->GetWidth(), mImage[1]->GetHeight() 
 			, RGB(255, 0, 255)); */
+
+		wchar_t szFloat[50] = {};
+		std::wstring str = std::to_wstring(GetPos().x) + L", " + std::to_wstring(GetPos().y);
+		swprintf_s(szFloat, 50, str.c_str());
+		int strLen = wcsnlen_s(szFloat, 50);
+		TextOut(hdc, 10, 10, szFloat, strLen);
 
 		GameObject::Render(hdc); /// 자식이 먼저그려져양함
 	}

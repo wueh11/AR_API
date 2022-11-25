@@ -25,15 +25,25 @@
 #pragma comment(lib, "winmm.lib") 
 #pragma comment(lib, "dsound.lib") 
 
-struct Pixel
+union Pixel
 {
-	BYTE R;
-	BYTE G;
-	BYTE B;
-	BYTE A;
+	struct
+	{
+		BYTE R;
+		BYTE G;
+		BYTE B;
+		BYTE A;
+	};
+	DWORD Color;
 
 	Pixel(BYTE r, BYTE g, BYTE b, BYTE a)
 		: R(r), G(g), B(b), A(a)
+	{
+
+	}
+
+	Pixel(COLORREF color)
+		:Color(color)
 	{
 
 	}
