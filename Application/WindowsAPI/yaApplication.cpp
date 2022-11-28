@@ -77,7 +77,7 @@ namespace ya
 
 		// 비트맵 해상도를 설정하기 위한 실제 윈도우 크기 계산
 		RECT rect = { 0, 0, mWindowData.width, mWindowData.height };
-		AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, true);
+		AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, false);
 
 		// 윈도우 크기 변경
 		SetWindowPos(mWindowData.hWnd

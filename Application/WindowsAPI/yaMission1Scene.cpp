@@ -29,19 +29,16 @@ namespace ya
 		
 		WindowData windowData = Application::GetInstance().GetWindowData();
 
-		/*ImageObject* Background = new ImageObject();
-		Background->SetScale({ M_SCALE, M_SCALE });
-		Background->SetImage(L"Mission1_part1_background", L"Background\\part1\\background.bmp");
+		ImageObject* Background = new ImageObject();
+		Background->SetImage(L"Mission1_part1_background", L"Background\\part1\\2.7\\background.bmp");
 		Background->Initialize();
-		Background->SetPos({ 0.0f, -64.0f * M_SCALE });
-		AddGameObject(Background, eColliderLayer::Background);*/
+		Background->SetPos({ 0.0f, -176.0f });
+		AddGameObject(Background, eColliderLayer::Background);
 
 		PixelImageObject* BackgroundPixel = new PixelImageObject();
-		//BackgroundPixel->SetScale({ M_SCALE, M_SCALE });
-		BackgroundPixel->SetImage(L"Mission1_part1_background_pixel", L"Background\\part1\\background_pixel.bmp");
+		BackgroundPixel->SetImage(L"Mission1_part1_background_pixel", L"Background\\part1\\2.7\\background_pixel.bmp");
+		BackgroundPixel->SetPos({ 0.0f, -10.0f });
 		BackgroundPixel->Initialize();
-		BackgroundPixel->SetPos({ 0.0f, 0.0f});
-		//BackgroundPixel->SetPos({ 0.0f, windowData.height - (BackgroundPixel->GetSize().y * BackgroundPixel->GetScale().y)});
 		AddGameObject(BackgroundPixel, eColliderLayer::Background_pixel);
 
 

@@ -139,7 +139,6 @@
     <ClInclude Include="yaAnimator.h" />
     <ClInclude Include="yaApplication.h" />
     <ClInclude Include="yaBackpack.h" />
-    <ClInclude Include="yaBgImageObject.h" />
     <ClInclude Include="yaCamera.h" />
     <ClInclude Include="yaCharacterSelectScene.h" />
     <ClInclude Include="yaChewmein.h" />
@@ -169,7 +168,6 @@
     <ClInclude Include="yaScene.h" />
     <ClInclude Include="yaSceneManager.h" />
     <ClInclude Include="yaTime.h" />
-    <ClInclude Include="yaTitleScene.h" />
     <ClInclude Include="yaUIBase.h" />
     <ClInclude Include="yaUIManager.h" />
   </ItemGroup>
@@ -178,7 +176,6 @@
     <ClCompile Include="yaAnimation.cpp" />
     <ClCompile Include="yaAnimator.cpp" />
     <ClCompile Include="yaBackpack.cpp" />
-    <ClCompile Include="yaBgImageObject.cpp" />
     <ClCompile Include="yaCamera.cpp" />
     <ClCompile Include="yaCharacterSelectScene.cpp" />
     <ClCompile Include="yaChewmein.cpp" />
@@ -211,7 +208,6 @@
     <ClCompile Include="yaScene.cpp" />
     <ClCompile Include="yaSceneManager.cpp" />
     <ClCompile Include="yaTime.cpp" />
-    <ClCompile Include="yaTitleScene.cpp" />
     <ClCompile Include="yaUIBase.cpp" />
     <ClCompile Include="yaUIManager.cpp" />
   </ItemGroup>

@@ -3,7 +3,7 @@
 #define W_WIDTH 800 
 #define W_HEIGHT 600 
 
-#define M_SCALE 1.5f
+#define M_SCALE 2.5f
 
 #define KEY_PRESS(KEY) ya::Input::GetKeyState(KEY) == ya::eKeyState::PRESSED
 #define KEY_DOWN(KEY) ya::Input::GetKeyState(KEY) == ya::eKeyState::DOWN
@@ -52,8 +52,8 @@ enum class eComponentType ///컴포넌트 종류들
 enum class eColliderLayer
 {
 	Default,
-	Background_pixel,
 	Background, /// 뒤에 그려질 애들 먼저..
+	Background_pixel,
 	EventPoint,
 	Tile,
 	Player,

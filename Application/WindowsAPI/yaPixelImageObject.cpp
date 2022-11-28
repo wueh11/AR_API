@@ -38,17 +38,20 @@ namespace ya
 		if (mPlayer == nullptr)
 			return;
 
+		Vector2 pos = GetPos();
+		//pos = Camera::CalculatePos(pos);
+
 		Vector2 playerPos = mPlayer->GetPos();
 		Vector2 playerSize = mPlayer->GetSize();
 		Vector2 playerScale = mPlayer->GetScale();
-		Pixel pixel = mImage->GetPixelImage(playerPos.x, playerPos.y + 40.0f);
+		Pixel pixel = mImage->GetPixelImage(playerPos.x - pos.x , playerPos.y - pos.y + 40.0f);
 
 		if (pixel.R == 0 && pixel.G == 255 && pixel.B == 0)
 		{
-			Pixel pixel2 = mImage->GetPixelImage(playerPos.x, playerPos.y + 40.0f + 1.0f);
+			Pixel pixel2 = mImage->GetPixelImage(playerPos.x - pos.x, playerPos.y - pos.y  + 40.0f + 1.0f);
 			if (pixel2.R == 0 && pixel2.G == 255 && pixel2.B == 0)
 			{
-				mPlayer->GetComponent<Rigidbody>()->SetGround(true);
+				mPlayer->GetComponent<Rigidbody>()->SetGround(true); 
 				playerPos.y -= 1.0f;
 				mPlayer->SetPos(playerPos);
 			}
@@ -66,11 +69,6 @@ namespace ya
 		Vector2 size = GetSize();
 
 		pos = Camera::CalculatePos(pos);
-
-		/*TransparentBlt(hdc, finalPos.x, finalPos.y
-			, mImage->GetWidth(), mImage->GetHeight(), mImage->GetDC()
-			, 0, 0, mImage->GetWidth(), mImage->GetHeight()
-			, RGB(255, 0, 255));*/
 
 		TransparentBlt(hdc, pos.x, pos.y
 			, size.x * scale.x, size.y * scale.y, mImage->GetDC()

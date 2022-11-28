@@ -1,4 +1,5 @@
 #include "yaInput.h"
+#include "yaApplication.h"
 
 namespace ya
 {
@@ -21,6 +22,7 @@ namespace ya
 	};
 
 	std::vector<Input::Key> Input::mKeys;
+	Vector2 Input::mMousePos;
 
 	void Input::Initialize()
 	{
@@ -37,28 +39,50 @@ namespace ya
 
 	void Input::Tick()
 	{
-		for (size_t i = 0; i < (UINT)eKeyCode::End; i++)
+		if (GetFocus())
 		{
-			// 해당 키가 현재 눌러져 있는 경우
-			if (GetAsyncKeyState(ASCII[i]) & 0x8000)
+			for (size_t i = 0; i < (UINT)eKeyCode::End; i++)
 			{
-				//이전 프레임에 눌러져 있던 경우
-				if (mKeys[i].bPressed)
-					mKeys[i].state = eKeyState::PRESSED;
-				//이전 프레임에 눌러져있지 않았을 경우
-				else
-					mKeys[i].state = eKeyState::DOWN;
+				// 해당 키가 현재 눌러져 있는 경우
+				if (GetAsyncKeyState(ASCII[i]) & 0x8000)
+				{
+					//이전 프레임에 눌러져 있던 경우
+					if (mKeys[i].bPressed)
+						mKeys[i].state = eKeyState::PRESSED;
+					//이전 프레임에 눌러져있지 않았을 경우
+					else
+						mKeys[i].state = eKeyState::DOWN;
 
-				mKeys[i].bPressed = true;
-			}
-			// 눌러져 있지 않은 경우
-			else
-			{
-				//이전 프레임에 눌러져 있던 경우
-				if (mKeys[i].bPressed)
-					mKeys[i].state = eKeyState::UP;
-				//이전 프레임에 눌러져있지 않았을 경우
+					mKeys[i].bPressed = true;
+				}
+				// 눌러져 있지 않은 경우
 				else
+				{
+					//이전 프레임에 눌러져 있던 경우
+					if (mKeys[i].bPressed)
+						mKeys[i].state = eKeyState::UP;
+					//이전 프레임에 눌러져있지 않았을 경우
+					else
+						mKeys[i].state = eKeyState::NONE;
+
+					mKeys[i].bPressed = false;
+				}
+			}
+
+			POINT mousePos = {};
+			GetCursorPos(&mousePos);
+			HWND hwnd = Application::GetInstance().GetWindowData().hWnd;
+			ScreenToClient(hwnd, &mousePos);
+			mMousePos.x = mousePos.x;
+			mMousePos.y = mousePos.y;
+		}
+		else /// focus 에서 벗어났을 때
+		{
+			for (size_t i = 0; i < (UINT)eKeyCode::End; i++)
+			{
+				if (eKeyState::DOWN == mKeys[i].state || eKeyState::PRESSED == mKeys[i].state)
+					mKeys[i].state = eKeyState::UP; /// 눌려있던 키를 UP으로 초기화
+				else if (eKeyState::UP == mKeys[i].state)
 					mKeys[i].state = eKeyState::NONE;
 
 				mKeys[i].bPressed = false;
@@ -68,11 +92,33 @@ namespace ya
 
 	void Input::Render(HDC hdc)
 	{
-
+		wchar_t szFloat[50] = {};
+		std::wstring str1 = L"Mouse : " + std::to_wstring(mMousePos.x) + L", " + std::to_wstring(mMousePos.y);
+		swprintf_s(szFloat, 50, str1.c_str());
+		int strLen = wcsnlen_s(szFloat, 50);
+		TextOut(hdc, 10, 60, szFloat, strLen);
 	}
 
 	eKeyState Input::GetKeyState(eKeyCode keyCode)
 	{
 		return mKeys[(UINT)keyCode].state;
+	}
+
+	Vector2 Input::GetMousePos(HWND hWnd)
+	{
+		Vector2 vMousePos(-1.0f, -1.0f);
+
+		if (GetFocus()) /// 윈도우 여러개일경우 예외처리 (현재 창에만 입력)
+		{
+			POINT mousePos = {};
+			GetCursorPos(&mousePos);
+			ScreenToClient(hWnd, &mousePos);
+			vMousePos.x = mousePos.x;
+			vMousePos.y = mousePos.y;
+
+			return vMousePos;
+		}
+
+		return vMousePos;
 	}
 }
