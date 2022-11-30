@@ -39,16 +39,16 @@ namespace ya
 			return;
 
 		Vector2 pos = GetPos();
-		//pos = Camera::CalculatePos(pos);
 
 		Vector2 playerPos = mPlayer->GetPos();
 		Vector2 playerSize = mPlayer->GetSize();
 		Vector2 playerScale = mPlayer->GetScale();
-		Pixel pixel = mImage->GetPixelImage(playerPos.x - pos.x , playerPos.y - pos.y + 40.0f);
+
+		Pixel pixel = mImage->GetPixelImage(playerPos.x - pos.x , playerPos.y - pos.y + (playerSize.y * playerScale.x / 2 ));
 
 		if (pixel.R == 0 && pixel.G == 255 && pixel.B == 0)
 		{
-			Pixel pixel2 = mImage->GetPixelImage(playerPos.x - pos.x, playerPos.y - pos.y  + 40.0f + 1.0f);
+			Pixel pixel2 = mImage->GetPixelImage(playerPos.x - pos.x, playerPos.y - pos.y + (playerSize.y * playerScale.y / 2 ) - 1.0f);
 			if (pixel2.R == 0 && pixel2.G == 255 && pixel2.B == 0)
 			{
 				mPlayer->GetComponent<Rigidbody>()->SetGround(true); 

@@ -9,6 +9,7 @@ namespace ya
 		, mSize{ 0.0f, 0.0f }
 		, mDead(false)
 		, mDeathTime(-100.0f)
+		, mOwner(nullptr)
 	{
 	}
 
@@ -39,6 +40,9 @@ namespace ya
 				continue;
 
 			component->Tick();
+
+			for (GameObject* child : mChildren)
+ 				child->Tick();
 		}
 	}
 
@@ -52,6 +56,9 @@ namespace ya
 
 			component->Render(hdc);
 		}
+
+		for (GameObject* child : mChildren)
+			child->Render(hdc);
 	}
 
 	void GameObject::OnCollisionEnter(Collider* other)
@@ -64,6 +71,15 @@ namespace ya
 
 	void GameObject::OnCollisionExit(Collider* other)
 	{
+	}
+
+	void GameObject::AddChild(GameObject* gameObject)
+	{
+		if (gameObject == nullptr)
+			return;
+
+		mChildren.push_back(gameObject);
+		gameObject->mOwner = this;
 	}
 
 	void GameObject::AddComponent(Component* component)

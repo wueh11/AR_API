@@ -68,6 +68,9 @@
     <Filter Include="Engine\GameObject\Image">
       <UniqueIdentifier>{3168afd1-2616-40bc-9514-ef413f299467}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\GameObject\Player">
+      <UniqueIdentifier>{95b53366-67ae-4378-b062-7c2e450b9852}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -166,9 +169,6 @@
     <ClInclude Include="yaMonster.h">
       <Filter>Engine\GameObject\Game</Filter>
     </ClInclude>
-    <ClInclude Include="yaPlayer.h">
-      <Filter>Engine\GameObject\Game</Filter>
-    </ClInclude>
     <ClInclude Include="yaUIManager.h">
       <Filter>Engine\Manager</Filter>
     </ClInclude>
@@ -195,6 +195,15 @@
     </ClInclude>
     <ClInclude Include="yaPixelImageObject.h">
       <Filter>Engine\GameObject\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="yaPlayer.h">
+      <Filter>Engine\GameObject\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="yaPlayerUpper.h">
+      <Filter>Engine\GameObject\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="yaPlayerLower.h">
+      <Filter>Engine\GameObject\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -279,9 +288,6 @@
     <ClCompile Include="yaMonster.cpp">
       <Filter>Engine\GameObject\Game</Filter>
     </ClCompile>
-    <ClCompile Include="yaPlayer.cpp">
-      <Filter>Engine\GameObject\Game</Filter>
-    </ClCompile>
     <ClCompile Include="yaRock.cpp">
       <Filter>Engine\GameObject\Game</Filter>
     </ClCompile>
@@ -311,6 +317,15 @@
     </ClCompile>
     <ClCompile Include="yaPixelImageObject.cpp">
       <Filter>Engine\GameObject\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="yaPlayer.cpp">
+      <Filter>Engine\GameObject\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="yaPlayerLower.cpp">
+      <Filter>Engine\GameObject\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="yaPlayerUpper.cpp">
+      <Filter>Engine\GameObject\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

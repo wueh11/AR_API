@@ -81,7 +81,7 @@ namespace ya
 		for (UIBase* child : mChildren)
 		{
 			if (child->mbEnable)
-				child->OnRender(hdc);
+				child->Render(hdc);
 		}
 	}
 

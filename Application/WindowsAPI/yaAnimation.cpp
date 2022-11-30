@@ -23,13 +23,24 @@ namespace ya
 			return;
 
 		mTime += Time::DeltaTime();
+		
 		if (mSpriteSheet[mSpriteIndex].duration < mTime)
 		{
 			mTime = 0.0f;
-			if (mSpriteSheet.size() <= mSpriteIndex + 1)
-				mbComplete = true;
+			if (!mbReverse)
+			{
+				if (mSpriteSheet.size() <= mSpriteIndex + 1)
+					mbComplete = true;
+				else
+					mSpriteIndex++;
+			}
 			else
-				mSpriteIndex++;
+			{ // ¿ªÀç»ý
+				if (mSpriteIndex == 0)
+					mbComplete = true;
+				else
+					mSpriteIndex--;
+			}
 		}
 	}
 	
@@ -60,6 +71,8 @@ namespace ya
 			, int(mSpriteSheet[mSpriteIndex].size.x), int(mSpriteSheet[mSpriteIndex].size.y)
 			, func);*/
 
+		pos += mSpriteSheet[mSpriteIndex].offset;
+
 		TransparentBlt(hdc
 			, int(pos.x + animatorOffset.x - (mSpriteSheet[mSpriteIndex].size.x * scale.x / 2.0f))
 			, int(pos.y + animatorOffset.y - (mSpriteSheet[mSpriteIndex].size.y * scale.y / 2.0f))
@@ -68,29 +81,60 @@ namespace ya
 			, int(mSpriteSheet[mSpriteIndex].leftTop.x), int(mSpriteSheet[mSpriteIndex].leftTop.y)
 			, int(mSpriteSheet[mSpriteIndex].size.x), int(mSpriteSheet[mSpriteIndex].size.y)
 			, RGB(255, 0, 255));
+
+
+		wchar_t szFloat[50] = {};
+		std::wstring str = L"reverse: ";
+		str += (mbReverse ? L"true" : L"false");
+		swprintf_s(szFloat, 50, str.c_str());
+		int strLen = wcsnlen_s(szFloat, 50);
+		TextOut(hdc, 300, 10, szFloat, strLen);
 	}
 	
-	void Animation::Create(Image* image, Vector2 leftTop, Vector2 size, Vector2 offset, UINT spriteLength, float duration, bool bAffectedCamera)
+	void Animation::Create(Image* image, Vector2 leftTop, Vector2 size, Vector2 offset, UINT spriteLength, float duration, bool bAffectedCamera, bool bVertical)
 	{
 		mImage = image;
 		mbAffectedCamera = bAffectedCamera;
+		mbVertical = bVertical;
 
-		for (size_t i = 0; i < spriteLength; i++)
+		if (!bVertical)
 		{
-			Sprite sprite;
-			sprite.leftTop.x = leftTop.x + (size.x * (float)i);
-			sprite.leftTop.y = leftTop.y;
-			sprite.size = size;
-			sprite.offset = offset;
-			sprite.duration = duration;
+			for (size_t i = 0; i < spriteLength; i++)
+			{
+				Sprite sprite;
+				sprite.leftTop.x = leftTop.x + (size.x * (float)i);
+				sprite.leftTop.y = leftTop.y;
+				sprite.size = size;
+				sprite.offset = offset;
+				sprite.duration = duration;
 
-			mSpriteSheet.push_back(sprite);
+				mSpriteSheet.push_back(sprite);
+			}
+		}
+		else
+		{
+			for (size_t i = 0; i < spriteLength; i++)
+			{
+				Sprite sprite;
+				sprite.leftTop.x = leftTop.x;
+				sprite.leftTop.y = leftTop.y + (size.y * (float)i);
+				sprite.size = size;
+				sprite.offset = offset;
+				sprite.duration = duration;
+
+				mSpriteSheet.push_back(sprite);
+			}
 		}
 	}
 	
-	void Animation::Reset()
+	void Animation::Reset(bool bReverse)
 	{
-		mSpriteIndex = 0;
+		mbReverse = bReverse;
+		if (!bReverse)
+			mSpriteIndex = 0;
+		else
+			mSpriteIndex = mSpriteSheet.size() - 1;
+
 		mTime = 0.0f;
 		mbComplete = false;
 	}

@@ -32,10 +32,11 @@ namespace ya
 		void Render(HDC hdc);
 
 		void Create(Image* image, Vector2 leftTop, Vector2 size, Vector2 offset
-			, UINT spriteLength, float duration, bool bAffectedCamera = false);
+			, UINT spriteLength, float duration, bool bAffectedCamera = false, bool bVertical = false);
 
-		void Reset();
+		void Reset(bool bReverse = false);
 		bool isComplete() { return mbComplete; }
+		bool isReverse() { return mbReverse; }
 		void SetAnimator(Animator* animator) { mAnimator = animator; }
 
 	private:
@@ -49,5 +50,7 @@ namespace ya
 		bool mbComplete;
 		bool mbEnd;
 		bool mbAffectedCamera;
+		bool mbReverse;
+		bool mbVertical;
 	};
 }

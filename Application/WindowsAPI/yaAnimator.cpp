@@ -40,7 +40,7 @@ namespace ya
 				if (events != nullptr)
 					events->mCompleteEvent();
 
-				mPlayAnimation->Reset();
+				mPlayAnimation->Reset(mPlayAnimation->isReverse());
 			}
 		}
 	}
@@ -52,7 +52,7 @@ namespace ya
 	}
 
 	void Animator::CreateAnimation(std::wstring name, Image* image, Vector2 leftTop, Vector2 size
-			, Vector2 offset, UINT spriteLength, float duration, bool bAffectedCamera)
+			, Vector2 offset, UINT spriteLength, float duration, bool bAffectedCamera, bool bVertical)
 	{
 		Animation* animation = FindAnimation(name);
 		if (animation != nullptr)
@@ -72,7 +72,7 @@ namespace ya
 		mEvents.insert(std::make_pair(name, events));
 	}
 
-	void Animator::Play(std::wstring name, bool bLoop)
+	void Animator::Play(std::wstring name, bool bLoop, bool bReverse)
 	{
 		Animator::Events* events = FindEvents(name);
 
@@ -84,7 +84,7 @@ namespace ya
 
 		if(mPlayAnimation != nullptr)
 		{
-			mPlayAnimation->Reset();
+			mPlayAnimation->Reset(bReverse);
 			mbLoop = bLoop;
 
 			if (prevAnimation != mPlayAnimation)

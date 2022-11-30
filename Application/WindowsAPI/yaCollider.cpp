@@ -47,8 +47,8 @@ namespace ya
 		GameObject* owner = GetOwner();
 		mSize = owner->GetSize();
 
-		Rectangle(hdc, mPos.x - (mSize.x / 2.0f), mPos.y - (mSize.y / 2.0f)
-			, mPos.x + (mSize.x / 2.0f), mPos.y + (mSize.y / 2.0f));
+		Rectangle(hdc, mPos.x - (mSize.x * mScale.x / 2.0f), mPos.y - (mSize.y * mScale.y / 2.0f)
+			, mPos.x + (mSize.x * mScale.x / 2.0f), mPos.y + (mSize.y * mScale.y / 2.0f));
 		/*Rectangle(hdc, mPos.x - (mScale.x / 2.0f), mPos.y - (mScale.y / 2.0f)
 			, mPos.x + (mScale.x / 2.0f), mPos.y + (mScale.y / 2.0f));*/
 

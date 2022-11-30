@@ -21,14 +21,20 @@ namespace ya
 		virtual void OnCollisionExit(Collider* other);
 
 		void WalkComplete();
-		void Walking();
+
+		bool IsLeft() { return mLeft; }
 
 	private:
 		float mSpeed;
-		Image* mImage1;
-		Animator* mAnimator1;
-		Image* mImage[2]; //0:upper, 1:lower
-		Animator* mAnimator[2];
+		
+		bool mLeft;
+		bool mJump;
+
+		GameObject* mUpper;
+		GameObject* mLower;
+
+		Image* mImage;
+		Animator* mAnimator;
 
 		Backpack* mBackpack;
 	};

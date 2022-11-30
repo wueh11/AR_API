@@ -38,9 +38,9 @@ namespace ya
 		virtual void Tick() override;
 		virtual void Render(HDC hdc) override;
 
-		void CreateAnimation(std::wstring name, Image* image, Vector2 leftTop, Vector2 size, Vector2 offset
-			, UINT spriteLength, float duration, bool bAffectedCamera = true);
-		void Play(std::wstring name, bool bLoop = false);
+		void CreateAnimation(std::wstring name, Image* image, Vector2 leftTop, Vector2 size, Vector2 offset, UINT spriteLength
+							, float duration, bool bAffectedCamera = true, bool bVertical = false);
+		void Play(std::wstring name, bool bLoop = false, bool bReverse = false);
 
 		Animation* FindAnimation(std::wstring name);
 
