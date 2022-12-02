@@ -34,13 +34,13 @@ namespace ya
 		{
 			mPlayAnimation->Tick();
 
-			if (mbLoop && mPlayAnimation->isComplete())
+			if (mbLoop && mPlayAnimation->IsComplete())
 			{
 				Animator::Events* events = FindEvents(mPlayAnimation->getName());
 				if (events != nullptr)
 					events->mCompleteEvent();
 
-				mPlayAnimation->Reset(mPlayAnimation->isReverse());
+				mPlayAnimation->Reset(mPlayAnimation->IsReverse());
 			}
 		}
 	}

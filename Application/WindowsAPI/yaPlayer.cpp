@@ -24,13 +24,18 @@ namespace ya
 {
 	Player::Player()
 		: mSpeed(200.0f)
-		, mLeft(false)
+		, mbLeft(false)
+		, mbJump(false)
+		, mbSit(false)
+		, mbFall(true)
+		, mbUpside(false)
+		, mbDownside(false)
 		, mUpper(nullptr)
 		, mLower(nullptr)
 	{
 		SetName(L"Player");
 		SetPos({ 40.0f, 60.0f });
-		SetScale({ 3.0f, 3.0f });
+		SetScale({ 2.6f, 2.6f });
 		SetSize({ 24.0f, 36.0f });
 
 		Initialize();
@@ -63,59 +68,58 @@ namespace ya
 	{
 		GameObject::Tick();
 
-		Vector2 pos = GetPos();
+		Rigidbody* rigidbody = GetComponent<Rigidbody>();;
 
-		//if (KEY_PRESS(eKeyCode::W))
-		//{
-		//	// ¿ßπÊ«‚∫Ω
-		//}
-		//if (KEY_PRESS(eKeyCode::S))
-		//{
-		//	// æ∆∑°πÊ«‚∫Ω
-		//}
-		if (KEY_PRESS(eKeyCode::A))
+		switch (mState)
 		{
-			mLeft = true;
-			pos.x -= mSpeed * Time::DeltaTime();
+		case ya::Player::State::IDLE:
+			Idle();
+			break;
+		case ya::Player::State::WALK:
+			Walk();
+			break;
+		case ya::Player::State::JUMP:
+			Jump(rigidbody);
+			break;
+		case ya::Player::State::SIT:
+			Sit();
+			break;
+		case ya::Player::State::FRONT_TO_UPSIDE:
+			break;
+		case ya::Player::State::UPSIDE:
+			Upside();
+			break;
+		case ya::Player::State::UPSIDE_TO_FRONT:
+			break;
+		case ya::Player::State::FRONT_TO_DOWNSIDE:
+			break;
+		case ya::Player::State::DOWNSIDE:
+			Downside();
+			break;
+		case ya::Player::State::DOWNSIDE_TO_FRONT:
+			break;
+		case ya::Player::State::SHOOT:
+			Shoot();
+			break;
+		case ya::Player::State::SHOOT_FRONT_UPSIDE:
+			break;
+		case ya::Player::State::SHOOT_UPSIDE:
+			ShootUpside();
+			break;
+		case ya::Player::State::SHOOT_DOWNSIDE:
+			ShootDownside();
+			break;
+		case ya::Player::State::KNIFE:
+			Knife();
+			break;
+		case ya::Player::State::BOMB:
+			Bomb();
+			break;
+		default:
+			break;
 		}
-		if (KEY_PRESS(eKeyCode::D))
-		{
-			mLeft = false;
-			pos.x += mSpeed * Time::DeltaTime();
-		}
 
-		if (KEY_DOWN(eKeyCode::SPACE))
-		{
-			Rigidbody* rigidbody = GetComponent<Rigidbody>();
-			Vector2 velocity = rigidbody->GetVelocity();
-
-			//if (rigidbody->isGround())
-			{
-				velocity.y = -500.0f;
-				rigidbody->SetVelocity(velocity);
-
-				rigidbody->SetGround(false);
-			}
-
-			//mAnimator[0]->Play(L"JumpPistolRight", false);
-			//mAnimator[1]->Play(L"JumpPistolRight", false);
-		}
-
-		if (KEY_DOWN(eKeyCode::LCTRL))
-		{
-			Missile* missile = new Missile();
-
-			Scene* playScene = SceneManager::GetPlayScene();
-			playScene->AddGameObject(missile, eColliderLayer::Player_Projecttile);
-
-			Vector2 playerPos = GetPos();
-			Vector2 playerScale = GetScale() / 2.0f;
-
-			Vector2 missileScale = missile->GetScale();
-
-			missile->SetPos(playerPos + playerScale - (missileScale / 2.0f));
-
-		}
+		
 
 		/*if (KEY_DOWN(eKeyCode::I))
 		{
@@ -124,7 +128,6 @@ namespace ya
 			playScene->AddGameObject(backPack, eColliderLayer::Backpack);
 		}*/
 
-		SetPos(pos);
 	}
 
 	void Player::Render(HDC hdc)
@@ -148,6 +151,203 @@ namespace ya
 
 	void Player::OnCollisionExit(Collider* other)
 	{
+	}
+
+	void Player::ShootArms()
+	{
+		Missile* missile = new Missile();
+
+		Scene* playScene = SceneManager::GetPlayScene();
+		playScene->AddGameObject(missile, eColliderLayer::Player_Projecttile);
+
+		Vector2 playerPos = GetPos();
+		Vector2 playerScale = GetScale() / 2.0f;
+
+		Vector2 missileScale = missile->GetScale();
+
+		missile->SetPos(playerPos + playerScale - (missileScale / 2.0f));
+	}
+
+	void Player::Idle()
+	{
+		mbJump = false;
+
+		if (KEY_PRESS(eKeyCode::LEFT) || KEY_PRESS(eKeyCode::RIGHT))
+		{
+			mState = State::WALK;
+		}
+
+		if (KEY_PRESS(eKeyCode::UP))
+		{
+			mState = State::UPSIDE;
+			
+		}
+		if (KEY_PRESS(eKeyCode::DOWN))
+		{
+			mState = State::SIT;
+		}
+
+		if (KEY_PRESS(eKeyCode::SPACE))
+		{
+			mState = State::JUMP;
+		}
+
+		if (KEY_DOWN(eKeyCode::LCTRL))
+		{
+			mState = State::SHOOT;
+		}
+	}
+
+	void Player::Walk()
+	{
+		Vector2 pos = GetPos();
+
+		if (KEY_PRESS(eKeyCode::SPACE))
+		{
+			mState = State::JUMP;
+		}
+
+		if (KEY_PRESS(eKeyCode::LEFT))
+		{
+			mbLeft = true;
+			pos.x -= mSpeed * Time::DeltaTime();
+		}
+		if (KEY_PRESS(eKeyCode::RIGHT))
+		{
+			mbLeft = false;
+			pos.x += mSpeed * Time::DeltaTime();
+		}
+
+		SetPos(pos);
+
+		if (KEY_UP(eKeyCode::LEFT)
+			|| KEY_UP(eKeyCode::RIGHT))
+		{
+			mState = State::IDLE;
+		}
+	}
+
+	void Player::Jump(Rigidbody* rigidbody)
+	{
+		if (!mbJump)
+		{
+			Vector2 velocity = rigidbody->GetVelocity();
+			velocity.y = -560.0f;
+			rigidbody->SetVelocity(velocity);
+			rigidbody->SetGround(false);
+		}
+
+		mbFall = (rigidbody->GetVelocity().y > 0);
+
+		if (rigidbody->isGround())
+		{
+			mbJump = false;
+			mState = State::IDLE;
+			return;
+		}
+
+		mbJump = true;
+
+		if (KEY_PRESS(eKeyCode::LEFT) || KEY_PRESS(eKeyCode::RIGHT))
+		{
+			mState = State::WALK;
+		}
+
+		if (KEY_PRESS(eKeyCode::DOWN))
+		{
+			mState = State::DOWNSIDE;
+		}
+	}
+
+	void Player::Sit()
+	{
+		mbSit = true;
+
+		if (KEY_UP(eKeyCode::DOWN))
+		{
+			mbSit = false;
+			mState = State::IDLE;
+			return;
+		}
+
+		if (KEY_PRESS(eKeyCode::LEFT) || KEY_PRESS(eKeyCode::RIGHT))
+		{
+			mState = State::WALK;
+			return;
+		}
+	}
+
+	void Player::Upside()
+	{
+		mbUpside = true;
+
+		if (KEY_UP(eKeyCode::UP))
+		{
+			mbUpside = false;
+			mState = State::IDLE;
+		}
+
+		if (KEY_DOWN(eKeyCode::LCTRL))
+		{
+			mState = State::SHOOT_UPSIDE;
+		}
+	}
+
+	void Player::Downside()
+	{
+		mbDownside = true;
+
+		if(!mbJump)
+		{
+			mbDownside = false;
+			mState = State::IDLE;
+		}
+
+		if (KEY_DOWN(eKeyCode::LCTRL))
+		{
+			mState = State::SHOOT_DOWNSIDE;
+		}
+	}
+
+	void Player::Shoot()
+	{
+		ShootArms();
+
+		mState = State::IDLE;
+	}
+
+	void Player::ShootFrontUpside()
+	{
+	}
+
+	void Player::ShootUpside()
+	{
+		ShootArms();
+
+		mState = State::UPSIDE;
+	}
+
+	void Player::ShootDownside()
+	{
+		ShootArms();
+
+		mState = State::DOWNSIDE;
+	}
+
+	void Player::Knife()
+	{
+		if (KEY_UP(eKeyCode::LCTRL))
+		{
+			mState = State::IDLE;
+		}
+	}
+
+	void Player::Bomb()
+	{
+		if (KEY_UP(eKeyCode::LSHIFT))
+		{
+			mState = State::IDLE;
+		}
 	}
 
 	void Player::WalkComplete()

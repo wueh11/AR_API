@@ -13,9 +13,9 @@ namespace ya
 		, mAccelation(Vector2::Zero)
 		, mFriction(100.0f)
 	{
-		mGravity = Vector2(0.0f, 800.0f);
+		mGravity = Vector2(0.0f, 1000.0f);
 		mbGround = false;
-		mLimitVelocity = Vector2(200.0f, 1000.0f);
+		mLimitVelocity = Vector2(200.0f, 2000.0f);
 	}
 
 	Rigidbody::~Rigidbody()
@@ -96,16 +96,16 @@ namespace ya
 		std::wstring strForce = L"Force : " + std::to_wstring(mForce.x) + L", " + std::to_wstring(mForce.y);
 		swprintf_s(szFloat, 50, strForce.c_str());
 		int strLen = wcsnlen_s(szFloat, 50);
-		TextOut(hdc, 1050, 30, szFloat, strLen);
+		TextOut(hdc, 600, 30, szFloat, strLen);
 
 		std::wstring strVelocity = L"Velocity : " + std::to_wstring(mVelocity.x) + L", " + std::to_wstring(mVelocity.y);
 		swprintf_s(szFloat, 50, strVelocity.c_str());
-		TextOut(hdc, 1050, 50, szFloat, strLen);
+		TextOut(hdc, 600, 50, szFloat, strLen);
 
 		std::wstring isGround = (mbGround ? L"TRUE" : L"FALSE");
 		std::wstring strGround = L"Ground : " + isGround;
 		swprintf_s(szFloat, 50, strGround.c_str());
-		TextOut(hdc, 1050, 70, szFloat, strLen);
+		TextOut(hdc, 600, 70, szFloat, strLen);
 	}
 
 	void Rigidbody::AddForce(Vector2 force)

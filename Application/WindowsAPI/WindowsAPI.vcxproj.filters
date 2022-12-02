@@ -341,4 +341,7 @@
       <Filter>main\리소스 파일</Filter>
     </Image>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="ani.txt" />
+  </ItemGroup>
 </Project>

@@ -9,6 +9,16 @@ namespace ya
 	class PlayerLower : public GameObject
 	{
 	public:
+		enum class State
+		{
+			IDLE,
+			WALK,
+			JUMP,
+			FALL,
+			JUMPMOVE,
+			END,
+		};
+
 		PlayerLower();
 		virtual ~PlayerLower();
 
@@ -20,9 +30,16 @@ namespace ya
 		virtual void OnCollisionStay(Collider* other);
 		virtual void OnCollisionExit(Collider* other);
 
-		void CreateAnimation();
-
 	private:
+		void Idle(bool bLeft);
+		void Walk(bool bLeft);
+		void Jump(bool bLeft, bool bJump, bool bFall);
+		void Fall(bool bLeft, bool bJump);
+		void JumpMove(bool bLeft, bool bJump);
+		
+	private:
+		State mState;
+
 		Image* mImage;
 		Animator* mAnimator;
 	};

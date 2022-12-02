@@ -1,6 +1,7 @@
-﻿  yaPlayerLower.cpp
+﻿  yaPlayer.cpp
 C:\Git\assortrock\AR_API\Application\WindowsAPI\Maths.h(141,32): warning C4244: 'return': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 C:\Git\assortrock\AR_API\Application\WindowsAPI\Maths.h(146,27): warning C4244: 'return': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
 C:\Git\assortrock\AR_API\Application\WindowsAPI\Common.h(133,1): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Git\assortrock\AR_API\Application\WindowsAPI\yaPlayer.cpp(138,38): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   WindowsAPI.vcxproj -> C:\Git\assortrock\AR_API\Application\x64\Debug\WindowsAPI.exe

@@ -35,8 +35,8 @@ namespace ya
 			, UINT spriteLength, float duration, bool bAffectedCamera = false, bool bVertical = false);
 
 		void Reset(bool bReverse = false);
-		bool isComplete() { return mbComplete; }
-		bool isReverse() { return mbReverse; }
+		bool IsComplete() { return mbComplete; }
+		bool IsReverse() { return mbReverse; }
 		void SetAnimator(Animator* animator) { mAnimator = animator; }
 
 	private:

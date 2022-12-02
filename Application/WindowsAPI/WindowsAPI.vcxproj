@@ -222,6 +222,9 @@
     <Image Include="small.ico" />
     <Image Include="WindowsAPI.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="ani.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

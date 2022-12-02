@@ -45,21 +45,23 @@ namespace ya
 			}
 		}
 
-		if (KEY_PRESS(eKeyCode::UP))
+		float speed = 400.0f;
+
+		if (KEY_PRESS(eKeyCode::NUM_8))
 		{
-			mLookPosition.y -= 200.0f * Time::DeltaTime();
+			mLookPosition.y -= speed * Time::DeltaTime();
 		}
-		if (KEY_PRESS(eKeyCode::DOWN))
+		if (KEY_PRESS(eKeyCode::NUM_2))
 		{
-			mLookPosition.y += 200.0f * Time::DeltaTime();
+			mLookPosition.y += speed * Time::DeltaTime();
 		}
-		if (KEY_PRESS(eKeyCode::LEFT))
+		if (KEY_PRESS(eKeyCode::NUM_4))
 		{
-			mLookPosition.x -= 200.0f * Time::DeltaTime();
+			mLookPosition.x -= speed * Time::DeltaTime();
 		}
-		if (KEY_PRESS(eKeyCode::RIGHT))
+		if (KEY_PRESS(eKeyCode::NUM_6))
 		{
-			mLookPosition.x += 200.0f * Time::DeltaTime();
+			mLookPosition.x += speed * Time::DeltaTime();
 		}
 
 		if (mTarget != nullptr)

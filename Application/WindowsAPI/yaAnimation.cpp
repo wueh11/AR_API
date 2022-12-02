@@ -83,12 +83,12 @@ namespace ya
 			, RGB(255, 0, 255));
 
 
-		wchar_t szFloat[50] = {};
+		/*wchar_t szFloat[50] = {};
 		std::wstring str = L"reverse: ";
 		str += (mbReverse ? L"true" : L"false");
 		swprintf_s(szFloat, 50, str.c_str());
 		int strLen = wcsnlen_s(szFloat, 50);
-		TextOut(hdc, 300, 10, szFloat, strLen);
+		TextOut(hdc, 300, 10, szFloat, strLen);*/
 	}
 	
 	void Animation::Create(Image* image, Vector2 leftTop, Vector2 size, Vector2 offset, UINT spriteLength, float duration, bool bAffectedCamera, bool bVertical)

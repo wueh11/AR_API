@@ -94,3 +94,13 @@ union ColliderID ///union -> 메모리 데이터 영역을 공유한다
 	};
 	UINT64 ID;
 };
+
+enum class eArms
+{
+	Pistol,
+	HeavyMachinegun,
+	ShotGun,
+	LaserGun,
+
+	END,
+};
