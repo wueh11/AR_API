@@ -8,6 +8,16 @@ namespace ya
 	class Camera
 	{
 	public:
+		enum class eState
+		{
+			DEFAULT,
+			TARGET,
+			FIX,
+			FREE,
+			AUTO,
+		};
+
+	public:
 		static void Initialize();
 		static void Tick();
 		static void Render(HDC hdc);
@@ -15,6 +25,20 @@ namespace ya
 		static Vector2 CalculatePos(Vector2 pos) { return pos - mDistance; }
 		static void SetTarget(GameObject* gameObj) { mTarget = gameObj; }
 		static void SetCameraEffect(eCameraEffect effect) { mEffect = effect; }
+		static Vector2 GetLookPosition() { return mLookPosition; }
+
+	public:
+		static void SetState(eState state) { mState = state; }
+		static void SetLookPosition(Vector2 lookPosition) { mLookPosition = lookPosition; }
+
+		static void Reset();
+
+	private:
+		static void Default();
+		static void Target();
+		static void Fix();
+		static void Free();
+		static void Auto();
 
 	private:
 		Camera() = default;
@@ -32,6 +56,11 @@ namespace ya
 		static float mAlphaTime;
 		static float mCuttonAlpha;
 		static float mEndTime;
+
+		static float mSpeed;
+		static float mMaxSpeed;
+
+		static eState mState;
 	};
 
 }

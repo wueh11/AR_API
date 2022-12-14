@@ -19,8 +19,8 @@ namespace ya
 			{
 				if (mEvent)
 					mEvent();
-			}
 
+			}
 			std::function<void()> mEvent;
 		};
 

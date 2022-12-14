@@ -1,16 +1,27 @@
 #include "yaMission1Scene.h"
+
+#include "yaApplication.h"
 #include "yaInput.h"
+#include "yaCamera.h"
+#include "yaObject.h"
 
 #include "yaCollisionManager.h"
 #include "yaSceneManager.h"
 
-#include "yaImageObject.h"
-#include "yaPixelImageObject.h"
 #include "yaPlayer.h"
+#include "yaImageObject.h"
+#include "yaBgImageObject.h"
+#include "yaPixelImageObject.h"
+#include "yaCollisionObject.h"
+
 #include "yaMonster.h"
-#include "yaObject.h"
 #include "yaChewmein.h"
-#include "yaApplication.h"
+#include "yaCameraWall.h"
+#include "yaPart1ChewmeinHouse.h"
+
+#include "yaWaterObject.h"
+#include "yaWaterBackground.h"
+#include "yaWaterFront.h"
 
 namespace ya
 {
@@ -26,33 +37,67 @@ namespace ya
 	{
 		Player* player = ya::object::Instantiate<Player>(eColliderLayer::Player);
 		SetPlayer(player);
+		Camera::SetTarget(player);
 		
 		WindowData windowData = Application::GetInstance().GetWindowData();
 
-		ImageObject* Background = new ImageObject();
-		Background->SetImage(L"Mission1_part1_background", L"Background\\part1\\2.7\\background.bmp");
-		Background->Initialize();
-		Background->SetPos({ 0.0f, -176.0f });
-		AddGameObject(Background, eColliderLayer::Background);
+		BgImageObject* background = ya::object::Instantiate<BgImageObject>(eColliderLayer::Background);
+		background->SetImage(L"Mission1_part1_background", L"Background\\part1\\2.7\\background.bmp");
+		background->SetPos({ 0.0f, -176.0f });
 
-		PixelImageObject* BackgroundPixel = new PixelImageObject();
-		BackgroundPixel->SetImage(L"Mission1_part1_background_pixel", L"Background\\part1\\2.7\\background_pixel.bmp");
-		BackgroundPixel->SetPos({ 0.0f, -10.0f });
-		BackgroundPixel->Initialize();
-		AddGameObject(BackgroundPixel, eColliderLayer::Background_pixel);
+		ImageObject* backgroundObject = ya::object::Instantiate<ImageObject>(eColliderLayer::Background);
+		backgroundObject->SetImage(L"Mission1_part1_backobject", L"Background\\part1\\2.7\\background_object.bmp");
+		backgroundObject->SetPos({ 0.0f, -10.0f });
 
+		Vector2 bgObjectPos = backgroundObject->GetPos();
 
-		/*ImageObject* BackgroundObject = new ImageObject();
-		BackgroundObject->SetImage(L"Mission1_part1_backobject", L"Background\\part1\\background_object.bmp");
-		BackgroundObject->Initialize();
-		BackgroundObject->SetPos({ 0.0f, 00.0f });
-		BackgroundObject->SetScale({ M_SCALE, M_SCALE });
-		AddGameObject(BackgroundObject, eColliderLayer::Background);*/
+		{ // object
 
+			WaterObject* waterObject = ya::object::Instantiate<WaterObject>(eColliderLayer::Event);
+			
+			/*WaterBackground* waterBackground = ya::object::Instantiate<WaterBackground>(eColliderLayer::Background);
+			waterBackground->SetPos({ bgObjectPos.x + 710.0f, bgObjectPos.y + 431.0f + 35.0f });
+			WaterFront* waterFront = ya::object::Instantiate<WaterFront>(eColliderLayer::Background_front);
+			waterFront->SetPos({ bgObjectPos.x + 710.0f, bgObjectPos.y + 494.0f + 55.0f });*/
+
+			ImageObject* deadfish1 = ya::object::Instantiate<ImageObject>(eColliderLayer::Background);
+			deadfish1->SetImage(L"Mission1_part1_deadfish1", L"Background\\part1\\2.7\\deadfish1_background.bmp");
+			deadfish1->SetPos({ bgObjectPos.x + 929.0f, bgObjectPos.y + 378.0f });
+
+			ImageObject* deadfish1Front = ya::object::Instantiate<ImageObject>(eColliderLayer::Background_front);
+			deadfish1Front->SetImage(L"Mission1_part1_deadfish1_front", L"Background\\part1\\2.7\\deadfish1_front.bmp");
+			deadfish1Front->SetPos({ bgObjectPos.x + 929.0f, bgObjectPos.y + 378.0f });
+
+			ImageObject* deadfish2 = ya::object::Instantiate<ImageObject>(eColliderLayer::Background);
+			deadfish2->SetImage(L"Mission1_part1_deadfish2", L"Background\\part1\\2.7\\deadfish2_background.bmp");
+			deadfish2->SetPos({ bgObjectPos.x + 1488.0f, bgObjectPos.y + 408.0f });
+
+			ImageObject* chewmeinHouseBackground = ya::object::Instantiate<ImageObject>(eColliderLayer::Background);
+			chewmeinHouseBackground->SetImage(L"Mission1_part1_chewmein_house_background", L"Background\\part1\\2.7\\chewmein_house_background.bmp");
+			chewmeinHouseBackground->SetPos({ bgObjectPos.x + 2187.0f, bgObjectPos.y + 38.0f });
+
+			ImageObject* chewmeinHouseFront = ya::object::Instantiate<ImageObject>(eColliderLayer::Background_front);
+			chewmeinHouseFront->SetImage(L"Mission1_part1_chewmein_house_background_front", L"Background\\part1\\2.7\\chewmein_house_front.bmp");
+			chewmeinHouseFront->SetPos({ bgObjectPos.x + 2187.0f, bgObjectPos.y + 38.0f });
+
+			CollisionObject* chewmeinHouseCollision = ya::object::Instantiate<CollisionObject>(eColliderLayer::MapObject);
+			chewmeinHouseCollision->SetSize({ 170.0f, 260.0f });
+			chewmeinHouseCollision->SetPos({ bgObjectPos.x + 2245.0f + 85.0f, bgObjectPos.y + 95.0f + 130.0f });
+
+			Part1ChewmeinHouse* chewmeinHouseEvent = ya::object::Instantiate<Part1ChewmeinHouse>(eColliderLayer::Event);
+		}
+
+		PixelImageObject* backgroundPixel = ya::object::Instantiate<PixelImageObject>(eColliderLayer::Background_pixel);
+		backgroundPixel->SetImage(L"Mission1_part1_background_pixel", L"Background\\part1\\2.7\\background_pixel.bmp");
+		backgroundPixel->SetPos({ 0.0f, -10.0f });
+		backgroundPixel->AddObject(player);
 		
-		//ya::object::Instantiate<Chewmein>(eColliderLayer::Monster);
+		//Chewmein* chewmein = ya::object::Instantiate<Chewmein>(eColliderLayer::Monster);
+		//backgroundPixel->AddObject(chewmein);
 
-		CollisionManager::SetLayer(eColliderLayer::Monster, eColliderLayer::Player, true);
+		CameraWall* cameraWall = ya::object::Instantiate<CameraWall>(eColliderLayer::MapObject);
+
+		Scene::Initialize();
 	}
 
 	void Mission1Scene::Tick()
@@ -63,14 +108,24 @@ namespace ya
 	void Mission1Scene::Render(HDC hdc)
 	{
 		Scene::Render(hdc);
-		//Text text(hdc, L"Mission1", 10, 30);
 	}
 
 	void Mission1Scene::Enter()
 	{
+		Scene::Enter();
+
+		CollisionManager::SetLayer(eColliderLayer::Monster, eColliderLayer::Player, true);
+		CollisionManager::SetLayer(eColliderLayer::Monster, eColliderLayer::Player_Projecttile, true);
+		CollisionManager::SetLayer(eColliderLayer::Player, eColliderLayer::Monster_Projecttile, true);
+		CollisionManager::SetLayer(eColliderLayer::Player_Projecttile, eColliderLayer::Monster_Projecttile, true);
+		CollisionManager::SetLayer(eColliderLayer::Event, eColliderLayer::Player, true);
+
+		CollisionManager::SetLayer(eColliderLayer::MapObject, eColliderLayer::Player_Projecttile, true);
+		CollisionManager::SetLayer(eColliderLayer::MapObject, eColliderLayer::Collider, true);
 	}
 
 	void Mission1Scene::Exit()
 	{
+		Camera::SetTarget(nullptr);
 	}
 }

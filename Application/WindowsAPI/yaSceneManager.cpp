@@ -37,8 +37,6 @@ namespace ya
 
 	void SceneManager::Tick()
 	{
-		mPlayScene->Tick();
-
 		if (KEY_DOWN(eKeyCode::N))
 		{
 			if (mType != eSceneType::MAX)
@@ -47,6 +45,8 @@ namespace ya
 				SceneManager::ChangeScene(type);
 			}
 		}
+
+		mPlayScene->Tick();
 	}
 
 	void SceneManager::Render(HDC hdc)

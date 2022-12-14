@@ -26,7 +26,10 @@ namespace ya
 
 		Player* GetPlayer() { return mPlayer; }
 		void SetPlayer(Player* player) { mPlayer = player; }
+		
+		bool IsActive() { return mbActive; }
 
+		bool mbActive;
 	private:
 		std::vector<std::vector<GameObject*>> mObjects;
 		WindowData windowData;

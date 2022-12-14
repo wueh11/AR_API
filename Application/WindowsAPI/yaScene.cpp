@@ -8,6 +8,8 @@
 namespace ya
 {
 	Scene::Scene()
+		: mPlayer(nullptr)
+		, mbActive(false)
 	{
 		SceneManager::SetPlayScene(this);
 		mObjects.resize(_COLLIDER_LAYER);
@@ -87,11 +89,11 @@ namespace ya
 
 	void Scene::Enter()
 	{
+		mbActive = true;
 	}
 
 	void Scene::Exit()
 	{
-		CollisionManager::Clear();
 	}
 
 	void Scene::AddGameObject(GameObject* object, eColliderLayer type)

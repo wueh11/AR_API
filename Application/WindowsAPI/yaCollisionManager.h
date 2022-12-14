@@ -17,9 +17,13 @@ namespace ya
 
 		static void Clear();
 
+		static bool IsShow() { return mbShow; }
+
 	private:
 		static WORD mMatrix[_COLLIDER_LAYER];
 		static std::map<UINT64, bool> mCollisionInformation;
+
+		static bool mbShow;
 	};
 }
 

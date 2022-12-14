@@ -4,6 +4,7 @@
 #include "yaImage.h"
 #include "yaTime.h"
 #include "yaInput.h"
+//#include "yaCamera.h"
 
 #include "yaAnimator.h"
 #include "yaCollider.h"
@@ -15,30 +16,26 @@
 
 #include "yaPlayerUpper.h"
 #include "yaPlayerLower.h"
-#include "yaBackpack.h"
-#include "yaMissile.h"
-#include "yaRock.h"
+#include "yaBullet.h"
 #include "yaEffect.h"
+
+#include "yaPixelImageObject.h"
+
+#include "yaColliderHorizontal.h"
+#include "yaColliderVertical.h"
 
 namespace ya
 {
 	Player::Player()
-		: mSpeed(200.0f)
-		, mbLeft(false)
-		, mbJump(false)
-		, mbSit(false)
-		, mbFall(true)
-		, mbUpside(false)
-		, mbDownside(false)
+		: mSpeed(250.0f)
+		, mArmsDirection({ 1.0f, 0.0f })
 		, mUpper(nullptr)
 		, mLower(nullptr)
 	{
 		SetName(L"Player");
-		SetPos({ 40.0f, 60.0f });
-		SetScale({ 2.6f, 2.6f });
+		SetPos({ 150.0f, 200.0f });
+		SetScale({ M_SCALE, M_SCALE });
 		SetSize({ 24.0f, 36.0f });
-
-		Initialize();
 	}
 
 	Player::~Player()
@@ -47,20 +44,26 @@ namespace ya
 
 	void Player::Initialize()
 	{
+		Scene* playScene = SceneManager::GetPlayScene();
+
 		PlayerLower* lower = new PlayerLower();
 		AddChild(lower);
-		lower->Initialize();
-		
+		playScene->AddGameObject(lower, eColliderLayer::Player);
+
 		PlayerUpper* upper = new PlayerUpper();
 		AddChild(upper);
-		upper->Initialize();
+		playScene->AddGameObject(upper, eColliderLayer::Player);
 
-		/*Collider* collider = new Collider();
-		collider->SetSize(GetSize());
-		collider->SetScale(GetScale());
-		collider->SetOffset({0.0f, 0.0f});
-		AddComponent(collider);*/
 
+		ColliderHorizontal* colliderH = new ColliderHorizontal();
+		AddChild(colliderH);
+		playScene->AddGameObject(colliderH, eColliderLayer::Collider);
+
+		ColliderVertical* colliderV = new ColliderVertical();
+		AddChild(colliderV);
+		playScene->AddGameObject(colliderV, eColliderLayer::Collider);
+
+		AddComponent(new Collider());
 		AddComponent(new Rigidbody());
 	}
 
@@ -68,7 +71,7 @@ namespace ya
 	{
 		GameObject::Tick();
 
-		Rigidbody* rigidbody = GetComponent<Rigidbody>();;
+		Rigidbody* rigidbody = GetComponent<Rigidbody>();
 
 		switch (mState)
 		{
@@ -115,28 +118,44 @@ namespace ya
 		case ya::Player::State::BOMB:
 			Bomb();
 			break;
+		case ya::Player::State::DIE:
+			Die();
+			break;
 		default:
 			break;
 		}
-
 		
-
 		/*if (KEY_DOWN(eKeyCode::I))
 		{
 			Backpack* backPack = new Backpack();
 			Scene* playScene = SceneManager::GetPlayScene();
 			playScene->AddGameObject(backPack, eColliderLayer::Backpack);
 		}*/
-
 	}
 
 	void Player::Render(HDC hdc)
 	{
 		wchar_t szFloat[50] = {};
-		std::wstring str = std::to_wstring(GetPos().x) + L", " + std::to_wstring(GetPos().y);
+		std::wstring str = L"[" + std::to_wstring((int)mState) + L"] " + std::to_wstring(GetPos().x) + L", " + std::to_wstring(GetPos().y);
 		swprintf_s(szFloat, 50, str.c_str());
 		int strLen = wcsnlen_s(szFloat, 50);
 		TextOut(hdc, 10, 10, szFloat, strLen);
+
+		std::wstring jumpstr = L"Jump : " + std::to_wstring(mMoveState.bJump);
+		swprintf_s(szFloat, 50, jumpstr.c_str());
+		TextOut(hdc, 600, 100, szFloat, strLen);
+
+		std::wstring sitstr = L"Sit : " + std::to_wstring(mMoveState.bSit);
+		swprintf_s(szFloat, 50, sitstr.c_str());
+		TextOut(hdc, 600, 120, szFloat, strLen);
+
+		std::wstring strUpside = L"Upside : " + std::to_wstring(mMoveState.bUpside);
+		swprintf_s(szFloat, 50, strUpside.c_str());
+		TextOut(hdc, 600, 140, szFloat, strLen);
+
+		std::wstring strDownside = L"Downside : " + std::to_wstring(mMoveState.bDownside);
+		swprintf_s(szFloat, 50, strDownside.c_str());
+		TextOut(hdc, 600, 160, szFloat, strLen);
 
 		GameObject::Render(hdc); /// 자식이 먼저그려져양함
 	}
@@ -153,53 +172,52 @@ namespace ya
 	{
 	}
 
-	void Player::ShootArms()
-	{
-		Missile* missile = new Missile();
-
-		Scene* playScene = SceneManager::GetPlayScene();
-		playScene->AddGameObject(missile, eColliderLayer::Player_Projecttile);
-
-		Vector2 playerPos = GetPos();
-		Vector2 playerScale = GetScale() / 2.0f;
-
-		Vector2 missileScale = missile->GetScale();
-
-		missile->SetPos(playerPos + playerScale - (missileScale / 2.0f));
-	}
-
 	void Player::Idle()
 	{
-		mbJump = false;
+		mMoveState.clear();
 
 		if (KEY_PRESS(eKeyCode::LEFT) || KEY_PRESS(eKeyCode::RIGHT))
 		{
 			mState = State::WALK;
+			return;
 		}
 
 		if (KEY_PRESS(eKeyCode::UP))
 		{
 			mState = State::UPSIDE;
-			
+			return;
 		}
+
 		if (KEY_PRESS(eKeyCode::DOWN))
 		{
 			mState = State::SIT;
+			return;
 		}
 
 		if (KEY_PRESS(eKeyCode::SPACE))
 		{
 			mState = State::JUMP;
+			return;
 		}
 
 		if (KEY_DOWN(eKeyCode::LCTRL))
 		{
 			mState = State::SHOOT;
+			return;
+		}
+
+		if (KEY_DOWN(eKeyCode::P))
+		{
+			mControlState.bAlive = false;
+			mState = State::DIE;
+			return;
 		}
 	}
 
 	void Player::Walk()
 	{
+		mMoveState.bWalk = true;
+
 		Vector2 pos = GetPos();
 
 		if (KEY_PRESS(eKeyCode::SPACE))
@@ -209,13 +227,20 @@ namespace ya
 
 		if (KEY_PRESS(eKeyCode::LEFT))
 		{
-			mbLeft = true;
-			pos.x -= mSpeed * Time::DeltaTime();
+			pos.x -= mSpeed * Time::DeltaTime() * (mMoveState.bSit ? 0.5f : 1.0f);
+			mMoveState.bLeft = true;
+
 		}
-		if (KEY_PRESS(eKeyCode::RIGHT))
+		else if (KEY_PRESS(eKeyCode::RIGHT))
 		{
-			mbLeft = false;
-			pos.x += mSpeed * Time::DeltaTime();
+			pos.x += mSpeed * Time::DeltaTime() * (mMoveState.bSit ? 0.5f : 1.0f);
+			mMoveState.bLeft = false;
+		}
+
+		if (KEY_DOWN(eKeyCode::LCTRL))
+		{
+			mState = State::SHOOT;
+			return;
 		}
 
 		SetPos(pos);
@@ -224,12 +249,14 @@ namespace ya
 			|| KEY_UP(eKeyCode::RIGHT))
 		{
 			mState = State::IDLE;
+			mMoveState.bWalk = false;
+			return;
 		}
 	}
 
 	void Player::Jump(Rigidbody* rigidbody)
 	{
-		if (!mbJump)
+		if (!mMoveState.bJump)
 		{
 			Vector2 velocity = rigidbody->GetVelocity();
 			velocity.y = -560.0f;
@@ -237,16 +264,23 @@ namespace ya
 			rigidbody->SetGround(false);
 		}
 
-		mbFall = (rigidbody->GetVelocity().y > 0);
+		mMoveState.bFall = (rigidbody->GetVelocity().y > 0);
 
 		if (rigidbody->isGround())
 		{
-			mbJump = false;
+			mMoveState.bJump = false;
+			mMoveState.bDownside = false;
 			mState = State::IDLE;
 			return;
 		}
 
-		mbJump = true;
+		if (KEY_DOWN(eKeyCode::LCTRL))
+		{
+			mState = State::SHOOT;
+			return;
+		}
+
+		mMoveState.bJump = true;
 
 		if (KEY_PRESS(eKeyCode::LEFT) || KEY_PRESS(eKeyCode::RIGHT))
 		{
@@ -261,12 +295,18 @@ namespace ya
 
 	void Player::Sit()
 	{
-		mbSit = true;
+		mMoveState.bSit = true;
 
 		if (KEY_UP(eKeyCode::DOWN))
 		{
-			mbSit = false;
+			mMoveState.bSit = false;
 			mState = State::IDLE;
+			return;
+		}
+
+		if (KEY_DOWN(eKeyCode::LCTRL))
+		{
+			mState = State::SHOOT;
 			return;
 		}
 
@@ -275,43 +315,73 @@ namespace ya
 			mState = State::WALK;
 			return;
 		}
+
+		if (KEY_PRESS(eKeyCode::SPACE))
+		{
+			mMoveState.bSit = false;
+			mState = State::JUMP;
+			return;
+		}
 	}
 
 	void Player::Upside()
 	{
-		mbUpside = true;
+		mMoveState.bUpside = true;
 
 		if (KEY_UP(eKeyCode::UP))
 		{
-			mbUpside = false;
+			mMoveState.bUpside = false;
 			mState = State::IDLE;
+			return;
 		}
 
 		if (KEY_DOWN(eKeyCode::LCTRL))
 		{
 			mState = State::SHOOT_UPSIDE;
+			return;
+		}
+
+		if (KEY_PRESS(eKeyCode::LEFT) || KEY_PRESS(eKeyCode::RIGHT))
+		{
+			mState = State::WALK;
+			return;
+		}
+
+		if (KEY_PRESS(eKeyCode::SPACE))
+		{
+			mState = State::JUMP;
+			return;
 		}
 	}
 
 	void Player::Downside()
 	{
-		mbDownside = true;
+		mMoveState.bDownside = true;
 
-		if(!mbJump)
+		if(!mMoveState.bJump)
 		{
-			mbDownside = false;
+			mMoveState.bDownside = false;
 			mState = State::IDLE;
+			return;
+		}
+
+		if (KEY_UP(eKeyCode::DOWN))
+		{
+			mMoveState.bDownside = false;
+			mState = State::JUMP;
+			return;
 		}
 
 		if (KEY_DOWN(eKeyCode::LCTRL))
 		{
 			mState = State::SHOOT_DOWNSIDE;
+			return;
 		}
 	}
 
 	void Player::Shoot()
 	{
-		ShootArms();
+		OnShoot();
 
 		mState = State::IDLE;
 	}
@@ -322,14 +392,14 @@ namespace ya
 
 	void Player::ShootUpside()
 	{
-		ShootArms();
+		OnShoot();
 
 		mState = State::UPSIDE;
 	}
 
 	void Player::ShootDownside()
 	{
-		ShootArms();
+		OnShoot();
 
 		mState = State::DOWNSIDE;
 	}
@@ -348,6 +418,78 @@ namespace ya
 		{
 			mState = State::IDLE;
 		}
+	}
+
+	void Player::Die()
+	{
+		mControlState.bInvincible = true;
+		mControlState.bPlayable = false;
+		mControlState.bAlive = true;
+
+		if (Time::Timer(L"die", 3.0f))
+		{
+			mControlState.bInvincible = false;
+			mControlState.bPlayable = true;
+			mState = State::IDLE;                                                                                                                                                                                        
+		}
+	}
+
+	void Player::OnShoot()
+	{
+		Bullet* bullet = new Bullet();
+
+		Scene* playScene = SceneManager::GetPlayScene();
+		playScene->AddGameObject(bullet, eColliderLayer::Player_Projecttile);
+
+		Vector2 playerPos = GetPos();
+		Vector2 playerSize = GetSize() / 2.0f;
+
+		Vector2 bulletSize = bullet->GetSize();
+
+		//mArmsDirection = math::Rotate(mArmsDirection, -10.0f);
+
+		/*if (mArmsDirection.y < 0.0f)
+			mArmsDirection = Vector2({ 1.0f, 0.0f });*/
+
+		mArmsDirection = Vector2({ 1.0f, 0.0f });
+
+		float dir = 0.0f;
+		if (mMoveState.bUpside)
+			dir = -90.0f;
+		else if (mMoveState.bDownside)
+			dir = 90.0f;
+		else if (mMoveState.bLeft)
+			dir = -180.0f;
+
+		Vector2 offset = { 0.0f, -30.0f };
+		if (mMoveState.bUpside || mMoveState.bDownside)
+			offset.x = 0.0f;
+		else if (mMoveState.bLeft)
+			offset.x = -30.0f;
+		else
+			offset.x = 30.0f;
+
+		if (mMoveState.bSit)
+			offset.y = 10.0f;
+		else
+			offset.y = -20.0f;
+
+		bullet->SetPos(playerPos + playerSize - (bulletSize / 2.0f) + offset);
+		bullet->SetDirection(math::Rotate(mArmsDirection, dir));
+	}
+
+	void Player::OnWalk()
+	{
+	}
+
+	void Player::PickupArms(eArms arms, UINT bulletCount)
+	{
+		if (mInfo.arms == arms)
+			mInfo.armsCount += bulletCount;
+		else
+			mInfo.armsCount = bulletCount;
+
+		mInfo.arms = arms;
 	}
 
 	void Player::WalkComplete()

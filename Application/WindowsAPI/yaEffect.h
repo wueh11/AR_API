@@ -5,6 +5,7 @@
 namespace ya
 {
 	class Image;
+	class Animator;
 	class Effect : public GameObject
 	{
 	public:
@@ -15,13 +16,17 @@ namespace ya
 		virtual void Tick();
 		virtual void Render(HDC hdc);
 
-		/*virtual void OnCollisionEnter(Collider* other);
+		virtual void OnCollisionEnter(Collider* other);
 		virtual void OnCollisionStay(Collider* other);
-		virtual void OnCollisionExit(Collider* other);*/
+		virtual void OnCollisionExit(Collider* other);
+
+		void play();
 
 	private:
 		float mSpeed;
 		float mAliveTime;
+
 		Image* mImage;
+		Animator* mAnimator;
 	};
 }

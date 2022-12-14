@@ -16,8 +16,11 @@ namespace ya
 		virtual void Tick() override;
 		virtual void Render(HDC hdc) override;
 
+		Image* GetImage() { return mImage; }
 		void SetImage(const std::wstring& key, const std::wstring& imageName);
 		void SetFullClient(bool fullClient) { mFullClienet = fullClient; }
+
+		void AddObject(GameObject* object) { mObjects.push_back(object); }
 
 	private:
 		Image* mImage;
@@ -26,5 +29,6 @@ namespace ya
 		bool mFullClienet;
 
 		Player* mPlayer;
+		std::vector<GameObject*> mObjects;
 	};
 }

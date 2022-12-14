@@ -41,7 +41,7 @@ namespace ya
 		{
 			mAnimator->CreateAnimation(L"IdleRight", mImage, Vector2(0.0f, 0.0f), Vector2(21.0f, 16.0f), Vector2(0.0f, 0.0f), 1, 0.05f);
 			mAnimator->CreateAnimation(L"WalkRight", mImage, Vector2(0.0f, 35.0f), Vector2(33.0f, 20.0f), Vector2(0.0f, 0.0f), 12, 0.05f);
-			mAnimator->CreateAnimation(L"JumpRight", mImage, Vector2(0.0f, 78.0f), Vector2(23.0f, 24.0f), Vector2(8.0f, 0.0f), 6, 0.05f);
+			mAnimator->CreateAnimation(L"JumpRight", mImage, Vector2(0.0f, 78.0f), Vector2(22.0f, 24.0f), Vector2(2.0f, 0.0f), 6, 0.05f);
 			mAnimator->CreateAnimation(L"JumpMoveRight", mImage, Vector2(0.0f, 129.0f), Vector2(35.0f, 21.0f), Vector2(0.0f, 0.0f), 6, 0.15f);
 		}
 
@@ -49,7 +49,7 @@ namespace ya
 		{
 			mAnimator->CreateAnimation(L"IdleLeft", mImage, Vector2(0.0f, 17.0f), Vector2(21.0f, 16.0f), Vector2(0.0f, 0.0f), 1, 0.05f);
 			mAnimator->CreateAnimation(L"WalkLeft", mImage, Vector2(0.0f, 56.0f), Vector2(33.0f, 20.0f), Vector2(0.0f, 0.0f), 12, 0.05f);
-			mAnimator->CreateAnimation(L"JumpLeft", mImage, Vector2(0.0f, 103.0f), Vector2(23.0f, 24.0f), Vector2(8.0f, 0.0f), 6, 0.05f);
+			mAnimator->CreateAnimation(L"JumpLeft", mImage, Vector2(0.0f, 103.0f), Vector2(22.0f, 24.0f), Vector2(2.0f, 0.0f), 6, 0.05f);
 			mAnimator->CreateAnimation(L"JumpMoveLeft", mImage, Vector2(0.0f, 151.0f), Vector2(35.0f, 21.0f), Vector2(0.0f, 0.0f), 6, 0.15f);
 		}
 	
@@ -68,30 +68,34 @@ namespace ya
 		GameObject::Tick();
 
 		Player* player = dynamic_cast<Player*>(GetOwner());
+		mMoveState = player->GetMoveState();
 
 		Vector2 pos = player->GetPos() + GetOffset();
+		
+		if (mMoveState.bSit)
+			return;
 
-		bool bLeft = player->IsLeft();
-		bool bJump = player->IsJumping();
-		bool bFall = player->IsFalling();
-		bool bSit = player->IsSitting();
+		/* = player->IsLeft();
+		bool mMoveState.bJump = player->IsJumping();
+		bool mMoveState.bFall = player->IsFalling();
+		bool bSit = player->IsSitting();*/
 
 		switch (mState)
 		{
 		case ya::PlayerLower::State::IDLE:
-			Idle(bLeft);
+			Idle();
 			break;
 		case ya::PlayerLower::State::WALK:
-			Walk(bLeft);
+			Walk();
 			break;
 		case ya::PlayerLower::State::JUMP:
-			Jump(bLeft, bJump, bFall);
+			Jump();
 			break;
 		case ya::PlayerLower::State::FALL:
-			Fall(bLeft, bJump);
+			Fall();
 			break;
 		case ya::PlayerLower::State::JUMPMOVE:
-			JumpMove(bLeft, bJump);
+			JumpMove();
 			break;
 		default:
 			break;
@@ -102,12 +106,15 @@ namespace ya
 
 	void PlayerLower::Render(HDC hdc)
 	{
+		if (mMoveState.bSit)
+			return;
+
 		/*Player* player = dynamic_cast<Player*>(GetOwner());
-		bool bJump = player->IsJumping();*/
+		bool mMoveState.bJump = player->IsJumping();*/
 
 		//wchar_t szFloat[50] = {};
 
-		////std::wstring res = (bJump ? L"TRUE" : L"FALSE");
+		////std::wstring res = (mMoveState.bJump ? L"TRUE" : L"FALSE");
 		//int nState = (int)mState;
 		//std::wstring strForce = L"state : " + std::to_wstring(nState);
 		//swprintf_s(szFloat, 50, strForce.c_str());
@@ -129,7 +136,7 @@ namespace ya
 	{
 	}
 
-	void PlayerLower::Idle(bool bLeft)
+	void PlayerLower::Idle()
 	{
 		if (KEY_DOWN(eKeyCode::LEFT))
 		{
@@ -149,7 +156,7 @@ namespace ya
 
 		if (KEY_DOWN(eKeyCode::SPACE))
 		{
-			if (bLeft)
+			if (mMoveState.bLeft)
 				mAnimator->Play(L"JumpLeft", false, true);
 			else
 				mAnimator->Play(L"JumpRight", false);
@@ -161,12 +168,12 @@ namespace ya
 			return;
 		}
 	}
-	void PlayerLower::Walk(bool bLeft)
+	void PlayerLower::Walk()
 	{
 		if (KEY_UP(eKeyCode::LEFT)
 			|| KEY_UP(eKeyCode::RIGHT))
 		{
-			if (bLeft)
+			if (mMoveState.bLeft)
 				mAnimator->Play(L"IdleLeft", true, true);
 			else
 				mAnimator->Play(L"IdleRight", true);
@@ -177,7 +184,7 @@ namespace ya
 
 		if (KEY_DOWN(eKeyCode::SPACE))
 		{
-			if (bLeft)
+			if (mMoveState.bLeft)
 				mAnimator->Play(L"JumpMoveLeft", false, true);
 			else
 				mAnimator->Play(L"JumpMoveRight", false);
@@ -188,17 +195,17 @@ namespace ya
 			mState = State::JUMPMOVE;
 		}
 	}
-	void PlayerLower::Jump(bool bLeft, bool bJump, bool bFall)
+	void PlayerLower::Jump()
 	{
-		if(!bJump)
+		if(!mMoveState.bJump)
 		{
 			mState = State::IDLE;
 			return;
 		}
 
-		if (bFall)
+		if (mMoveState.bFall)
 		{
-			if (bLeft)
+			if (mMoveState.bLeft)
 				mAnimator->Play(L"JumpLeft", false, false);
 			else
 				mAnimator->Play(L"JumpRight", false, true);
@@ -206,11 +213,11 @@ namespace ya
 			mState = State::FALL;
 		}
 	}
-	void PlayerLower::Fall(bool bLeft, bool bJump)
+	void PlayerLower::Fall()
 	{
-		if (!bJump)
+		if (!mMoveState.bJump)
 		{
-			if (bLeft)
+			if (mMoveState.bLeft)
 				mAnimator->Play(L"IdleLeft", true, true);
 			else
 				mAnimator->Play(L"IdleRight", true);
@@ -219,11 +226,11 @@ namespace ya
 		}
 	}
 
-	void PlayerLower::JumpMove(bool bLeft, bool bJump)
+	void PlayerLower::JumpMove()
 	{
-		if (!bJump)
+		if (!mMoveState.bJump)
 		{
-			/*if (bLeft)
+			/*if ()
 				mAnimator->Play(L"IdleLeft", true, true);
 			else
 				mAnimator->Play(L"IdleRight", true);*/

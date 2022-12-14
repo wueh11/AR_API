@@ -139,20 +139,3 @@ public:
 
 	}
 };
-
-struct ObjectInfo
-{
-private:
-	UINT mHp;
-
-public:
-	ObjectInfo()
-		: mHp(0)
-	{
-
-	}
-	~ObjectInfo() {}
-	
-	void SetHp(UINT hp) { mHp = hp; }
-	UINT GetHp() { return mHp; }
-};

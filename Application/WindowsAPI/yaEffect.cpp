@@ -6,7 +6,7 @@
 
 #include "yaImage.h"
 #include "yaAnimator.h"
-
+#include "yaCollider.h"
 
 namespace ya
 {
@@ -14,21 +14,21 @@ namespace ya
 		: mSpeed(1.0f)
 		, mAliveTime(1.0f)
 	{
-		SetPos({ 100.0f, 100.0f });
-		SetScale({ 20.0f, 20.0f });
+		SetName(L"Effect");
+		SetPos(Vector2::Zero);
+		SetScale({ M_SCALE, M_SCALE });
+		SetSize({16.0f, 16.0f});
 
-		if (mImage == nullptr)
-		{
-			mImage = Resources::Find<Image>(L"Player");
+		{ // 애니메이션
+			if (mImage == nullptr)
+				mImage = Resources::Load<Image>(L"bulletEffect", L"..\\Resources\\Image\\Bullet\\bulletEffect.bmp");
+
+			mAnimator = new Animator();
+			mAnimator->CreateAnimation(L"bulletEffect", mImage, Vector2(0.0f, 0.0f), Vector2(16.0f, 16.0f), Vector2(0.0f, 0.0f), 10, 0.02f);
+			mAnimator->GetCompleteEvent(L"bulletEffect") = std::bind(&Effect::Death, this);
+
+			AddComponent(mAnimator);
 		}
-		Animator* ani = new Animator();
-		ani->CreateAnimation(L"Idle", mImage
-			, Vector2(0.0f, 0.0f), Vector2(120.0f, 130.0f)
-			, Vector2(5.0f, -20.0f), 3, 0.1f);
-
-		ani->Play(L"Idle", true);
-
-		AddComponent(ani);
 	}
 
 	Effect::~Effect()
@@ -43,18 +43,33 @@ namespace ya
 	{
 		GameObject::Tick();
 
-		mAliveTime -= Time::DeltaTime();
+		/*mAliveTime -= Time::DeltaTime();
 		if (mAliveTime <= 0.0f)
 		{
 			this->Death();
 		}
 
 		Vector2 pos = GetPos();
-		SetPos(pos);
+		SetPos(pos);*/
 	}
 
 	void Effect::Render(HDC hdc)
 	{
 		GameObject::Render(hdc);
+	}
+
+	void Effect::OnCollisionEnter(Collider* other)
+	{
+	}
+
+	void Effect::OnCollisionStay(Collider* other)
+	{
+	}
+	void Effect::OnCollisionExit(Collider* other)
+	{
+	}
+	void Effect::play()
+	{
+		mAnimator->Play(L"bulletEffect", false);
 	}
 }

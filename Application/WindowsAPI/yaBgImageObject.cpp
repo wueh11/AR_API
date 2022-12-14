@@ -1,7 +1,12 @@
 #include "yaBgImageObject.h"
+
+#include "yaApplication.h"
+
 #include "yaResources.h"
 #include "yaImage.h"
-#include "yaApplication.h"
+#include "yaInput.h"
+#include "yaTime.h"
+#include "yaCamera.h"
 
 namespace ya
 {
@@ -10,6 +15,7 @@ namespace ya
 	{
 		SetPos(Vector2::Zero);
 		SetScale(Vector2::One);
+		SetSize(Vector2::Zero);
 	}
 
 	BgImageObject::~BgImageObject()
@@ -24,11 +30,34 @@ namespace ya
 	void BgImageObject::Tick()
 	{
 		GameObject::Tick();
+
+		//Vector2 pos = GetPos();
+		//Vector2 lookPosition = Camera::GetLookPosition();
+
+		//float speed = -96.0f;
+
+		//if(lookPosition.x > Application::GetInstance().GetWindowData().width / 2)
+		//{
+		//	/*if (KEY_PRESS(eKeyCode::LEFT))
+		//		pos.x -= speed * Time::DeltaTime();
+		//	else if (KEY_PRESS(eKeyCode::RIGHT))
+		//		pos.x += speed * Time::DeltaTime();*/
+
+		//	if (KEY_PRESS(eKeyCode::RIGHT))
+		//		pos.x += speed * Time::DeltaTime();
+		//}
+
+		//SetPos(pos);
+
+		/*Vector2 pos = GetPos();
+		pos = Camera::CalculatePos(pos);
+		SetPos(pos);*/
 	}
 
 	void BgImageObject::Render(HDC hdc)
 	{
 		Vector2 pos = GetPos();
+		Vector2 size = GetSize();
 		Vector2 scale = GetScale();
 
 		Vector2 rect;
@@ -36,9 +65,9 @@ namespace ya
 		rect.y = Application::GetInstance().GetWindowData().height;
 
 		TransparentBlt(hdc, pos.x, pos.y
-			, rect.x, rect.y, mImage->GetDC()  ///dc, 시작위치, 이미지 크기, 복사할dc
-			, 0, 0, mImage->GetWidth(), mImage->GetHeight() /// 이미지의 시작, 끝부분 좌표(자르기)
-			, RGB(255, 255, 255)); ///crTransparent의 인자를 제외시키고 출력한다.(투명처리)
+			, size.x * scale.x, size.y * scale.y, mImage->GetDC()
+			, 0, 0, mImage->GetWidth(), mImage->GetHeight()
+			, RGB(255, 0, 255));
 
 		GameObject::Render(hdc);
 	}
@@ -48,5 +77,6 @@ namespace ya
 		std::wstring path = L"..\\Resources\\Image\\";
 		path += name;
 		mImage = Resources::Load<Image>(key, path);
+		SetSize({ (float)(mImage->GetWidth() * GetScale().x), (float)(mImage->GetHeight() * GetScale().y) });
 	}
 }

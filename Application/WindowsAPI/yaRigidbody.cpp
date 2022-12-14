@@ -2,6 +2,8 @@
 
 #include "yaTime.h"
 #include "yaGameObject.h"
+#include "yaImage.h"
+#include "yaPixelImageObject.h"
 
 namespace ya
 {
@@ -12,10 +14,11 @@ namespace ya
 		, mVelocity(Vector2::Zero)
 		, mAccelation(Vector2::Zero)
 		, mFriction(100.0f)
+		, mbPixel(true)
 	{
-		mGravity = Vector2(0.0f, 1000.0f);
+		mGravity = Vector2(0.0f, 900.0f);
 		mbGround = false;
-		mLimitVelocity = Vector2(200.0f, 2000.0f);
+		mLimitVelocity = Vector2(200.0f, 1200.0f);
 	}
 
 	Rigidbody::~Rigidbody()
@@ -45,6 +48,7 @@ namespace ya
 			mVelocity += mGravity * Time::DeltaTime();
 		}
 
+		// 최대 속도 제한
 		Vector2 gravity = mGravity;
 		gravity.Normalize();
 		float dot = math::Dot(mVelocity, gravity);

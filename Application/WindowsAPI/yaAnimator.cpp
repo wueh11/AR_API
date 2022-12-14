@@ -34,13 +34,14 @@ namespace ya
 		{
 			mPlayAnimation->Tick();
 
-			if (mbLoop && mPlayAnimation->IsComplete())
+			if (mPlayAnimation->IsComplete())
 			{
 				Animator::Events* events = FindEvents(mPlayAnimation->getName());
 				if (events != nullptr)
 					events->mCompleteEvent();
 
-				mPlayAnimation->Reset(mPlayAnimation->IsReverse());
+				if(mbLoop)
+					mPlayAnimation->Reset(mPlayAnimation->IsReverse());
 			}
 		}
 	}
@@ -62,7 +63,7 @@ namespace ya
 		}
 
 		animation = new Animation();
-		animation->Create(image, leftTop, size, offset, spriteLength, duration, bAffectedCamera);
+		animation->Create(image, leftTop, size, offset, spriteLength, duration, bAffectedCamera, bVertical);
 		animation->SetName(name);
 		animation->SetAnimator(this);
 
@@ -119,11 +120,13 @@ namespace ya
 		Events* events = FindEvents(key);
 		return events->mStartEvent.mEvent;
 	}
+
 	std::function<void()>& Animator::GetCompleteEvent(const std::wstring key)
 	{
 		Events* events = FindEvents(key);
 		return events->mCompleteEvent.mEvent;
 	}
+
 	std::function<void()>& Animator::GetEndEvent(const std::wstring key)
 	{
 		Events* events = FindEvents(key);

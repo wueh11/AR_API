@@ -8,6 +8,7 @@ namespace ya
 	LARGE_INTEGER Time::mCurFrequency;
 	float Time::mDeltaTime = 0.0f;
 	float Time::mTime = 0.0f;
+	std::map<std::wstring, float> Time::timerMap;
 
 	void Time::Initialize()
 	{
@@ -47,5 +48,23 @@ namespace ya
 
 			mTime = 0.0f;
 		}
+	}
+
+	bool Time::Timer(std::wstring key, float time)
+	{
+		if (timerMap.find(key) == timerMap.end())
+			timerMap.insert(std::pair<std::wstring, float>(key, 0.0f));
+		else
+		{
+			float timer = timerMap.find(key)->second;
+			timer += Time::DeltaTime();
+			if (time <= timer)
+			{
+				timerMap.erase(key);
+				return true;
+			}
+			timerMap.find(key)->second = timer;
+		}
+		return false;
 	}
 }

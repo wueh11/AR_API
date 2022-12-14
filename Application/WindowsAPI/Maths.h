@@ -1,7 +1,8 @@
 #pragma once
-#include <math.h>
+#define PI 3.14159265f
 
-#define PI 3.141592
+#include <cmath>
+#include <algorithm>
 
 namespace ya
 {
@@ -17,15 +18,14 @@ namespace ya
         float x;
         float y;
 
-        Vector2(float x, float y)
-        {
-            this->x = x;
-            this->y = y;
-        }
-
-        Vector2(const Vector2& other) = default;
         Vector2() = default;
         ~Vector2() = default;
+
+        Vector2(const Vector2&) = default;
+        Vector2& operator=(const Vector2&) = default;
+
+        Vector2(Vector2&&) = default;
+        Vector2& operator=(Vector2&&) = default;
 
         Vector2 operator-()
         {
@@ -62,6 +62,14 @@ namespace ya
         {
             x *= value;
             y *= value;
+
+            return *this;
+        }
+
+        Vector2& operator +=(const float value)
+        {
+            x += value;
+            y += value;
 
             return *this;
         }
@@ -111,6 +119,19 @@ namespace ya
             return temp;
         }
 
+        constexpr Vector2(float _x, float _y) noexcept
+            : x(_x)
+            , y(_y)
+        {
+
+        }
+        explicit Vector2(_In_reads_(2) const float* pArray)  noexcept
+            : x(pArray[0])
+            , y(pArray[1])
+        {
+
+        }
+
         float Length()
         {
             return sqrtf(x * x + y * y);
@@ -131,39 +152,60 @@ namespace ya
             y = 0.0f;
         }
     };
+    typedef Vector2 Pos;
+    typedef Vector2 Size;
+}
 
-    namespace math
+namespace ya::math
+{
+    /* x도 = x * π / 180라디안
+    x라디안 = x * 180 / π도*/
+    inline float DegreeToRadian(float degree)
     {
-        /* x도 = x * π / 180라디안
-        x라디안 = x * 180 / π도*/
-        inline float DegreeToRadian(float degree)
-        {
-            return degree * PI / 180.0f;
-        }
+        return degree * PI / 180.0f;
+    }
 
-        inline float RadianToDegree(float radian)
-        {
-            return radian * (180.0f / PI);
-        }
+    inline float RadianToDegree(float radian)
+    {
+        return radian * (180.0f / PI);
+    }
 
-        inline Vector2 Rotate(const Vector2 v, float degree)
-        {
-            Vector2 ret = Vector2::Zero;
-            float radian = DegreeToRadian(degree);
-            ret.x = v.x * cosf(radian) - v.y * sinf(radian);
-            ret.y = v.x * sinf(radian) + v.y * cosf(radian);
+    inline Vector2 Rotate(const Vector2 v, float degree)
+    {
+        Vector2 ret = Vector2::Zero;
+        float radian = DegreeToRadian(degree);
+        ret.x = v.x * cosf(radian) - v.y * sinf(radian);
+        ret.y = v.x * sinf(radian) + v.y * cosf(radian);
 
-            return ret;
-        }
+        return ret;
+    }
 
-        inline float Dot(Vector2& v1, Vector2& v2)
-        {
-            return v1.x * v2.x + v1.y * v2.y;
-        }
+    inline float Dot(Vector2& v1, Vector2& v2)
+    { /// 내적
+        return v1.x * v2.x + v1.y * v2.y;
+    }
 
-        inline float Cross(Vector2 v1, Vector2 v2)
-        {
-            return v1.x * v2.y - v1.y * v2.x;
-        }
-    };
+    inline float Cross(Vector2 v1, Vector2 v2)
+    {
+        return v1.x * v2.y - v1.y * v2.x;
+    }
+
+    inline float lerp(float p1, float p2, float t)
+    { /// 선형보간법
+        return (1 - t) * p1 + t * p2;
+    }
+
+    inline Vector2 lerpv(Vector2 v1, Vector2 v2, float t)
+    {
+        Vector2 temp;
+        temp.x = lerp(v1.x, v2.x, t);
+        temp.y = lerp(v1.y, v2.y, t);
+
+        return temp;
+    }
+
+    inline int Random(int min, int max)
+    {
+        return rand() % (max - min) + min;
+    }
 }

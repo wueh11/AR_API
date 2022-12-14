@@ -3,7 +3,7 @@
 #define W_WIDTH 800 
 #define W_HEIGHT 600 
 
-#define M_SCALE 2.5f
+#define M_SCALE 2.6f
 
 #define KEY_PRESS(KEY) ya::Input::GetKeyState(KEY) == ya::eKeyState::PRESSED
 #define KEY_DOWN(KEY) ya::Input::GetKeyState(KEY) == ya::eKeyState::DOWN
@@ -52,17 +52,20 @@ enum class eComponentType ///컴포넌트 종류들
 enum class eColliderLayer
 {
 	Default,
-	Background, /// 뒤에 그려질 애들 먼저..
 	Background_pixel,
-	EventPoint,
-	Tile,
+	Background, /// 뒤에 그려질 애들 먼저..
+	MapObject, //background 앞에 그려질 오브젝트
+	Event, // 이벤트 발생 지점
+
 	Player,
 	Player_Projecttile,
 	Monster,
 	Monster_Projecttile,
+	Collider, // 충돌이 적용되는 object collider
+
 	Background_front, /// 플레이어를 가리는 배경
+	Effect,
 	
-	Backpack,
 	UI = _COLLIDER_LAYER - 1, /// 화면 제일 앞에 그려져야함
 	End = _COLLIDER_LAYER,
 };

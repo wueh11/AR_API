@@ -9,6 +9,7 @@
 #include "yaImage.h"
 #include "yaCamera.h"
 #include "yaPlayer.h"
+#include "yaGameObject.h"
 #include "yaRigidbody.h"
 
 namespace ya
@@ -35,10 +36,38 @@ namespace ya
 	{
 		GameObject::Tick();
 
-		if (mPlayer == nullptr)
-			return;
-
 		Vector2 pos = GetPos();
+
+		for (GameObject* object : mObjects)
+		{
+			if (object == nullptr || object->GetComponent<Rigidbody>() == nullptr)
+				return;
+
+			Vector2 objectPos = object->GetPos();
+			Vector2 objectSize = object->GetSize();
+			Vector2 objectScale = object->GetScale();
+
+			Pixel pixel = mImage->GetPixelImage(objectPos.x - pos.x, objectPos.y - pos.y + (objectSize.y * objectScale.y / 2));
+
+			if (pixel.R == 0 && pixel.G == 255 && pixel.B == 0)
+			{
+				Pixel pixel2 = mImage->GetPixelImage(objectPos.x - pos.x, objectPos.y - pos.y + (objectSize.y * objectScale.y / 2) - 1.0f);
+				if (pixel2.R == 0 && pixel2.G == 255 && pixel2.B == 0)
+				{
+					object->GetComponent<Rigidbody>()->SetGround(true);
+					objectPos.y -= 1.0f;
+					object->SetPos(objectPos);
+				}
+			}
+			else
+			{
+				if(object->GetComponent<Rigidbody>()->IsPixel())
+					object->GetComponent<Rigidbody>()->SetGround(false);
+			}
+		}
+
+
+		/*Vector2 pos = GetPos();
 
 		Vector2 playerPos = mPlayer->GetPos();
 		Vector2 playerSize = mPlayer->GetSize();
@@ -59,7 +88,7 @@ namespace ya
 		else
 		{
 			mPlayer->GetComponent<Rigidbody>()->SetGround(false);
-		}
+		}*/
 	}
 
 	void PixelImageObject::Render(HDC hdc)

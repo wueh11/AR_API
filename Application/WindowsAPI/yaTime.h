@@ -11,6 +11,8 @@ namespace ya
 		static void Render(HDC hdc);
 
 		static float DeltaTime() { return mDeltaTime; }
+		
+		static bool Timer(std::wstring key, float time);
 
 	private:
 		//CPU 고유 진동수 ( 1초당 몇번 ) -> 진동 횟수를 통해 몇초가 지났는지 계산
@@ -20,5 +22,7 @@ namespace ya
 
 		static float mDeltaTime;
 		static float mTime;
+
+		static std::map<std::wstring, float> timerMap;
 	};
 }

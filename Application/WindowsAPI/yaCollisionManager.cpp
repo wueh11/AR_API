@@ -3,15 +3,23 @@
 #include "yaSceneManager.h"
 #include "yaGameObject.h"
 #include "yaCollider.h"
+#include "yaInput.h"
 
 namespace ya
 {
     WORD CollisionManager::mMatrix[_COLLIDER_LAYER] = {};
     std::map<UINT64, bool> CollisionManager::mCollisionInformation;
+    bool CollisionManager::mbShow = false;
 
     void CollisionManager::Tick()
     {
+        if (KEY_DOWN(eKeyCode::C))
+            mbShow = !mbShow;
+
         Scene* playScene = SceneManager::GetPlayScene();
+
+        if (!playScene->IsActive())
+            return;
 
         for (size_t row = 0; row < _COLLIDER_LAYER; row++)
         {
@@ -141,12 +149,14 @@ namespace ya
 
         Vector2 leftPos = left->GetPos();
         Vector2 leftSize = left->GetSize();
+        Vector2 leftScale = left->GetScale();
 
         Vector2 rightPos = right->GetPos();
         Vector2 rightSize = right->GetSize();
+        Vector2 rightScale = right->GetScale();
 
-        if (fabs(leftPos.x - rightPos.x) < fabs(leftSize.x / 2.0f + rightSize.x / 2.0f)
-            && fabs(leftPos.y - rightPos.y) < fabs(leftSize.y / 2.0f + rightSize.y / 2.0f))
+        if (fabs(leftPos.x - rightPos.x) < fabs(leftSize.x * leftScale.x / 2.0f + rightSize.x * rightScale.x / 2.0f)
+            && fabs(leftPos.y - rightPos.y) < fabs(leftSize.y * leftScale.y / 2.0f + rightSize.y * rightScale.y / 2.0f))
         {
             return true;
         }

@@ -15,20 +15,11 @@ namespace ya
 {
 	Monster::Monster()
 		: mSpeed(1.0f)
+		, mTarget(nullptr)
+		, mImage(nullptr)
+		, mAnimator(nullptr)
+		, mCollider(nullptr)
 	{
-		SetPos({ 450.0f, 100.0f });
-		SetScale({ 3.0f, 3.0f });
-
-		Initialize();
-	}
-
-	Monster::Monster(Vector2 position)
-		: mSpeed(1.0f)
-	{
-		SetPos(position);
-		SetScale({ 3.0f, 3.0f });
-
-		Initialize();
 	}
 
 	Monster::~Monster()
@@ -38,14 +29,8 @@ namespace ya
 	void Monster::Initialize()
 	{
 		SetName(L"Monster");
-		if (mImage == nullptr)
-		{
-			mImage = Resources::Load<Image>(L"Monster", L"..\\Resources\\Image\\Monster.bmp");
-		}
-		SetSize({ (float)(mImage->GetWidth() * GetScale().x), (float)(mImage->GetHeight() * GetScale().y) });
-
-		//AddComponent(new Animator());
-		AddComponent(new Collider());
+		mCollider = new Collider();
+		AddComponent(mCollider);
 	}
 
 	void Monster::Tick()
@@ -55,29 +40,28 @@ namespace ya
 
 	void Monster::Render(HDC hdc)
 	{
-		Vector2 pos = GetPos();
-		Vector2 scale = GetScale();
-
-		Vector2 finalPos;
-		finalPos.x = pos.x - mImage->GetWidth() * (scale.x / 2.0f);
-		finalPos.y = pos.y - mImage->GetHeight() * (scale.y / 2.0f);
-
-		Vector2 rect;
-		rect.x = mImage->GetWidth() * scale.x;
-		rect.y = mImage->GetHeight() * scale.y;
-
-		finalPos = Camera::CalculatePos(finalPos);
-
-		TransparentBlt(hdc, finalPos.x, finalPos.y
-			, rect.x, rect.y, mImage->GetDC()  ///dc, 시작위치, 이미지 크기, 복사할dc
-			, 0, 0, mImage->GetWidth(), mImage->GetHeight() /// 이미지의 시작, 끝부분 좌표(자르기)
-			, RGB(255, 0, 255)); ///crTransparent의 인자를 제외시키고 출력한다.(투명처리)
-
 		GameObject::Render(hdc); /// 자식이 먼저그려져양함
 	}
 
 	void Monster::OnCollisionEnter(Collider* other)
 	{
+		GameObject* object = other->GetOwner();
+
+		if (object == nullptr)
+			return;
+
+		Vector2 otherPos = object->GetPos();
+		Vector2 otherSize = object->GetSize();
+		Vector2 otherScale = object->GetScale();
+
+		Vector2 newPos = otherPos;
+
+		if (GetPos().x <= otherPos.x)
+			newPos.x = GetPos().x + (GetSize().x * GetScale().x / 2) + (otherSize.x * otherScale.x / 2) + 0.01f;
+		else
+			newPos.x = GetPos().x - (GetSize().x * GetScale().x / 2) - (otherSize.x * otherScale.x / 2) - 0.01f;
+
+		object->SetPos(newPos);
 	}
 
 	void Monster::OnCollisionStay(Collider* other)

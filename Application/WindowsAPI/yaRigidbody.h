@@ -3,6 +3,7 @@
 
 namespace ya
 {
+	class PixelImageObject;
 	class Rigidbody : public Component
 	{
 	public:
@@ -20,6 +21,12 @@ namespace ya
 		void SetVelocity(Vector2 velocity) { mVelocity = velocity; }
 		Vector2 GetVelocity() { return mVelocity; }
 
+		//void SetPixelImageObject(PixelImageObject* pixelImageObject) { mPixelImageObject = pixelImageObject; }
+		//void PixelCollision();
+
+		bool IsPixel() { return mbPixel; }
+		void SetPixel(bool pixel) { mbPixel = pixel; }
+
 	private:
 		// 힘과 마찰력을 이용한 이동
 		float mMass;		/// 무게
@@ -32,5 +39,9 @@ namespace ya
 		Vector2 mGravity;	/// 중력 크기
 		bool mbGround;		/// 지면에 붙어있는지
 		Vector2 mLimitVelocity;	/// 속도 한계값
+		
+		bool mbPixel;	//픽셀충돌중인지
+
+		PixelImageObject* mPixelImageObject;
 	};
 }

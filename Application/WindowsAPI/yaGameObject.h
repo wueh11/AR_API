@@ -69,9 +69,6 @@ namespace ya
 			return nullptr;
 		}
 
-	public:
-		ObjectInfo GetObjectInfo() { return mObjectInfo; }
-
 	private:
 		std::vector<Component*> mComponents;
 		Vector2 mPos;
@@ -82,8 +79,6 @@ namespace ya
 		bool mDead;
 		float mDeathTime;
 		bool mDeathTimeOn;
-
-		ObjectInfo mObjectInfo;
 
 		GameObject* mOwner;
 		std::vector<GameObject*> mChildren;

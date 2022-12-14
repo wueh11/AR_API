@@ -4,9 +4,9 @@
 namespace ya
 {
 	GameObject::GameObject()
-		: mPos(Vector2(0.0f, 0.0f))
-		, mScale{ 1.0f, 1.0f }
-		, mSize{ 0.0f, 0.0f }
+		: mPos(Vector2::Zero)
+		, mScale(Vector2::One)
+		, mSize(Vector2::Zero)
 		, mDead(false)
 		, mDeathTime(-100.0f)
 		, mOwner(nullptr)
@@ -40,9 +40,6 @@ namespace ya
 				continue;
 
 			component->Tick();
-
-			for (GameObject* child : mChildren)
- 				child->Tick();
 		}
 	}
 
@@ -56,9 +53,6 @@ namespace ya
 
 			component->Render(hdc);
 		}
-
-		for (GameObject* child : mChildren)
-			child->Render(hdc);
 	}
 
 	void GameObject::OnCollisionEnter(Collider* other)

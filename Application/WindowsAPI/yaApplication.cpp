@@ -17,6 +17,7 @@ namespace ya
 {
 	void Application::Inititalize(WindowData& data)
 	{
+		srand(time(NULL));
 		initializeWindow(data);
 
 		Time::Initialize();

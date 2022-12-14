@@ -71,6 +71,42 @@
     <Filter Include="Engine\GameObject\Player">
       <UniqueIdentifier>{95b53366-67ae-4378-b062-7c2e450b9852}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\GameObject\EventPoint">
+      <UniqueIdentifier>{125a4e17-45d6-4260-9eb6-d2173150ae11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Manager\Collision">
+      <UniqueIdentifier>{0edec8cc-b179-4c33-bbde-ccff5a0d82f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Manager\Scene">
+      <UniqueIdentifier>{cf943214-83d0-4248-8cbe-88639475ce66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Manager\UI">
+      <UniqueIdentifier>{ec0f1758-6316-462d-9b46-9d914659b776}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Manager\Resources">
+      <UniqueIdentifier>{29cd4708-3aa1-48ad-a2a3-1e0b5dd858fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Manager\Camera">
+      <UniqueIdentifier>{180c1f92-212f-4171-971b-ee805ab059fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Manager\Input">
+      <UniqueIdentifier>{054b6306-8636-421c-97cd-02cef1ae2619}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Manager\Time">
+      <UniqueIdentifier>{4f9ef1d0-4469-46c8-8aa8-b2a2e349fe20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GameObject\Effect">
+      <UniqueIdentifier>{5e5caa5a-3611-4a6e-b08e-6eea34112bdb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GameObject\Background">
+      <UniqueIdentifier>{c60e30a8-6319-40df-99f2-edc5983d950d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GameObject\Enemy\Chewmein">
+      <UniqueIdentifier>{0d85b6fa-da0c-48d2-895b-c5ec72fa8aeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GameObject\Base\Collider">
+      <UniqueIdentifier>{8a375178-5154-4f68-a94d-051649bdd378}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -103,29 +139,14 @@
     <ClInclude Include="yaGameObject.h">
       <Filter>Engine\GameObject\Base</Filter>
     </ClInclude>
-    <ClInclude Include="yaInput.h">
-      <Filter>Engine\Manager</Filter>
-    </ClInclude>
     <ClInclude Include="yaScene.h">
       <Filter>Engine\Scene\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="yaSceneManager.h">
-      <Filter>Engine\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="yaTime.h">
-      <Filter>Engine\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="yaResources.h">
-      <Filter>Engine\Manager</Filter>
     </ClInclude>
     <ClInclude Include="yaResource.h">
       <Filter>Engine\Resources\Base</Filter>
     </ClInclude>
     <ClInclude Include="yaImage.h">
       <Filter>Engine\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="yaPlayScene.h">
-      <Filter>Engine\Scene</Filter>
     </ClInclude>
     <ClInclude Include="yaComponent.h">
       <Filter>Engine\Component\Base</Filter>
@@ -139,20 +160,11 @@
     <ClInclude Include="yaEndScene.h">
       <Filter>Engine\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="yaCollisionManager.h">
-      <Filter>Engine\Manager</Filter>
-    </ClInclude>
     <ClInclude Include="yaAnimation.h">
       <Filter>Engine\Component</Filter>
     </ClInclude>
-    <ClInclude Include="yaCamera.h">
-      <Filter>Engine\Manager</Filter>
-    </ClInclude>
     <ClInclude Include="yaMission1Scene.h">
       <Filter>Engine\Scene\Mission</Filter>
-    </ClInclude>
-    <ClInclude Include="yaChewmein.h">
-      <Filter>Engine\GameObject\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="yaRock.h">
       <Filter>Engine\GameObject\Game</Filter>
@@ -160,17 +172,8 @@
     <ClInclude Include="yaBackpack.h">
       <Filter>Engine\GameObject\Game</Filter>
     </ClInclude>
-    <ClInclude Include="yaEffect.h">
-      <Filter>Engine\GameObject\Game</Filter>
-    </ClInclude>
     <ClInclude Include="yaMissile.h">
       <Filter>Engine\GameObject\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="yaMonster.h">
-      <Filter>Engine\GameObject\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="yaUIManager.h">
-      <Filter>Engine\Manager</Filter>
     </ClInclude>
     <ClInclude Include="yaUIBase.h">
       <Filter>Engine\GameObject\UI\Base</Filter>
@@ -180,9 +183,6 @@
     </ClInclude>
     <ClInclude Include="yaCharacterSelectScene.h">
       <Filter>Engine\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="yaGround.h">
-      <Filter>Engine\GameObject\Game</Filter>
     </ClInclude>
     <ClInclude Include="yaHostage.h">
       <Filter>Engine\GameObject\Hostage</Filter>
@@ -205,6 +205,87 @@
     <ClInclude Include="yaPlayerLower.h">
       <Filter>Engine\GameObject\Player</Filter>
     </ClInclude>
+    <ClInclude Include="yaCameraWall.h">
+      <Filter>Engine\GameObject\EventPoint</Filter>
+    </ClInclude>
+    <ClInclude Include="yaHeavyMachinegun.h">
+      <Filter>Engine\GameObject\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="yaBgImageObject.h">
+      <Filter>Engine\GameObject\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="yaCollisionManager.h">
+      <Filter>Engine\Manager\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="yaSceneManager.h">
+      <Filter>Engine\Manager\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="yaUIManager.h">
+      <Filter>Engine\Manager\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="yaResources.h">
+      <Filter>Engine\Manager\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="yaCamera.h">
+      <Filter>Engine\Manager\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="yaInput.h">
+      <Filter>Engine\Manager\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="yaTime.h">
+      <Filter>Engine\Manager\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="yaEffect.h">
+      <Filter>Engine\GameObject\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="yaWaterEffect.h">
+      <Filter>Engine\GameObject\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="yaBullet.h">
+      <Filter>Engine\GameObject\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="yaPart1ChewmeinHouse.h">
+      <Filter>Engine\GameObject\EventPoint</Filter>
+    </ClInclude>
+    <ClInclude Include="yaWaterObject.h">
+      <Filter>Engine\GameObject\EventPoint</Filter>
+    </ClInclude>
+    <ClInclude Include="yaWaterBackground.h">
+      <Filter>Engine\GameObject\Background</Filter>
+    </ClInclude>
+    <ClInclude Include="yaWaterFront.h">
+      <Filter>Engine\GameObject\Background</Filter>
+    </ClInclude>
+    <ClInclude Include="yaMonster.h">
+      <Filter>Engine\GameObject\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="yaGround.h">
+      <Filter>Engine\GameObject\Background</Filter>
+    </ClInclude>
+    <ClInclude Include="yaColliderVertical.h">
+      <Filter>Engine\GameObject\Base\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="yaColliderHorizontal.h">
+      <Filter>Engine\GameObject\Base\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="yaEyeSight.h">
+      <Filter>Engine\GameObject\Enemy\Chewmein</Filter>
+    </ClInclude>
+    <ClInclude Include="yaAttackSight.h">
+      <Filter>Engine\GameObject\Enemy\Chewmein</Filter>
+    </ClInclude>
+    <ClInclude Include="yaChewmein.h">
+      <Filter>Engine\GameObject\Enemy\Chewmein</Filter>
+    </ClInclude>
+    <ClInclude Include="yaChewmeinProjecttile.h">
+      <Filter>Engine\GameObject\Enemy\Chewmein</Filter>
+    </ClInclude>
+    <ClInclude Include="yaAttack.h">
+      <Filter>Engine\GameObject\Enemy\Chewmein</Filter>
+    </ClInclude>
+    <ClInclude Include="yaCollisionObject.h">
+      <Filter>Engine\GameObject\Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -219,29 +300,14 @@
     <ClCompile Include="yaGameObject.cpp">
       <Filter>Engine\GameObject\Base</Filter>
     </ClCompile>
-    <ClCompile Include="yaInput.cpp">
-      <Filter>Engine\Manager</Filter>
-    </ClCompile>
     <ClCompile Include="yaScene.cpp">
       <Filter>Engine\Scene\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="yaSceneManager.cpp">
-      <Filter>Engine\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="yaTime.cpp">
-      <Filter>Engine\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="yaResources.cpp">
-      <Filter>Engine\Manager</Filter>
     </ClCompile>
     <ClCompile Include="yaResource.cpp">
       <Filter>Engine\Resources\Base</Filter>
     </ClCompile>
     <ClCompile Include="yaImage.cpp">
       <Filter>Engine\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="yaPlayScene.cpp">
-      <Filter>Engine\Scene</Filter>
     </ClCompile>
     <ClCompile Include="yaComponent.cpp">
       <Filter>Engine\Component\Base</Filter>
@@ -258,41 +324,23 @@
     <ClCompile Include="yaEndScene.cpp">
       <Filter>Engine\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="yaCollisionManager.cpp">
-      <Filter>Engine\Manager</Filter>
-    </ClCompile>
     <ClCompile Include="yaObject.h">
       <Filter>Engine\Common</Filter>
     </ClCompile>
     <ClCompile Include="yaAnimation.cpp">
       <Filter>Engine\Component</Filter>
     </ClCompile>
-    <ClCompile Include="yaCamera.cpp">
-      <Filter>Engine\Manager</Filter>
-    </ClCompile>
     <ClCompile Include="yaMission1Scene.cpp">
       <Filter>Engine\Scene\Mission</Filter>
     </ClCompile>
-    <ClCompile Include="yaChewmein.cpp">
-      <Filter>Engine\GameObject\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="yaBackpack.cpp">
-      <Filter>Engine\GameObject\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="yaEffect.cpp">
       <Filter>Engine\GameObject\Game</Filter>
     </ClCompile>
     <ClCompile Include="yaMissile.cpp">
       <Filter>Engine\GameObject\Game</Filter>
     </ClCompile>
-    <ClCompile Include="yaMonster.cpp">
-      <Filter>Engine\GameObject\Game</Filter>
-    </ClCompile>
     <ClCompile Include="yaRock.cpp">
       <Filter>Engine\GameObject\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="yaUIManager.cpp">
-      <Filter>Engine\Manager</Filter>
     </ClCompile>
     <ClCompile Include="yaUIBase.cpp">
       <Filter>Engine\GameObject\UI\Base</Filter>
@@ -302,9 +350,6 @@
     </ClCompile>
     <ClCompile Include="yaCharacterSelectScene.cpp">
       <Filter>Engine\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="yaGround.cpp">
-      <Filter>Engine\GameObject\Game</Filter>
     </ClCompile>
     <ClCompile Include="yaHostage.cpp">
       <Filter>Engine\GameObject\Hostage</Filter>
@@ -326,6 +371,87 @@
     </ClCompile>
     <ClCompile Include="yaPlayerUpper.cpp">
       <Filter>Engine\GameObject\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="yaCameraWall.cpp">
+      <Filter>Engine\GameObject\EventPoint</Filter>
+    </ClCompile>
+    <ClCompile Include="yaHeavyMachinegun.cpp">
+      <Filter>Engine\GameObject\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="yaBgImageObject.cpp">
+      <Filter>Engine\GameObject\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="yaCollisionManager.cpp">
+      <Filter>Engine\Manager\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="yaSceneManager.cpp">
+      <Filter>Engine\Manager\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="yaUIManager.cpp">
+      <Filter>Engine\Manager\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="yaResources.cpp">
+      <Filter>Engine\Manager\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="yaCamera.cpp">
+      <Filter>Engine\Manager\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="yaInput.cpp">
+      <Filter>Engine\Manager\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="yaTime.cpp">
+      <Filter>Engine\Manager\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="yaEffect.cpp">
+      <Filter>Engine\GameObject\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="yaWaterEffect.cpp">
+      <Filter>Engine\GameObject\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="yaBullet.cpp">
+      <Filter>Engine\GameObject\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="yaPart1ChewmeinHouse.cpp">
+      <Filter>Engine\GameObject\EventPoint</Filter>
+    </ClCompile>
+    <ClCompile Include="yaWaterObject.cpp">
+      <Filter>Engine\GameObject\EventPoint</Filter>
+    </ClCompile>
+    <ClCompile Include="yaWaterBackground.cpp">
+      <Filter>Engine\GameObject\Background</Filter>
+    </ClCompile>
+    <ClCompile Include="yaWaterFront.cpp">
+      <Filter>Engine\GameObject\Background</Filter>
+    </ClCompile>
+    <ClCompile Include="yaMonster.cpp">
+      <Filter>Engine\GameObject\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="yaGround.cpp">
+      <Filter>Engine\GameObject\Background</Filter>
+    </ClCompile>
+    <ClCompile Include="yaColliderHorizontal.cpp">
+      <Filter>Engine\GameObject\Base\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="yaColliderVertical.cpp">
+      <Filter>Engine\GameObject\Base\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="yaAttackSight.cpp">
+      <Filter>Engine\GameObject\Enemy\Chewmein</Filter>
+    </ClCompile>
+    <ClCompile Include="yaChewmein.cpp">
+      <Filter>Engine\GameObject\Enemy\Chewmein</Filter>
+    </ClCompile>
+    <ClCompile Include="yaChewmeinProjecttile.cpp">
+      <Filter>Engine\GameObject\Enemy\Chewmein</Filter>
+    </ClCompile>
+    <ClCompile Include="yaEyeSight.cpp">
+      <Filter>Engine\GameObject\Enemy\Chewmein</Filter>
+    </ClCompile>
+    <ClCompile Include="yaAttack.cpp">
+      <Filter>Engine\GameObject\Enemy\Chewmein</Filter>
+    </ClCompile>
+    <ClCompile Include="yaCollisionObject.cpp">
+      <Filter>Engine\GameObject\Base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

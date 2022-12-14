@@ -1,37 +1,46 @@
 #pragma once
 #include "yaGameObject.h"
+#include "yaPlayer.h"
 
 namespace ya
 {
 	class Image;
 	class Animator;
+	class Coliider;
 	class Player;
 	class PlayerUpper : public GameObject
 	{
 	public:
 		enum class State
 		{
-			IDLE,
-			WALK,
-			JUMP,
-			WALKJUMP,
+			IDLE,				// 0
+			WALK,				// 1
+			JUMP,				// 2
+			WALKJUMP,			// 3
+								   
+			FRONT_TO_SIT,		// 4
+			SIT,				// 5
+			SIT_TO_FRONT,		// 6
+			SITWALK,			// 7
+								   
+			FRONT_TO_UPSIDE,	// 8
+			UPSIDE,				// 9
+			UPSIDE_TO_FRONT,	// 10
+								   
+			FRONT_TO_DOWNSIDE,	// 11
+			DOWNSIDE,			// 12
+			DOWNSIDE_TO_FRONT,	// 13
+								   
+			SHOOT,				// 14
+			SHOOT_SIT,			// 15
+			SHOOT_UPSIDE,		// 16
+			SHOOT_DOWNSIDE,		// 17
+								   
+			KNIFE,				// 18
+			BOMB,				// 19
 			
-			FRONT_TO_UPSIDE,
-			UPSIDE,
-			UPSIDE_TO_FRONT,
-			FRONT_TO_DOWNSIDE,
-			DOWNSIDE,
-			DOWNSIDE_TO_FRONT,
-
-			SIT,
-
-			SHOOT,
-			SHOOT_UPSIDE,
-			SHOOT_DOWNSIDE,
-			SHOOT_SIT,
-
-			KNIFE,
-			BOMB,
+			DIE,
+			REVIVAL,
 
 			END,
 		};
@@ -51,30 +60,47 @@ namespace ya
 		void CreateAnimation();
 		
 	public:
-		void Idle(eArms arms, bool bLeft);
-		void Walk(eArms arms,bool bLeft);
-		void Jump(eArms arms,bool bLeft, bool bJump);
-		void WalkJump(eArms arms, bool bLeft, bool bJump);
-
-		void FrontToUpside(eArms arms, bool bLeft);
-		void Upside(eArms arms, bool bLeft);
-		void UpsideToFront(eArms arms, bool bLeft);
-
-		void FrontToDownside(eArms arms, bool bLeft);
-		void Downside(eArms arms, bool bLeft);
-		void DownsideToFront(eArms arms, bool bLeft);
+		void Idle();
+		void Walk();
+		void Jump();
+		void WalkJump();
 		
-		void Shoot(eArms arms, bool bLeft);
-		void ShootUpside(eArms arms, bool bLeft);
-		void ShootDownside(eArms arms, bool bLeft);
+		void FrontToSit();
+		void Sit();
+		void SitToFront();
+		void SitWalk();
+
+		void FrontToUpside();
+		void Upside();
+		void UpsideToFront();
+
+		void FrontToDownside();
+		void Downside();
+		void DownsideToFront();
+
+		void Shoot();
 		
-		void Knife(eArms arms, bool bLeft);
-		void Bomb(eArms arms, bool bLeft);
+		void Knife();
+		void Bomb();
+
+		void Die();
+		void Revival();
+
+	public:
+		//void OnIdle();
+		void OnWalk();
+		void OnSit();
+		void OnUpside();
+		void OnDownside();
 
 	private:
 		State mState;
+		ya::Player::MoveState mMoveState;
+		ya::Player::ControlState mControlState;
+		eArms mArms;
 
 		Image* mImage;
 		Animator* mAnimator;
+		Collider* mCollider;
 	};
 }

@@ -26,6 +26,8 @@ namespace ya
 		Vector2 GetSize() { return mSize; }
 		Vector2 GetOffset() { return mOffset; }
 
+		void SetActive(bool active) { mbActive = active; }
+
 	private:
 		Vector2 mOffset;
 		Vector2 mPos;
@@ -33,5 +35,7 @@ namespace ya
 		Vector2 mSize;
 
 		UINT mCollisionCount;
+
+		bool mbActive;
 	};
 }

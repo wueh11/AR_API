@@ -4,11 +4,19 @@
 namespace ya
 {
 	class Image;
+	class Animator;
+	class Collider;
 	class Monster : public GameObject
 	{
 	public:
+		struct Status
+		{
+			UINT hp = 100;
+			bool alive = true;
+		};
+
+	public:
 		Monster();
-		Monster(Vector2 position);
 		~Monster();
 
 		virtual void Initialize() override;
@@ -19,8 +27,21 @@ namespace ya
 		virtual void OnCollisionStay(Collider* other);
 		virtual void OnCollisionExit(Collider* other);
 
-	private:
+	public:
+		GameObject* GetTarget() { return mTarget; }
+		void SetTarget(GameObject* target) { mTarget = target; }
+
+		Status GetStatus() { return mStatus; }
+		void SetHp(int val) { mStatus.hp += val; }
+
+	protected:
 		float mSpeed;
+		
+		Status mStatus;
+		GameObject* mTarget;
+
 		Image* mImage;
+		Animator* mAnimator;
+		Collider* mCollider;
 	};
 }
