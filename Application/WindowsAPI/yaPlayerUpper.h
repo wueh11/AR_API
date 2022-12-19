@@ -6,7 +6,6 @@ namespace ya
 {
 	class Image;
 	class Animator;
-	class Coliider;
 	class Player;
 	class PlayerUpper : public GameObject
 	{
@@ -101,6 +100,5 @@ namespace ya
 
 		Image* mImage;
 		Animator* mAnimator;
-		Collider* mCollider;
 	};
 }

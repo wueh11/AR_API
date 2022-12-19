@@ -18,9 +18,6 @@ namespace ya
 
         Scene* playScene = SceneManager::GetPlayScene();
 
-        if (!playScene->IsActive())
-            return;
-
         for (size_t row = 0; row < _COLLIDER_LAYER; row++)
         {
             for (size_t col = 0; col < _COLLIDER_LAYER; col++)

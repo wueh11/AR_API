@@ -92,11 +92,11 @@ namespace ya
 
 	void Input::Render(HDC hdc)
 	{
-		wchar_t szFloat[50] = {};
+		/*wchar_t szFloat[50] = {};
 		std::wstring str1 = L"Mouse : " + std::to_wstring(mMousePos.x) + L", " + std::to_wstring(mMousePos.y);
 		swprintf_s(szFloat, 50, str1.c_str());
 		int strLen = wcsnlen_s(szFloat, 50);
-		TextOut(hdc, 10, 60, szFloat, strLen);
+		TextOut(hdc, 10, 60, szFloat, strLen);*/
 	}
 
 	eKeyState Input::GetKeyState(eKeyCode keyCode)

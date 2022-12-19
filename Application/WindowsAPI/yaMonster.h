@@ -11,13 +11,22 @@ namespace ya
 	public:
 		struct Status
 		{
-			UINT hp = 100;
+			int hp = 20;
 			bool alive = true;
+
+			void SetHp(int _hp)
+			{
+				hp = _hp;
+			}
+			void Die()
+			{
+				alive = false;
+			}
 		};
 
 	public:
 		Monster();
-		~Monster();
+		virtual ~Monster();
 
 		virtual void Initialize() override;
 		virtual void Tick() override;

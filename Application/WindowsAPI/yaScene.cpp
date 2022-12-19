@@ -9,7 +9,7 @@ namespace ya
 {
 	Scene::Scene()
 		: mPlayer(nullptr)
-		, mbActive(false)
+		, mPixelImage(nullptr)
 	{
 		SceneManager::SetPlayScene(this);
 		mObjects.resize(_COLLIDER_LAYER);
@@ -21,6 +21,9 @@ namespace ya
 		{
 			for (size_t i = 0; i < mObjects[j].size(); i++)
 			{
+				if (mObjects[j][i] == nullptr)
+					continue;
+
 				delete mObjects[j][i];
 				mObjects[j][i] = nullptr;
 			}
@@ -89,7 +92,6 @@ namespace ya
 
 	void Scene::Enter()
 	{
-		mbActive = true;
 	}
 
 	void Scene::Exit()

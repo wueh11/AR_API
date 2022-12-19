@@ -46,7 +46,7 @@ namespace ya
 			TransparentBlt(hdc, pos.x, pos.y
 				, rect.x, rect.y, mImage->GetDC()  ///dc, 시작위치, 이미지 크기, 복사할dc
 				, 0, 0, mImage->GetWidth(), mImage->GetHeight() /// 이미지의 시작, 끝부분 좌표(자르기)
-				, RGB(255, 255, 255)); ///crTransparent의 인자를 제외시키고 출력한다.(투명처리)
+				, RGB(255, 0, 255)); ///crTransparent의 인자를 제외시키고 출력한다.(투명처리)
 		}
 		else
 		{

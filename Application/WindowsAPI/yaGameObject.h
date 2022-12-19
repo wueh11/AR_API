@@ -80,6 +80,7 @@ namespace ya
 		float mDeathTime;
 		bool mDeathTimeOn;
 
+	protected:
 		GameObject* mOwner;
 		std::vector<GameObject*> mChildren;
 	};

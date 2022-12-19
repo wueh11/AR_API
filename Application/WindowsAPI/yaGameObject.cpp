@@ -22,7 +22,17 @@ namespace ya
 
 			delete component;
 			component = nullptr;
+
 		}
+
+		/*for (GameObject* object : mChildren)
+		{
+			if (object == nullptr)
+				continue;
+
+			delete object;
+			object = nullptr;
+		}*/
 	}
 
 	void GameObject::Initialize()

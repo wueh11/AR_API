@@ -17,7 +17,7 @@
 #include "yaPlayerUpper.h"
 #include "yaPlayerLower.h"
 #include "yaBullet.h"
-#include "yaEffect.h"
+#include "yaGrenade.h"
 
 #include "yaPixelImageObject.h"
 
@@ -121,16 +121,12 @@ namespace ya
 		case ya::Player::State::DIE:
 			Die();
 			break;
+		case ya::Player::State::RESET:
+			Reset();
+			break;
 		default:
 			break;
 		}
-		
-		/*if (KEY_DOWN(eKeyCode::I))
-		{
-			Backpack* backPack = new Backpack();
-			Scene* playScene = SceneManager::GetPlayScene();
-			playScene->AddGameObject(backPack, eColliderLayer::Backpack);
-		}*/
 	}
 
 	void Player::Render(HDC hdc)
@@ -157,7 +153,7 @@ namespace ya
 		swprintf_s(szFloat, 50, strDownside.c_str());
 		TextOut(hdc, 600, 160, szFloat, strLen);
 
-		GameObject::Render(hdc); /// 자식이 먼저그려져양함
+		GameObject::Render(hdc);
 	}
 
 	void Player::OnCollisionEnter(Collider* other)
@@ -206,10 +202,23 @@ namespace ya
 			return;
 		}
 
+		if (KEY_DOWN(eKeyCode::LSHIFT))
+		{
+			mState = State::BOMB;
+			return;
+		}
+
 		if (KEY_DOWN(eKeyCode::P))
 		{
 			mControlState.bAlive = false;
 			mState = State::DIE;
+			return;
+		}
+
+		if (KEY_DOWN(eKeyCode::R))
+		{
+			mControlState.bAlive = false;
+			mState = State::RESET;
 			return;
 		}
 	}
@@ -240,6 +249,12 @@ namespace ya
 		if (KEY_DOWN(eKeyCode::LCTRL))
 		{
 			mState = State::SHOOT;
+			return;
+		}
+
+		if (KEY_DOWN(eKeyCode::LSHIFT))
+		{
+			mState = State::BOMB;
 			return;
 		}
 
@@ -280,6 +295,12 @@ namespace ya
 			return;
 		}
 
+		if (KEY_DOWN(eKeyCode::LSHIFT))
+		{
+			mState = State::BOMB;
+			return;
+		}
+
 		mMoveState.bJump = true;
 
 		if (KEY_PRESS(eKeyCode::LEFT) || KEY_PRESS(eKeyCode::RIGHT))
@@ -307,6 +328,12 @@ namespace ya
 		if (KEY_DOWN(eKeyCode::LCTRL))
 		{
 			mState = State::SHOOT;
+			return;
+		}
+
+		if (KEY_DOWN(eKeyCode::LSHIFT))
+		{
+			mState = State::BOMB;
 			return;
 		}
 
@@ -338,6 +365,12 @@ namespace ya
 		if (KEY_DOWN(eKeyCode::LCTRL))
 		{
 			mState = State::SHOOT_UPSIDE;
+			return;
+		}
+
+		if (KEY_DOWN(eKeyCode::LSHIFT))
+		{
+			mState = State::BOMB;
 			return;
 		}
 
@@ -377,6 +410,12 @@ namespace ya
 			mState = State::SHOOT_DOWNSIDE;
 			return;
 		}
+
+		if (KEY_DOWN(eKeyCode::LSHIFT))
+		{
+			mState = State::BOMB;
+			return;
+		}
 	}
 
 	void Player::Shoot()
@@ -414,24 +453,31 @@ namespace ya
 
 	void Player::Bomb()
 	{
-		if (KEY_UP(eKeyCode::LSHIFT))
-		{
-			mState = State::IDLE;
-		}
+		OnBomb();
+
+		mState = State::IDLE;
 	}
 
 	void Player::Die()
 	{
 		mControlState.bInvincible = true;
 		mControlState.bPlayable = false;
-		mControlState.bAlive = true;
+		mControlState.bAlive = false;
 
 		if (Time::Timer(L"die", 3.0f))
 		{
 			mControlState.bInvincible = false;
 			mControlState.bPlayable = true;
+			mControlState.bAlive = true;
 			mState = State::IDLE;                                                                                                                                                                                        
 		}
+	}
+
+	void Player::Reset()
+	{
+		SetPos({ 150.0f, 200.0f });
+
+		mState = State::IDLE;
 	}
 
 	void Player::OnShoot()
@@ -476,6 +522,30 @@ namespace ya
 
 		bullet->SetPos(playerPos + playerSize - (bulletSize / 2.0f) + offset);
 		bullet->SetDirection(math::Rotate(mArmsDirection, dir));
+	}
+
+	void Player::OnBomb()
+	{
+		Grenade* grenade = new Grenade();
+
+		Scene* playScene = SceneManager::GetPlayScene();
+		playScene->AddGameObject(grenade, eColliderLayer::Player_Projecttile);
+
+		Vector2 playerPos = GetPos();
+		Vector2 playerSize = GetSize() / 2.0f;
+		Vector2 grenadeSize = grenade->GetSize();
+		
+		mArmsDirection = Vector2({ 0.5f, -0.5f });
+
+		float dir = 0.0f;
+		if (mMoveState.bLeft)
+			dir = 270.0f;
+
+		Vector2 offset = Vector2::Zero;
+		offset.x = -10.0f;
+
+		grenade->SetPos(playerPos + playerSize - (grenadeSize / 2.0f) + offset);
+		grenade->SetDirection(math::Rotate(mArmsDirection, dir));
 	}
 
 	void Player::OnWalk()

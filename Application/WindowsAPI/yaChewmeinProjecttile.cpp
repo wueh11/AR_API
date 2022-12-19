@@ -12,6 +12,7 @@ namespace ya
 		: mSpeed(800.0f)
 		, mAliveTime(5.0f)
 		, mImage(nullptr)
+		, mCollider(nullptr)
 		, mState(eState::MOVE)
 	{
 		SetPos({ 100.0f, 100.0f });
@@ -30,15 +31,13 @@ namespace ya
 			mAnimator->Play(L"projecttile", true);
 		}
 		 
-		mCollider = new Collider();
-		mCollider->SetSize(GetSize());
-		mCollider->SetScale(GetScale());
-		mCollider->SetOffset({ 0.0f, 0.0f });
-		AddComponent(mCollider);
+		Collider* collider = AddComponent<Collider>();
 	}
+
 	ChewmeinProjecttile::~ChewmeinProjecttile()
 	{
 	}
+
 	void ChewmeinProjecttile::Initialize()
 	{
 	}
@@ -74,6 +73,7 @@ namespace ya
 	void ChewmeinProjecttile::OnCollisionExit(Collider* other)
 	{
 	}
+
 	void ChewmeinProjecttile::Move()
 	{
 		mAliveTime -= Time::DeltaTime();
@@ -97,9 +97,10 @@ namespace ya
 
 		SetPos(pos);
 	}
+
 	void ChewmeinProjecttile::Destroy()
 	{
-		mCollider->SetActive(false);
+		//mCollider->SetActive(false);
 		mAnimator->Play(L"projecttile_destory", false);
 
 		mState = eState::WAIT;

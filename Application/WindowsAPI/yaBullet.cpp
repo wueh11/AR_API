@@ -5,10 +5,14 @@
 #include "yaTime.h"
 #include "yaCollider.h"
 #include "yaCamera.h"
-#include "yaEffect.h"
+#include "yaBulletEffect.h"
 
 #include "yaSceneManager.h"
 #include "yaScene.h"
+#include "yaPixelImageObject.h"
+#include "yaRigidbody.h"
+
+#include "yaMonster.h"
 
 namespace ya
 {
@@ -24,14 +28,18 @@ namespace ya
 
 		if (mImage == nullptr)
 		{
-			mImage = Resources::Load<Image>(L"playerBullet", L"..\\Resources\\Image\\Bullet\\playerBullet.bmp");
+			mImage = Resources::Load<Image>(L"playerBullet", L"..\\Resources\\Image\\Projecttile\\playerBullet.bmp");
 		}
 
-		Collider* collider = new Collider();
-		collider->SetSize(GetSize());
-		collider->SetScale(GetScale());
-		collider->SetOffset({ 0.0f, 0.0f });
-		AddComponent(collider);
+		Collider* collider = AddComponent<Collider>();
+
+		Rigidbody* rigidbody = AddComponent<Rigidbody>();
+		rigidbody->SetMass(0.0f);
+
+		Scene* playScene = SceneManager::GetPlayScene();
+		PixelImageObject* pixelImage = playScene->GetPixelImage();
+		if (pixelImage != nullptr)
+			pixelImage->AddObject(this);
 	}
 
 	Bullet::~Bullet()
@@ -45,6 +53,19 @@ namespace ya
 	void Bullet::Tick()
 	{
 		GameObject::Tick();
+
+		Rigidbody* rigidbody = GetComponent<Rigidbody>();
+		if (rigidbody != nullptr && rigidbody->isGround())
+		{
+			BulletEffect* effect = new BulletEffect();
+			Scene* playScene = SceneManager::GetPlayScene();
+			playScene->AddGameObject(effect, eColliderLayer::Effect);
+			effect->SetPos(GetPos());
+			effect->play();
+			Death();
+
+			return;
+		}
 
 		mAliveTime -= Time::DeltaTime(); 
 		if (mAliveTime <= 0.0f)
@@ -100,11 +121,16 @@ namespace ya
 
 	void Bullet::OnCollisionEnter(Collider* other)
 	{
-		GameObject* gameObj = other->GetOwner();
+		//GameObject* gameObj = other->GetOwner();
+		Monster* monster = dynamic_cast<Monster*>(other->GetOwner());
+		if(monster != nullptr)
+		{
+			monster->SetHp(-10);
+		}
 
 		//gameObj->Death();
 
-		Effect* effect = new Effect();
+		BulletEffect* effect = new BulletEffect();
 		Scene* playScene = SceneManager::GetPlayScene();
 		playScene->AddGameObject(effect, eColliderLayer::Effect);
 		effect->SetPos(GetPos());

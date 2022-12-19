@@ -57,9 +57,11 @@ enum class eColliderLayer
 	MapObject, //background 앞에 그려질 오브젝트
 	Event, // 이벤트 발생 지점
 
+	Item,
 	Player,
 	Player_Projecttile,
 	Monster,
+
 	Monster_Projecttile,
 	Collider, // 충돌이 적용되는 object collider
 

@@ -56,11 +56,7 @@ namespace ya
 		mAnimator->Play(L"IdleRight", true);
 		AddComponent(mAnimator);
 
-		Collider* collider = new Collider();
-		collider->SetSize(GetSize());
-		collider->SetScale(GetScale());
-		collider->SetOffset({ 0.0f, 0.0f });
-		//AddComponent(collider);
+		//mCollider = AddComponent<Collider>();
 	}
 
 	void PlayerLower::Tick()
@@ -74,11 +70,6 @@ namespace ya
 		
 		if (mMoveState.bSit)
 			return;
-
-		/* = player->IsLeft();
-		bool mMoveState.bJump = player->IsJumping();
-		bool mMoveState.bFall = player->IsFalling();
-		bool bSit = player->IsSitting();*/
 
 		switch (mState)
 		{

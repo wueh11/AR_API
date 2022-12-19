@@ -107,6 +107,9 @@
     <Filter Include="Engine\GameObject\Base\Collider">
       <UniqueIdentifier>{8a375178-5154-4f68-a94d-051649bdd378}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\GameObject\Item\Base">
+      <UniqueIdentifier>{7bd98984-93d6-4edb-9e86-d8456fe9b6a4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -235,14 +238,11 @@
     <ClInclude Include="yaTime.h">
       <Filter>Engine\Manager\Time</Filter>
     </ClInclude>
-    <ClInclude Include="yaEffect.h">
+    <ClInclude Include="yaBulletEffect.h">
       <Filter>Engine\GameObject\Effect</Filter>
     </ClInclude>
     <ClInclude Include="yaWaterEffect.h">
       <Filter>Engine\GameObject\Effect</Filter>
-    </ClInclude>
-    <ClInclude Include="yaBullet.h">
-      <Filter>Engine\GameObject\Item</Filter>
     </ClInclude>
     <ClInclude Include="yaPart1ChewmeinHouse.h">
       <Filter>Engine\GameObject\EventPoint</Filter>
@@ -259,19 +259,13 @@
     <ClInclude Include="yaMonster.h">
       <Filter>Engine\GameObject\Base</Filter>
     </ClInclude>
-    <ClInclude Include="yaGround.h">
-      <Filter>Engine\GameObject\Background</Filter>
-    </ClInclude>
     <ClInclude Include="yaColliderVertical.h">
       <Filter>Engine\GameObject\Base\Collider</Filter>
     </ClInclude>
     <ClInclude Include="yaColliderHorizontal.h">
       <Filter>Engine\GameObject\Base\Collider</Filter>
     </ClInclude>
-    <ClInclude Include="yaEyeSight.h">
-      <Filter>Engine\GameObject\Enemy\Chewmein</Filter>
-    </ClInclude>
-    <ClInclude Include="yaAttackSight.h">
+    <ClInclude Include="yaChewmeinAttackSight.h">
       <Filter>Engine\GameObject\Enemy\Chewmein</Filter>
     </ClInclude>
     <ClInclude Include="yaChewmein.h">
@@ -280,11 +274,35 @@
     <ClInclude Include="yaChewmeinProjecttile.h">
       <Filter>Engine\GameObject\Enemy\Chewmein</Filter>
     </ClInclude>
-    <ClInclude Include="yaAttack.h">
+    <ClInclude Include="yaChewmeinAttack.h">
       <Filter>Engine\GameObject\Enemy\Chewmein</Filter>
     </ClInclude>
     <ClInclude Include="yaCollisionObject.h">
       <Filter>Engine\GameObject\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="yaGround.h">
+      <Filter>Engine\GameObject\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="yaBullet.h">
+      <Filter>Engine\GameObject\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="yaGrenade.h">
+      <Filter>Engine\GameObject\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="yaGrenadeEffect.h">
+      <Filter>Engine\GameObject\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="yaChewmeinEyeSight.h">
+      <Filter>Engine\GameObject\Enemy\Chewmein</Filter>
+    </ClInclude>
+    <ClInclude Include="yaItem.h">
+      <Filter>Engine\GameObject\Item\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="yaWeapon.h">
+      <Filter>Engine\GameObject\Item\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="yaItemEffect.h">
+      <Filter>Engine\GameObject\Effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -402,14 +420,11 @@
     <ClCompile Include="yaTime.cpp">
       <Filter>Engine\Manager\Time</Filter>
     </ClCompile>
-    <ClCompile Include="yaEffect.cpp">
+    <ClCompile Include="yaBulletEffect.cpp">
       <Filter>Engine\GameObject\Effect</Filter>
     </ClCompile>
     <ClCompile Include="yaWaterEffect.cpp">
       <Filter>Engine\GameObject\Effect</Filter>
-    </ClCompile>
-    <ClCompile Include="yaBullet.cpp">
-      <Filter>Engine\GameObject\Item</Filter>
     </ClCompile>
     <ClCompile Include="yaPart1ChewmeinHouse.cpp">
       <Filter>Engine\GameObject\EventPoint</Filter>
@@ -426,16 +441,13 @@
     <ClCompile Include="yaMonster.cpp">
       <Filter>Engine\GameObject\Base</Filter>
     </ClCompile>
-    <ClCompile Include="yaGround.cpp">
-      <Filter>Engine\GameObject\Background</Filter>
-    </ClCompile>
     <ClCompile Include="yaColliderHorizontal.cpp">
       <Filter>Engine\GameObject\Base\Collider</Filter>
     </ClCompile>
     <ClCompile Include="yaColliderVertical.cpp">
       <Filter>Engine\GameObject\Base\Collider</Filter>
     </ClCompile>
-    <ClCompile Include="yaAttackSight.cpp">
+    <ClCompile Include="yaChewmeinAttackSight.cpp">
       <Filter>Engine\GameObject\Enemy\Chewmein</Filter>
     </ClCompile>
     <ClCompile Include="yaChewmein.cpp">
@@ -444,14 +456,35 @@
     <ClCompile Include="yaChewmeinProjecttile.cpp">
       <Filter>Engine\GameObject\Enemy\Chewmein</Filter>
     </ClCompile>
-    <ClCompile Include="yaEyeSight.cpp">
-      <Filter>Engine\GameObject\Enemy\Chewmein</Filter>
-    </ClCompile>
-    <ClCompile Include="yaAttack.cpp">
+    <ClCompile Include="yaChewmeinAttack.cpp">
       <Filter>Engine\GameObject\Enemy\Chewmein</Filter>
     </ClCompile>
     <ClCompile Include="yaCollisionObject.cpp">
       <Filter>Engine\GameObject\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="yaGround.cpp">
+      <Filter>Engine\GameObject\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="yaBullet.cpp">
+      <Filter>Engine\GameObject\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="yaGrenade.cpp">
+      <Filter>Engine\GameObject\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="yaGrenadeEffect.cpp">
+      <Filter>Engine\GameObject\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="yaChewmeinEyeSight.cpp">
+      <Filter>Engine\GameObject\Enemy\Chewmein</Filter>
+    </ClCompile>
+    <ClCompile Include="yaItem.cpp">
+      <Filter>Engine\GameObject\Item\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="yaWeapon.cpp">
+      <Filter>Engine\GameObject\Item\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="yaItemEffect.cpp">
+      <Filter>Engine\GameObject\Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

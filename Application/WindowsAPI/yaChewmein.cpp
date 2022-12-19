@@ -12,8 +12,9 @@
 #include "yaAnimator.h"
 #include "yaCollider.h"
 #include "yaRigidbody.h"
-#include "yaEyeSight.h"
-#include "yaAttackSight.h"
+#include "yaChewmeinEyeSight.h"
+#include "yaChewmeinAttackSight.h"
+#include "yaChewmeinAttack.h"
 
 #include "yaChewmeinProjecttile.h"
 
@@ -28,6 +29,7 @@ namespace ya
 		SetSize({ 32.0f, 40.0f });
 
 		mSpeed = 300.0f;
+		mStatus.SetHp(30);
 
 		{ // 애니메이션
 			if (mImage == nullptr)
@@ -50,6 +52,9 @@ namespace ya
 			mAnimator->GetCompleteEvent(L"AttackLeft") = std::bind(&Chewmein::OnIdle, this);
 			mAnimator->GetCompleteEvent(L"AttackRight") = std::bind(&Chewmein::OnIdle, this);
 
+			//mAnimator->GetCompleteEvent(L"AttackLeft") = std::bind(&Chewmein::OnAttackComplete, this);
+			//mAnimator->GetCompleteEvent(L"AttackRight") = std::bind(&Chewmein::OnAttackComplete, this);
+			
 			mAnimator->CreateAnimation(L"AttackBubbleLeft", mImage, Vector2(0.0f, 479.0f), Vector2(57.0f, 46.0f), Vector2(0.0f, -12.0f), 4, 0.1f);
 			mAnimator->CreateAnimation(L"AttackBubbleRight", mImage, Vector2(0.0f, 526.0f), Vector2(57.0f, 46.0f), Vector2(0.0f, -12.0f), 4, 0.1f);
 
@@ -59,8 +64,8 @@ namespace ya
 			mAnimator->CreateAnimation(L"DieLeft", mImage, Vector2(0.0f, 588.0f), Vector2(76.0f, 57.0f), Vector2(0.0f, -24.0f), 27, 0.05f);
 			mAnimator->CreateAnimation(L"DieRight", mImage, Vector2(0.0f, 646.0f), Vector2(76.0f, 57.0f), Vector2(0.0f, -24.0f), 27, 0.1f);
 
-			//mAnimator->GetCompleteEvent(L"DieLeft") = std::bind(&Chewmein::Death, this);
-			//mAnimator->GetCompleteEvent(L"DieRight") = std::bind(&Chewmein::Death, this);
+			mAnimator->GetCompleteEvent(L"DieLeft") = std::bind(&Chewmein::Death, this);
+			mAnimator->GetCompleteEvent(L"DieRight") = std::bind(&Chewmein::Death, this);
 
 			mAnimator->Play(L"WalkLeft", true);
 
@@ -69,34 +74,49 @@ namespace ya
 
 		Scene* playScene = SceneManager::GetPlayScene();
 
-		EyeSight* eyeSight = new EyeSight();
+		ChewmeinEyeSight* eyeSight = new ChewmeinEyeSight();
 		AddChild(eyeSight);
 		playScene->AddGameObject(eyeSight, eColliderLayer::Event);
 
-		AttackSight* attackSight = new AttackSight();
+		ChewmeinAttackSight* attackSight = new ChewmeinAttackSight();
 		AddChild(attackSight);
 		playScene->AddGameObject(attackSight, eColliderLayer::Event);
+
+		/*mAttack = new ChewmeinAttack();
+		AddChild(mAttack);
+		playScene->AddGameObject(mAttack, eColliderLayer::Monster_Projecttile);*/
 	}
 
 	Chewmein::~Chewmein()
 	{
+		/*for (GameObject* object : mChildren)
+		{
+			if (object == nullptr)
+				continue;
+
+			delete object;
+			object = nullptr;
+		}*/
 	}
 
 	void Chewmein::Initialize()
 	{
-		Collider* collider = new Collider();
-		AddComponent(collider);
-
-		AddComponent(new Rigidbody());
+		Monster::Initialize();
 	}
 
 	void Chewmein::Tick()
 	{
-		GameObject::Tick();
+		Monster::Tick();
+
+		if (mStatus.alive && mStatus.hp <= 0)
+		{
+			mStatus.Die();
+			mState = eState::DIE;
+		}
 
 		if (KEY_DOWN(eKeyCode::T))
 		{
-			mState = eState::ATTACK_BUBBLE;
+			mState = eState::ATTACK;
 		}
 
 		switch (mState)
@@ -132,13 +152,15 @@ namespace ya
 
 	void Chewmein::Render(HDC hdc)
 	{
+		Vector2 pos = Camera::CalculatePos(GetPos());
+
 		wchar_t szFloat[50] = {};
-		std::wstring str = L"cState:" + std::to_wstring((int)mState);
+		std::wstring str = L"[" + std::to_wstring((int)mState) + L"] HP:" + std::to_wstring((int)mStatus.hp);
 		swprintf_s(szFloat, 50, str.c_str());
 		int strLen = wcsnlen_s(szFloat, 50);
-		TextOut(hdc, 500, 500, szFloat, strLen);
+		TextOut(hdc, pos.x - 20.0f, pos.y - 80.0f, szFloat, strLen);
 
-		GameObject::Render(hdc);
+		Monster::Render(hdc);
 	}
 
 	void Chewmein::OnCollisionEnter(Collider* other)
@@ -209,6 +231,19 @@ namespace ya
 		else
 			mAnimator->Play(L"AttackRight", false, true);
 
+		ChewmeinAttack* attack = new ChewmeinAttack();
+		Scene* playScene = SceneManager::GetPlayScene();
+		AddChild(attack);
+		playScene->AddGameObject(attack, eColliderLayer::Monster_Projecttile);
+
+		Vector2 chewmeinPos = GetPos();
+		Vector2 chewmeinSize = GetSize() / 2.0f;
+
+		Vector2 attackSize = attack->GetSize() / 2.0f;
+		Vector2 attackPos = attack->GetPos();
+
+		Vector2 offset = { 0.0f, 0.0f };
+
 		mState = eState::IDLE;
 	}
 
@@ -242,6 +277,8 @@ namespace ya
 			mAnimator->Play(L"DieLeft", false);
 		else
 			mAnimator->Play(L"DieRight", false, true);
+
+		mState = eState::IDLE;
 	}
 
 	void Chewmein::OnIdle()
@@ -250,5 +287,11 @@ namespace ya
 			mAnimator->Play(L"WalkLeft", true);
 		else
 			mAnimator->Play(L"WalkRight", true, true);
+	}
+	void Chewmein::OnAttack()
+	{
+	}
+	void Chewmein::OnAttackComplete()
+	{
 	}
 }

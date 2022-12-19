@@ -4,6 +4,7 @@
 
 namespace ya
 {
+	class PixelImageObject;
 	class Mission1Scene : public Scene
 	{
 	public:
@@ -17,5 +18,10 @@ namespace ya
 		virtual void Enter();
 		virtual void Exit();
 
+	public:
+		PixelImageObject* GetPixelObject() { return mPixelObject; }
+
+	private:
+		PixelImageObject* mPixelObject;
 	};
 }

@@ -36,6 +36,7 @@ namespace ya
 
 			DIE,
 
+			RESET,
 			END,
 		};
 
@@ -100,10 +101,12 @@ namespace ya
 		void Knife();
 		void Bomb();
 		void Die();
+		void Reset();
 
 	private:
-		void OnShoot();
 		void OnWalk();
+		void OnShoot();
+		void OnBomb();
 
 	public:
 		void PickupArms(eArms arms, UINT bulletCount);

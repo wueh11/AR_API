@@ -6,6 +6,7 @@ namespace ya
 {
 	class Player;
 	class GameObject;
+	class PixelImageObject;
 	class Scene : public Entity
 	{
 	public:
@@ -26,15 +27,17 @@ namespace ya
 
 		Player* GetPlayer() { return mPlayer; }
 		void SetPlayer(Player* player) { mPlayer = player; }
-		
-		bool IsActive() { return mbActive; }
 
-		bool mbActive;
+	public:
+		PixelImageObject* GetPixelImage() { return mPixelImage; }
+		void SetPixelImage(PixelImageObject* pixelImage) { mPixelImage = pixelImage; }
+
 	private:
 		std::vector<std::vector<GameObject*>> mObjects;
 		WindowData windowData;
 
 		Player* mPlayer;
+		PixelImageObject* mPixelImage;
 	};
 
 	typedef std::vector<std::vector<GameObject*>> GameObjects;

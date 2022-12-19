@@ -6,6 +6,7 @@ namespace ya
 {
 	class Image;
 	class Animator;
+	class ChewmeinAttack;
 	class Chewmein : public Monster
 	{
 	public:
@@ -39,7 +40,7 @@ namespace ya
 
 	public:
 		Chewmein();
-		~Chewmein();
+		virtual ~Chewmein();
 
 		virtual void Initialize() override;
 		virtual void Tick() override;
@@ -69,9 +70,12 @@ namespace ya
 
 	private:
 		void OnIdle();
+		void OnAttack();
+		void OnAttackComplete();
 
 	private:
 		eState mState;
 		MoveState mMoveState;
+		//ChewmeinAttack* mAttack;
 	};
 }

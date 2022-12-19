@@ -9,6 +9,7 @@
 
 #include "yaAnimator.h"
 #include "yaCollider.h"
+#include "yaRigidbody.h"
 #include "yaCamera.h"
 
 namespace ya
@@ -29,13 +30,18 @@ namespace ya
 	void Monster::Initialize()
 	{
 		SetName(L"Monster");
-		mCollider = new Collider();
-		AddComponent(mCollider);
+		mCollider = AddComponent<Collider>();
+		AddComponent<Rigidbody>();
 	}
 
 	void Monster::Tick()
 	{
 		GameObject::Tick();
+
+		if (mStatus.hp <= 0)
+		{
+			mCollider->SetActive(false);
+		}
 	}
 
 	void Monster::Render(HDC hdc)

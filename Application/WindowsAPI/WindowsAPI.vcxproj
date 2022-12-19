@@ -128,8 +128,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="yaAttack.h" />
-    <ClInclude Include="yaAttackSight.h" />
+    <ClInclude Include="yaChewmeinAttack.h" />
+    <ClInclude Include="yaChewmeinAttackSight.h" />
+    <ClInclude Include="yaGrenade.h" />
+    <ClInclude Include="yaGrenadeEffect.h" />
     <ClInclude Include="yaChewmeinProjecttile.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="def.h" />
@@ -152,10 +154,10 @@
     <ClInclude Include="yaCollisionManager.h" />
     <ClInclude Include="yaCollisionObject.h" />
     <ClInclude Include="yaComponent.h" />
-    <ClInclude Include="yaEffect.h" />
+    <ClInclude Include="yaBulletEffect.h" />
     <ClInclude Include="yaEndScene.h" />
     <ClInclude Include="yaEntity.h" />
-    <ClInclude Include="yaEyeSight.h" />
+    <ClInclude Include="yaChewmeinEyeSight.h" />
     <ClInclude Include="yaGameObject.h" />
     <ClInclude Include="yaGround.h" />
     <ClInclude Include="yaHeavyMachinegun.h" />
@@ -163,6 +165,8 @@
     <ClInclude Include="yaImage.h" />
     <ClInclude Include="yaImageObject.h" />
     <ClInclude Include="yaInput.h" />
+    <ClInclude Include="yaItem.h" />
+    <ClInclude Include="yaItemEffect.h" />
     <ClInclude Include="yaLogoScene.h" />
     <ClInclude Include="yaMissile.h" />
     <ClInclude Include="yaMission1Scene.h" />
@@ -187,10 +191,13 @@
     <ClInclude Include="yaWaterEffect.h" />
     <ClInclude Include="yaWaterFront.h" />
     <ClInclude Include="yaWaterObject.h" />
+    <ClInclude Include="yaWeapon.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="yaAttack.cpp" />
-    <ClCompile Include="yaAttackSight.cpp" />
+    <ClCompile Include="yaChewmeinAttack.cpp" />
+    <ClCompile Include="yaChewmeinAttackSight.cpp" />
+    <ClCompile Include="yaGrenade.cpp" />
+    <ClCompile Include="yaGrenadeEffect.cpp" />
     <ClCompile Include="yaChewmeinProjecttile.cpp" />
     <ClCompile Include="Maths.cpp" />
     <ClCompile Include="yaAnimation.cpp" />
@@ -208,10 +215,10 @@
     <ClCompile Include="yaComponent.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="yaApplication.cpp" />
-    <ClCompile Include="yaEffect.cpp" />
+    <ClCompile Include="yaBulletEffect.cpp" />
     <ClCompile Include="yaEndScene.cpp" />
     <ClCompile Include="yaEntity.cpp" />
-    <ClCompile Include="yaEyeSight.cpp" />
+    <ClCompile Include="yaChewmeinEyeSight.cpp" />
     <ClCompile Include="yaGameObject.cpp" />
     <ClCompile Include="yaGround.cpp" />
     <ClCompile Include="yaHeavyMachinegun.cpp" />
@@ -219,6 +226,8 @@
     <ClCompile Include="yaImage.cpp" />
     <ClCompile Include="yaImageObject.cpp" />
     <ClCompile Include="yaInput.cpp" />
+    <ClCompile Include="yaItem.cpp" />
+    <ClCompile Include="yaItemEffect.cpp" />
     <ClCompile Include="yaLogoScene.cpp" />
     <ClCompile Include="yaMissile.cpp" />
     <ClCompile Include="yaMission1Scene.cpp" />
@@ -244,6 +253,7 @@
     <ClCompile Include="yaWaterEffect.cpp" />
     <ClCompile Include="yaWaterFront.cpp" />
     <ClCompile Include="yaWaterObject.cpp" />
+    <ClCompile Include="yaWeapon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WindowsAPI.rc" />

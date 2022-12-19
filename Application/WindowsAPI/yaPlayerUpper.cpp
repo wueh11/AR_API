@@ -43,11 +43,7 @@ namespace ya
 
 		AddComponent(mAnimator);
 
-		mCollider = new Collider();
-		mCollider->SetSize(GetSize());
-		mCollider->SetScale(GetScale());
-		mCollider->SetOffset({ 0.0f, 0.0f });
-		//AddComponent(mCollider);
+		//mCollider = AddComponent<Collider>();
 	}
 
 	void PlayerUpper::Tick()

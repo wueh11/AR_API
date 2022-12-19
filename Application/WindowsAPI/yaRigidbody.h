@@ -21,9 +21,6 @@ namespace ya
 		void SetVelocity(Vector2 velocity) { mVelocity = velocity; }
 		Vector2 GetVelocity() { return mVelocity; }
 
-		//void SetPixelImageObject(PixelImageObject* pixelImageObject) { mPixelImageObject = pixelImageObject; }
-		//void PixelCollision();
-
 		bool IsPixel() { return mbPixel; }
 		void SetPixel(bool pixel) { mbPixel = pixel; }
 
