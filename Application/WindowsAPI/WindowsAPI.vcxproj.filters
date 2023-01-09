@@ -50,9 +50,6 @@
     <Filter Include="Engine\GameObject\Item">
       <UniqueIdentifier>{cd5fd5ae-7b79-4a13-a58d-5d2e4aab2eb3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Scene\Mission">
-      <UniqueIdentifier>{e22f0530-5ab1-4aa0-9a08-47b175db745f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\GameObject\Game">
       <UniqueIdentifier>{ce46eb91-26dc-4517-9923-0b001b365d10}</UniqueIdentifier>
     </Filter>
@@ -109,6 +106,12 @@
     </Filter>
     <Filter Include="Engine\GameObject\Item\Base">
       <UniqueIdentifier>{7bd98984-93d6-4edb-9e86-d8456fe9b6a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GameObject\Enemy\HugeHermit">
+      <UniqueIdentifier>{84c19000-2b10-4e0d-a2cc-43209cf9d163}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Scene\Mission1">
+      <UniqueIdentifier>{e22f0530-5ab1-4aa0-9a08-47b175db745f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -167,7 +170,7 @@
       <Filter>Engine\Component</Filter>
     </ClInclude>
     <ClInclude Include="yaMission1Scene.h">
-      <Filter>Engine\Scene\Mission</Filter>
+      <Filter>Engine\Scene\Mission1</Filter>
     </ClInclude>
     <ClInclude Include="yaRock.h">
       <Filter>Engine\GameObject\Game</Filter>
@@ -304,6 +307,60 @@
     <ClInclude Include="yaItemEffect.h">
       <Filter>Engine\GameObject\Effect</Filter>
     </ClInclude>
+    <ClInclude Include="yaPlayerKnifeSight.h">
+      <Filter>Engine\GameObject\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="yaPlayerKnife.h">
+      <Filter>Engine\GameObject\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="yaBombItem.h">
+      <Filter>Engine\GameObject\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="yaUILife.h">
+      <Filter>Engine\GameObject\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="yaUIInventory.h">
+      <Filter>Engine\GameObject\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="yaUITime.h">
+      <Filter>Engine\GameObject\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="yaUIHp.h">
+      <Filter>Engine\GameObject\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="yaHugeHermit.h">
+      <Filter>Engine\GameObject\Enemy\HugeHermit</Filter>
+    </ClInclude>
+    <ClInclude Include="yaHugeHermitCannon.h">
+      <Filter>Engine\GameObject\Enemy\HugeHermit</Filter>
+    </ClInclude>
+    <ClInclude Include="yaHugeHermitCannonFireEffect.h">
+      <Filter>Engine\GameObject\Enemy\HugeHermit</Filter>
+    </ClInclude>
+    <ClInclude Include="yaHugeHermitEffect.h">
+      <Filter>Engine\GameObject\Enemy\HugeHermit</Filter>
+    </ClInclude>
+    <ClInclude Include="yaHugeHermitMissile.h">
+      <Filter>Engine\GameObject\Enemy\HugeHermit</Filter>
+    </ClInclude>
+    <ClInclude Include="yaHugeHermitCannonCollisionEffect.h">
+      <Filter>Engine\GameObject\Enemy\HugeHermit</Filter>
+    </ClInclude>
+    <ClInclude Include="yaHugeHermitMissileEffect.h">
+      <Filter>Engine\GameObject\Enemy\HugeHermit</Filter>
+    </ClInclude>
+    <ClInclude Include="yaHugeHermitScene.h">
+      <Filter>Engine\Scene\Mission1</Filter>
+    </ClInclude>
+    <ClInclude Include="yaArmsCount.h">
+      <Filter>Engine\GameObject\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="yaUILifePanel.h">
+      <Filter>Engine\GameObject\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="yaBombCount.h">
+      <Filter>Engine\GameObject\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -349,7 +406,7 @@
       <Filter>Engine\Component</Filter>
     </ClCompile>
     <ClCompile Include="yaMission1Scene.cpp">
-      <Filter>Engine\Scene\Mission</Filter>
+      <Filter>Engine\Scene\Mission1</Filter>
     </ClCompile>
     <ClCompile Include="yaBackpack.cpp">
       <Filter>Engine\GameObject\Game</Filter>
@@ -485,6 +542,60 @@
     </ClCompile>
     <ClCompile Include="yaItemEffect.cpp">
       <Filter>Engine\GameObject\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="yaPlayerKnifeSight.cpp">
+      <Filter>Engine\GameObject\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="yaPlayerKnife.cpp">
+      <Filter>Engine\GameObject\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="yaBombItem.cpp">
+      <Filter>Engine\GameObject\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="yaUILife.cpp">
+      <Filter>Engine\GameObject\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="yaUIInventory.cpp">
+      <Filter>Engine\GameObject\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="yaUITime.cpp">
+      <Filter>Engine\GameObject\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="yaUIHp.cpp">
+      <Filter>Engine\GameObject\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="yaHugeHermit.cpp">
+      <Filter>Engine\GameObject\Enemy\HugeHermit</Filter>
+    </ClCompile>
+    <ClCompile Include="yaHugeHermitCannon.cpp">
+      <Filter>Engine\GameObject\Enemy\HugeHermit</Filter>
+    </ClCompile>
+    <ClCompile Include="yaHugeHermitCannonFireEffect.cpp">
+      <Filter>Engine\GameObject\Enemy\HugeHermit</Filter>
+    </ClCompile>
+    <ClCompile Include="yaHugeHermitEffect.cpp">
+      <Filter>Engine\GameObject\Enemy\HugeHermit</Filter>
+    </ClCompile>
+    <ClCompile Include="yaHugeHermitMissile.cpp">
+      <Filter>Engine\GameObject\Enemy\HugeHermit</Filter>
+    </ClCompile>
+    <ClCompile Include="yaHugeHermitCannonCollisionEffect.cpp">
+      <Filter>Engine\GameObject\Enemy\HugeHermit</Filter>
+    </ClCompile>
+    <ClCompile Include="yaHugeHermitMissileEffect.cpp">
+      <Filter>Engine\GameObject\Enemy\HugeHermit</Filter>
+    </ClCompile>
+    <ClCompile Include="yaHugeHermitScene.cpp">
+      <Filter>Engine\Scene\Mission1</Filter>
+    </ClCompile>
+    <ClCompile Include="yaArmsCount.cpp">
+      <Filter>Engine\GameObject\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="yaUILifePanel.cpp">
+      <Filter>Engine\GameObject\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="yaBombCount.cpp">
+      <Filter>Engine\GameObject\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

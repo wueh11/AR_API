@@ -14,7 +14,9 @@ namespace ya
 	{
 		SetSize({ 20.0f, 30.0f });
 		SetScale({ M_SCALE, M_SCALE });
+
 		Collider* collider = AddComponent<Collider>();
+		collider->SetActive(false);
 	}
 
 	ChewmeinAttack::~ChewmeinAttack()
@@ -34,6 +36,12 @@ namespace ya
 		if (mAliveTime <= 0.0f)
 		{
 			Death();
+		}
+
+		if (Time::Timer(L"chewmein_attack_" + std::to_wstring((UINT32)this), 0.2f))
+		{
+			Collider* collider = GetComponent<Collider>();
+			collider->SetActive(true);
 		}
 
 		Chewmein* owner = dynamic_cast<Chewmein*>(GetOwner());
@@ -56,14 +64,18 @@ namespace ya
 
 	void ChewmeinAttack::OnCollisionEnter(Collider* other)
 	{
-		Player* player = dynamic_cast<Player*>(other->GetOwner());
+		/*Player* player = dynamic_cast<Player*>(other->GetOwner());
 		if (player == nullptr)
 			return;
-		player->Die();
+		player->Die();*/
 	}
 
 	void ChewmeinAttack::OnCollisionStay(Collider* other)
 	{
+		Player* player = dynamic_cast<Player*>(other->GetOwner());
+		if (player == nullptr)
+			return;
+		player->Attacked();
 	}
 
 	void ChewmeinAttack::OnCollisionExit(Collider* other)

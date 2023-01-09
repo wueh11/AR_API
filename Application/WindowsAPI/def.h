@@ -81,10 +81,11 @@ enum class eCameraEffect
 
 enum class eUIType
 {
+	LIFE,
 	HP,
-	MP,
-	SHOP,
 	INVENTORY,
+	SCORE,
+	TIME,
 	OPTION,
 
 	END,

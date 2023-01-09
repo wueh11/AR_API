@@ -51,6 +51,9 @@ namespace ya
 		void SetSize(Vector2 size) { mSize = size; }
 		Vector2 GetSize() { return mSize; }
 
+		void SetScale(Vector2 scale) { mScale = scale; }
+		Vector2 GetScale() { return mScale; }
+
 		void SetScreenPos(Vector2 screenPos) { mScreenPos = screenPos; }
 		Vector2 GeScreentPos() { return mScreenPos; }
 
@@ -69,6 +72,7 @@ namespace ya
 		Image* mImage;
 		Vector2 mPos;	/// 창 위치
 		Vector2 mSize;	/// 창 크기
+		Vector2 mScale;
 		Vector2 mScreenPos;
 
 	private:

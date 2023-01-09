@@ -55,7 +55,7 @@ namespace ya
 		if (mbAffectedCamera)
 			pos = Camera::CalculatePos(pos); /// 카메라와 함께 이동하는 경우 ex)UI
 
-		/*BLENDFUNCTION func = {};
+		BLENDFUNCTION func = {};
 		func.BlendOp = AC_SRC_OVER;
 		func.BlendFlags = 0;
 		func.AlphaFormat = AC_SRC_ALPHA;
@@ -63,7 +63,7 @@ namespace ya
 
 		pos += mSpriteSheet[mSpriteIndex].offset;
 
-		AlphaBlend(hdc
+		/*AlphaBlend(hdc
 			, int(pos.x + animatorOffset.x - (mSpriteSheet[mSpriteIndex].size.x / 2.0f)), int(pos.y + animatorOffset.y - (mSpriteSheet[mSpriteIndex].size.y / 2.0f))
 			, int(mSpriteSheet[mSpriteIndex].size.x), int(mSpriteSheet[mSpriteIndex].size.y)
 			, mImage->GetDC()
@@ -71,17 +71,25 @@ namespace ya
 			, int(mSpriteSheet[mSpriteIndex].size.x), int(mSpriteSheet[mSpriteIndex].size.y)
 			, func);*/
 
-		pos += mSpriteSheet[mSpriteIndex].offset;
-
-		TransparentBlt(hdc
-			, int(pos.x + animatorOffset.x - (mSpriteSheet[mSpriteIndex].size.x * scale.x / 2.0f))
-			, int(pos.y + animatorOffset.y - (mSpriteSheet[mSpriteIndex].size.y * scale.y / 2.0f))
+		AlphaBlend(hdc
+			, int(pos.x + (animatorOffset.x * scale.x) - (mSpriteSheet[mSpriteIndex].size.x * scale.x / 2.0f))
+			, int(pos.y + (animatorOffset.y * scale.y) - (mSpriteSheet[mSpriteIndex].size.y * scale.y / 2.0f))
 			, int(mSpriteSheet[mSpriteIndex].size.x * scale.x), int(mSpriteSheet[mSpriteIndex].size.y * scale.y)
 			, mImage->GetDC()
 			, int(mSpriteSheet[mSpriteIndex].leftTop.x), int(mSpriteSheet[mSpriteIndex].leftTop.y)
 			, int(mSpriteSheet[mSpriteIndex].size.x), int(mSpriteSheet[mSpriteIndex].size.y)
-			, RGB(255, 0, 255));
+			, func);
 
+		pos += mSpriteSheet[mSpriteIndex].offset;
+
+		/*TransparentBlt(hdc
+			, int(pos.x + (animatorOffset.x * scale.x) - (mSpriteSheet[mSpriteIndex].size.x * scale.x / 2.0f))
+			, int(pos.y + (animatorOffset.y * scale.y) - (mSpriteSheet[mSpriteIndex].size.y * scale.y / 2.0f))
+			, int(mSpriteSheet[mSpriteIndex].size.x * scale.x), int(mSpriteSheet[mSpriteIndex].size.y * scale.y)
+			, mImage->GetDC()
+			, int(mSpriteSheet[mSpriteIndex].leftTop.x), int(mSpriteSheet[mSpriteIndex].leftTop.y)
+			, int(mSpriteSheet[mSpriteIndex].size.x), int(mSpriteSheet[mSpriteIndex].size.y)
+			, RGB(255, 0, 255));*/
 
 		/*wchar_t szFloat[50] = {};
 		std::wstring str = L"reverse: ";

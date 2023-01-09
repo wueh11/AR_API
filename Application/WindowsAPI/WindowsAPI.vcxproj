@@ -128,6 +128,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="yaBombCount.h" />
+    <ClInclude Include="yaBombItem.h" />
     <ClInclude Include="yaChewmeinAttack.h" />
     <ClInclude Include="yaChewmeinAttackSight.h" />
     <ClInclude Include="yaGrenade.h" />
@@ -162,6 +164,14 @@
     <ClInclude Include="yaGround.h" />
     <ClInclude Include="yaHeavyMachinegun.h" />
     <ClInclude Include="yaHostage.h" />
+    <ClInclude Include="yaHugeHermit.h" />
+    <ClInclude Include="yaHugeHermitCannon.h" />
+    <ClInclude Include="yaHugeHermitCannonCollisionEffect.h" />
+    <ClInclude Include="yaHugeHermitCannonFireEffect.h" />
+    <ClInclude Include="yaHugeHermitEffect.h" />
+    <ClInclude Include="yaHugeHermitMissile.h" />
+    <ClInclude Include="yaHugeHermitMissileEffect.h" />
+    <ClInclude Include="yaHugeHermitScene.h" />
     <ClInclude Include="yaImage.h" />
     <ClInclude Include="yaImageObject.h" />
     <ClInclude Include="yaInput.h" />
@@ -176,6 +186,8 @@
     <ClInclude Include="yaPlayer.h" />
     <ClInclude Include="yaColliderHorizontal.h" />
     <ClInclude Include="yaColliderVertical.h" />
+    <ClInclude Include="yaPlayerKnife.h" />
+    <ClInclude Include="yaPlayerKnifeSight.h" />
     <ClInclude Include="yaPlayerLower.h" />
     <ClInclude Include="yaPlayerUpper.h" />
     <ClInclude Include="yaResource.h" />
@@ -186,7 +198,13 @@
     <ClInclude Include="yaSceneManager.h" />
     <ClInclude Include="yaTime.h" />
     <ClInclude Include="yaUIBase.h" />
+    <ClInclude Include="yaUIHp.h" />
+    <ClInclude Include="yaUILife.h" />
+    <ClInclude Include="yaUIInventory.h" />
+    <ClInclude Include="yaUILifePanel.h" />
     <ClInclude Include="yaUIManager.h" />
+    <ClInclude Include="yaArmsCount.h" />
+    <ClInclude Include="yaUITime.h" />
     <ClInclude Include="yaWaterBackground.h" />
     <ClInclude Include="yaWaterEffect.h" />
     <ClInclude Include="yaWaterFront.h" />
@@ -194,6 +212,8 @@
     <ClInclude Include="yaWeapon.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="yaBombCount.cpp" />
+    <ClCompile Include="yaBombItem.cpp" />
     <ClCompile Include="yaChewmeinAttack.cpp" />
     <ClCompile Include="yaChewmeinAttackSight.cpp" />
     <ClCompile Include="yaGrenade.cpp" />
@@ -223,6 +243,14 @@
     <ClCompile Include="yaGround.cpp" />
     <ClCompile Include="yaHeavyMachinegun.cpp" />
     <ClCompile Include="yaHostage.cpp" />
+    <ClCompile Include="yaHugeHermit.cpp" />
+    <ClCompile Include="yaHugeHermitCannon.cpp" />
+    <ClCompile Include="yaHugeHermitCannonCollisionEffect.cpp" />
+    <ClCompile Include="yaHugeHermitCannonFireEffect.cpp" />
+    <ClCompile Include="yaHugeHermitEffect.cpp" />
+    <ClCompile Include="yaHugeHermitMissile.cpp" />
+    <ClCompile Include="yaHugeHermitMissileEffect.cpp" />
+    <ClCompile Include="yaHugeHermitScene.cpp" />
     <ClCompile Include="yaImage.cpp" />
     <ClCompile Include="yaImageObject.cpp" />
     <ClCompile Include="yaInput.cpp" />
@@ -238,6 +266,8 @@
     <ClCompile Include="yaPlayer.cpp" />
     <ClCompile Include="yaColliderHorizontal.cpp" />
     <ClCompile Include="yaColliderVertical.cpp" />
+    <ClCompile Include="yaPlayerKnife.cpp" />
+    <ClCompile Include="yaPlayerKnifeSight.cpp" />
     <ClCompile Include="yaPlayerLower.cpp" />
     <ClCompile Include="yaPlayerUpper.cpp" />
     <ClCompile Include="yaResource.cpp" />
@@ -248,7 +278,13 @@
     <ClCompile Include="yaSceneManager.cpp" />
     <ClCompile Include="yaTime.cpp" />
     <ClCompile Include="yaUIBase.cpp" />
+    <ClCompile Include="yaUIHp.cpp" />
+    <ClCompile Include="yaUILife.cpp" />
+    <ClCompile Include="yaUIInventory.cpp" />
+    <ClCompile Include="yaUILifePanel.cpp" />
     <ClCompile Include="yaUIManager.cpp" />
+    <ClCompile Include="yaArmsCount.cpp" />
+    <ClCompile Include="yaUITime.cpp" />
     <ClCompile Include="yaWaterBackground.cpp" />
     <ClCompile Include="yaWaterEffect.cpp" />
     <ClCompile Include="yaWaterFront.cpp" />

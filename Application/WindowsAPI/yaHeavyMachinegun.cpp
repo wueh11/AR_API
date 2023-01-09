@@ -18,12 +18,10 @@
 namespace ya
 {
 	HeavyMachinegun::HeavyMachinegun()
+		: Weapon()
 	{
 		if (mImage == nullptr)
 			mImage = Resources::Load<Image>(L"heavymachinegun", L"..\\Resources\\Image\\Item\\heavymachinegun.bmp");
-
-		mCollider = AddComponent<Collider>();
-		//mRigidbody = AddComponent<Rigidbody>();
 	}
 
 	HeavyMachinegun::~HeavyMachinegun()
@@ -66,6 +64,13 @@ namespace ya
 	void HeavyMachinegun::OnCollisionEnter(Collider* other)
 	{
 		Weapon::OnCollisionEnter(other);
+
+		Player* player = dynamic_cast<Player*>(other->GetOwner());
+
+		if (player == nullptr)
+			return;
+
+		player->PickupArms(eArms::HeavyMachinegun, 200);
 	}
 
 	void HeavyMachinegun::OnCollisionStay(Collider* other)

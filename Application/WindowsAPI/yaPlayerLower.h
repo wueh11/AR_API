@@ -41,6 +41,7 @@ namespace ya
 	private:
 		State mState;
 		ya::Player::MoveState mMoveState;
+		ya::Player::ControlState mControlState;
 
 		Image* mImage;
 		Animator* mAnimator;

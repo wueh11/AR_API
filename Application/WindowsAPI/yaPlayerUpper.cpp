@@ -16,6 +16,8 @@ namespace ya
 	PlayerUpper::PlayerUpper()
 		: mImage(nullptr)
 		, mAnimator(nullptr)
+		, mState(State::IDLE)
+		, mArms(eArms::Pistol)
 	{
 		SetName(L"PlayerUpper");
 		SetPos(Vector2::Zero);
@@ -32,10 +34,6 @@ namespace ya
 	{
 		GameObject* player = GetOwner();
 		SetScale(player->GetScale());
-
-		//Upper
-		if (mImage == nullptr)
-			mImage = Resources::Load<Image>(L"PlayerUpper", L"..\\Resources\\Image\\Player\\player_upper_pistol.bmp");
 
 		mAnimator = new Animator();
 		CreateAnimation();
@@ -54,10 +52,16 @@ namespace ya
 
 		mMoveState = player->GetMoveState();
 		mControlState = player->GetControlState();
-		mArms = player->GetArms();
-			
-		if (!mControlState.bAlive)
-			mState = State::DIE;
+
+		if (mArms != player->GetArms())
+		{
+			mArms = player->GetArms();
+			ResetState();
+		}
+		else
+		{
+			mArms = player->GetArms();
+		}
 
 		Vector2 pos = player->GetPos() + GetOffset();
 
@@ -102,8 +106,14 @@ namespace ya
 		case ya::PlayerUpper::State::KNIFE:
 			Knife();
 			break;
+		case ya::PlayerUpper::State::KNIFE_SIT:
+			KnifeSit();
+			break;
 		case ya::PlayerUpper::State::BOMB:
 			Bomb();
+			break;
+		case ya::PlayerUpper::State::BOMB_SIT:
+			BombSit();
 			break;
 		case ya::PlayerUpper::State::DIE:
 			Die();
@@ -148,6 +158,9 @@ namespace ya
 
 	void PlayerUpper::CreateAnimation()
 	{
+		if (mImage == nullptr)
+			mImage = Resources::Load<Image>(L"PlayerUpperPistol", L"..\\Resources\\Image\\Player\\player_upper_pistol.bmp");
+
 		//Pistol
 		{
 			{ //Upper
@@ -156,13 +169,18 @@ namespace ya
 					mAnimator->CreateAnimation(L"Idle-Right-Pistol", mImage, Vector2(0.0f, 0.0f), Vector2(31.0f, 29.0f), Vector2(10.0f, 0.0f), 4, 0.2f);
 					mAnimator->CreateAnimation(L"Walk-Right-Pistol", mImage, Vector2(0.0f, 62.0f), Vector2(34.0f, 29.0f), Vector2(8.0f, 0.0f), 12, 0.1f);
 					mAnimator->CreateAnimation(L"Jump-Right-Pistol", mImage, Vector2(0.0f, 125.0f), Vector2(33.0f, 26.0f), Vector2(0.0f, -16.0f), 6, 0.1f);
-					mAnimator->CreateAnimation(L"JumpMove-Right-Pistol", mImage, Vector2(0.0f, 182.0f), Vector2(34.0f, 35.0f), Vector2(2.0f, 0.0f), 6, 0.1f);
+					mAnimator->CreateAnimation(L"JumpMove-Right-Pistol", mImage, Vector2(0.0f, 182.0f), Vector2(34.0f, 35.0f), Vector2(0.0f, -24.0f), 6, 0.08f);
 
-					mAnimator->CreateAnimation(L"Knife1-Right-Pistol", mImage, Vector2(0.0f, 318.0f), Vector2(43.0f, 48.0f), Vector2(2.0f, 0.0f), 6, 0.1f);
-					mAnimator->CreateAnimation(L"Knife2-Right-Pistol", mImage, Vector2(0.0f, 419.0f), Vector2(50.0f, 30.0f), Vector2(2.0f, 0.0f), 6, 0.1f);
-					mAnimator->CreateAnimation(L"Bomb-Right-Pistol", mImage, Vector2(0.0f, 486.0f), Vector2(30.0f, 30.0f), Vector2(2.0f, 0.0f), 6, 0.1f);
+					mAnimator->CreateAnimation(L"Knife1-Right-Pistol", mImage, Vector2(0.0f, 318.0f), Vector2(47.0f, 48.0f), Vector2(0.0f, -20.0f), 6, 0.06f);
+					mAnimator->CreateAnimation(L"Knife2-Right-Pistol", mImage, Vector2(0.0f, 419.0f), Vector2(50.0f, 33.0f), Vector2(26.0f, -3.0f), 6, 0.06f);
+					mAnimator->CreateAnimation(L"Bomb-Right-Pistol", mImage, Vector2(0.0f, 486.0f), Vector2(36.0f, 30.0f), Vector2(12.0f, -2.0f), 6, 0.08f);
+
+					mAnimator->GetCompleteEvent(L"Knife1-Right-Pistol") = std::bind(&PlayerUpper::ResetState, this);
+					mAnimator->GetCompleteEvent(L"Knife2-Right-Pistol") = std::bind(&PlayerUpper::ResetState, this);
+					mAnimator->GetCompleteEvent(L"Bomb-Right-Pistol") = std::bind(&PlayerUpper::ResetState, this);
 
 					mAnimator->CreateAnimation(L"Shoot-Front-Right-Pistol", mImage, Vector2(0.0f, 256.0f), Vector2(52.0f, 30.0f), Vector2(40.0f, 0.0f), 10, 0.04f);
+					mAnimator->GetCompleteEvent(L"Shoot-Front-Right-Pistol") = std::bind(&PlayerUpper::ResetState, this);
 
 					mAnimator->CreateAnimation(L"Upside-Right-Pistol", mImage, Vector2(0.0f, 548.0f), Vector2(34.0f, 26.0f), Vector2(10.0f, -10.0f), 4, 0.2f);
 					mAnimator->CreateAnimation(L"Front-Upside-Right-Pistol", mImage, Vector2(0.0f, 606.0f), Vector2(36.0f, 32.0f), Vector2(12.0f, -18.0f), 1, 0.1f);
@@ -179,14 +197,19 @@ namespace ya
 				{ //Left
 					mAnimator->CreateAnimation(L"Idle-Left-Pistol", mImage, Vector2(0.0f, 30.0f), Vector2(31.0f, 29.0f), Vector2(-10.0f, 0.0f), 4, 0.2f);
 					mAnimator->CreateAnimation(L"Walk-Left-Pistol", mImage, Vector2(0.0f, 93.0f), Vector2(34.0f, 29.0f), Vector2(-8.0f, 0.0f), 12, 0.1f);
-					mAnimator->CreateAnimation(L"Jump-Left-Pistol", mImage, Vector2(0.0f, 152.0f), Vector2(33.0f, 26.0f), Vector2(0.0f, -16.0f), 6, 0.1f);
-					mAnimator->CreateAnimation(L"JumpMove-Left-Pistol", mImage, Vector2(0.0f, 219.0f), Vector2(34.0f, 35.0f), Vector2(2.0f, 0.0f), 6, 0.1f);
+					mAnimator->CreateAnimation(L"Jump-Left-Pistol", mImage, Vector2(0.0f, 153.0f), Vector2(33.0f, 26.0f), Vector2(10.0f, -16.0f), 6, 0.1f);
+					mAnimator->CreateAnimation(L"JumpMove-Left-Pistol", mImage, Vector2(0.0f, 219.0f), Vector2(34.0f, 35.0f), Vector2(0.0f, -24.0f), 6, 0.1f);
 
-					mAnimator->CreateAnimation(L"Knife1-Left-Pistol", mImage, Vector2(0.0f, 368.0f), Vector2(43.0f, 48.0f), Vector2(2.0f, 0.0f), 6, 0.1f);
-					mAnimator->CreateAnimation(L"Knife2-Left-Pistol", mImage, Vector2(0.0f, 453.0f), Vector2(50.0f, 30.0f), Vector2(2.0f, 0.0f), 6, 0.1f);
-					mAnimator->CreateAnimation(L"Bomb-Left-Pistol", mImage, Vector2(0.0f, 517.0f), Vector2(30.0f, 30.0f), Vector2(2.0f, 0.0f), 6, 0.1f);
+					mAnimator->CreateAnimation(L"Knife1-Left-Pistol", mImage, Vector2(0.0f, 368.0f), Vector2(47.0f, 48.0f), Vector2(0.0f, -20.0f), 6, 0.06f);
+					mAnimator->CreateAnimation(L"Knife2-Left-Pistol", mImage, Vector2(0.0f, 453.0f), Vector2(50.0f, 33.0f), Vector2(-26.0f, -3.0f), 6, 0.06f);
+					mAnimator->CreateAnimation(L"Bomb-Left-Pistol", mImage, Vector2(0.0f, 517.0f), Vector2(36.0f, 30.0f), Vector2(-12.0f, -2.0f), 6, 0.08f);
+
+					mAnimator->GetCompleteEvent(L"Knife1-Left-Pistol") = std::bind(&PlayerUpper::ResetState, this);
+					mAnimator->GetCompleteEvent(L"Knife2-Left-Pistol") = std::bind(&PlayerUpper::ResetState, this);
+					mAnimator->GetCompleteEvent(L"Bomb-Left-Pistol") = std::bind(&PlayerUpper::ResetState, this);
 
 					mAnimator->CreateAnimation(L"Shoot-Front-Left-Pistol", mImage, Vector2(0.0f, 286.0f), Vector2(52.0f, 30.0f), Vector2(-40.0f, 0.0f), 10, 0.04f);
+					mAnimator->GetCompleteEvent(L"Shoot-Front-Left-Pistol") = std::bind(&PlayerUpper::ResetState, this);
 
 					mAnimator->CreateAnimation(L"Upside-Left-Pistol", mImage, Vector2(0.0f, 576.0f), Vector2(34.0f, 26.0f), Vector2(-6.0f, -12.0f), 4, 0.2f);
 					mAnimator->CreateAnimation(L"Front-Upside-Left-Pistol", mImage, Vector2(0.0f, 639.0f), Vector2(36.0f, 32.0f), Vector2(-12.0f, -18.0f), 1, 0.1f);
@@ -212,8 +235,10 @@ namespace ya
 					mAnimator->CreateAnimation(L"Sit-Shoot-Right-Pistol", mImage, Vector2(0.0f, 1241.0f), Vector2(55.0f, 27.0f), Vector2(30.0f, -10.0f), 10, 0.04f);
 					mAnimator->CreateAnimation(L"Sit-Bomb-Right-Pistol", mImage, Vector2(0.0f, 1299.0f), Vector2(43.0f, 28.0f), Vector2(0.0f, 0.0f), 6, 0.2f);
 					mAnimator->CreateAnimation(L"Sit-Knife1-Right-Pistol", mImage, Vector2(0.0f, 1357.0f), Vector2(43.0f, 34.0f), Vector2(0.0f, 0.0f), 7, 0.2f);
+					mAnimator->CreateAnimation(L"Sit-Knife2-Right-Pistol", mImage, Vector2(0.0f, 1427.0f), Vector2(51.0f, 33.0f), Vector2(0.0f, 0.0f), 6, 0.2f);
 
-					mAnimator->CreateAnimation(L"Revival-Pistol", mImage, Vector2(0.0f, 1756.0f), Vector2(34.0f, 240.0f), Vector2(0.0f, 0.0f), 7, 0.02f);
+					mAnimator->CreateAnimation(L"Revival-Pistol", mImage, Vector2(0.0f, 1756.0f), Vector2(34.0f, 240.0f), Vector2(0.0f, -260.0f), 7, 0.06f);
+					mAnimator->GetCompleteEvent(L"Revival-Pistol") = std::bind(&PlayerUpper::OnIdle, this);
 				}
 
 				{ //Left
@@ -231,15 +256,120 @@ namespace ya
 			}
 		}
 
+		{ // 공통
+			mAnimator->CreateAnimation(L"Die-Right", mImage, Vector2(0.0f, 1674.0f), Vector2(40.0f, 40.0f), Vector2(0.0f, 0.0f), 19, 0.04f);
+			mAnimator->CreateAnimation(L"Die-Left", mImage, Vector2(0.0f, 1715.0f), Vector2(40.0f, 40.0f), Vector2(0.0f, 0.0f), 19, 0.04f);
+		}
+
+		mImage = Resources::Load<Image>(L"PlayerUpperRiple", L"..\\Resources\\Image\\Player\\player_upper_riple.bmp");
+
 		//Heavy Machinegun
 		{
+			{ //Upper
 
-		}
+				{ //Right
+					mAnimator->CreateAnimation(L"Idle-Right-Riple", mImage, Vector2(0.0f, 0.0f), Vector2(40.0f, 29.0f), Vector2(20.0f, 0.0f), 4, 0.2f);
+					mAnimator->CreateAnimation(L"Walk-Right-Riple", mImage, Vector2(0.0f, 60.0f), Vector2(46.0f, 30.0f), Vector2(28.0f, 0.0f), 12, 0.1f);
+					mAnimator->CreateAnimation(L"Jump-Right-Riple", mImage, Vector2(0.0f, 127.0f), Vector2(39.0f, 27.0f), Vector2(0.0f, 0.0f), 6, 0.1f);
+					mAnimator->CreateAnimation(L"JumpMove-Right-Riple", mImage, Vector2(0.0f, 188.0f), Vector2(39.0f, 28.0f), Vector2(0.0f, 0.0f), 6, 0.1f);
 
-		{ // 공통
-			mAnimator->CreateAnimation(L"Die-Right-Pistol", mImage, Vector2(0.0f, 1674.0f), Vector2(40.0f, 40.0f), Vector2(0.0f, 0.0f), 19, 0.04f);
-			mAnimator->CreateAnimation(L"Die-Left-Pistol", mImage, Vector2(0.0f, 1715.0f), Vector2(40.0f, 40.0f), Vector2(0.0f, 0.0f), 19, 0.04f);
+					mAnimator->CreateAnimation(L"Shoot-Front-Right-Riple", mImage, Vector2(0.0f, 253.0f), Vector2(62.0f, 28.0f), Vector2(45.0f, 0.0f), 4, 0.04f);
+					mAnimator->GetCompleteEvent(L"Shoot-Front-Right-Riple") = std::bind(&PlayerUpper::ResetState, this);
+
+					mAnimator->CreateAnimation(L"Knife1-Right-Riple", mImage, Vector2(0.0f, 318.0f), Vector2(55.0f, 48.0f), Vector2(0.0f, 0.0f), 6, 0.06f);
+					mAnimator->CreateAnimation(L"Knife2-Right-Riple", mImage, Vector2(0.0f, 425.0f), Vector2(57.0f, 42.0f), Vector2(0.0f, 0.0f), 6, 0.06f);
+					mAnimator->CreateAnimation(L"Bomb-Right-Riple", mImage, Vector2(0.0f, 515.0f), Vector2(42.0f, 29.0f), Vector2(0.0f, 0.0f), 6, 0.1f);
+
+					mAnimator->GetCompleteEvent(L"Knife1-Right-Riple") = std::bind(&PlayerUpper::ResetState, this);
+					mAnimator->GetCompleteEvent(L"Knife2-Right-Riple") = std::bind(&PlayerUpper::ResetState, this);
+					mAnimator->GetCompleteEvent(L"Bomb-Right-Riple") = std::bind(&PlayerUpper::ResetState, this);
+
+					mAnimator->CreateAnimation(L"Upside-Right-Riple", mImage, Vector2(0.0f, 800.0f), Vector2(26.0f, 49.0f), Vector2(0.0f, 0.0f), 10, 0.1f);
+					mAnimator->CreateAnimation(L"Shoot-Upside-Right-Riple", mImage, Vector2(0.0f, 904.0f), Vector2(26.0f, 72.0f), Vector2(0.0f, 0.0f), 4, 0.08f);
+					mAnimator->CreateAnimation(L"Front-Upside-Right-Riple", mImage, Vector2(0.0f, 578.0f), Vector2(42.0f, 44.0f), Vector2(0.0f, 0.0f), 2, 0.04f);
+					mAnimator->CreateAnimation(L"Shoot-Front-Upside-Right-Riple", mImage, Vector2(0.0f, 670.0f), Vector2(58.0f, 63.0f), Vector2(0.0f, 0.0f), 4, 0.1f);
+
+					mAnimator->CreateAnimation(L"Downside-Right-Riple", mImage, Vector2(0.0f, 1274.0f), Vector2(36.0f, 40.0f), Vector2(0.0f, 0.0f), 7, 0.1f);
+					mAnimator->CreateAnimation(L"Shoot-Downside-Right-Riple", mImage, Vector2(0.0f, 1358.0f), Vector2(36.0f, 63.0f), Vector2(0.0f, 0.0f), 4, 0.1f);
+					mAnimator->CreateAnimation(L"Front-Downside-Right-Riple", mImage, Vector2(0.0f, 1054.0f), Vector2(36.0f, 44.0f), Vector2(0.0f, 0.0f), 3, 0.1f);
+					mAnimator->CreateAnimation(L"Shoot-Front-Downside-Right-Riple", mImage, Vector2(0.0f, 1150.0f), Vector2(54.0f, 60.0f), Vector2(0.0f, 0.0f), 4, 0.1f);
+
+					mAnimator->GetCompleteEvent(L"Front-Upside-Right-Riple") = std::bind(&PlayerUpper::OnUpside, this);
+					mAnimator->GetCompleteEvent(L"Front-Downside-Right-Riple") = std::bind(&PlayerUpper::OnDownside, this);
+				}
+
+				{ //Left
+					mAnimator->CreateAnimation(L"Idle-Left-Riple", mImage, Vector2(0.0f, 30.0f), Vector2(40.0f, 29.0f), Vector2(-20.0f, 0.0f), 4, 0.2f);
+					mAnimator->CreateAnimation(L"Walk-Left-Riple", mImage, Vector2(0.0f, 91.0f), Vector2(46.0f, 30.0f), Vector2(-28.0f, 0.0f), 12, 0.1f);
+					mAnimator->CreateAnimation(L"Jump-Left-Riple", mImage, Vector2(0.0f, 155.0f), Vector2(39.0f, 27.0f), Vector2(0.0f, 0.0f), 6, 0.1f);
+					mAnimator->CreateAnimation(L"JumpMove-Left-Riple", mImage, Vector2(0.0f, 218.0f), Vector2(39.0f, 28.0f), Vector2(0.0f, 0.0f), 6, 0.1f);
+
+					mAnimator->CreateAnimation(L"Shoot-Front-Left-Riple", mImage, Vector2(0.0f, 282.0f), Vector2(62.0f, 28.0f), Vector2(-45.0f, 0.0f), 4, 0.04f);
+					mAnimator->GetCompleteEvent(L"Shoot-Front-Left-Riple") = std::bind(&PlayerUpper::ResetState, this);
+
+					mAnimator->CreateAnimation(L"Knife1-Left-Riple", mImage, Vector2(0.0f, 367.0f), Vector2(55.0f, 48.0f), Vector2(0.0f, 0.0f), 6, 0.06f);
+					mAnimator->CreateAnimation(L"Knife2-Left-Riple", mImage, Vector2(0.0f, 468.0f), Vector2(57.0f, 42.0f), Vector2(0.0f, 0.0f), 6, 0.06f);
+					mAnimator->CreateAnimation(L"Bomb-Left-Riple", mImage, Vector2(0.0f, 545.0f), Vector2(42.0f, 29.0f), Vector2(0.0f, 0.0f), 6, 0.1f);
+
+					mAnimator->GetCompleteEvent(L"Knife1-Left-Riple") = std::bind(&PlayerUpper::ResetState, this);
+					mAnimator->GetCompleteEvent(L"Knife2-Left-Riple") = std::bind(&PlayerUpper::ResetState, this);
+					mAnimator->GetCompleteEvent(L"Bomb-Left-Riple") = std::bind(&PlayerUpper::ResetState, this);
+
+					mAnimator->CreateAnimation(L"Upside-Left-Riple", mImage, Vector2(0.0f, 850.0f), Vector2(26.0f, 49.0f), Vector2(0.0f, 0.0f), 10, 0.1f);
+					mAnimator->CreateAnimation(L"Shoot-Upside-Left-Riple", mImage, Vector2(0.0f, 977.0f), Vector2(26.0f, 72.0f), Vector2(0.0f, 0.0f), 4, 0.08f);
+					mAnimator->CreateAnimation(L"Front-Upside-Left-Riple", mImage, Vector2(0.0f, 623.0f), Vector2(42.0f, 44.0f), Vector2(0.0f, 0.0f), 2, 0.04f);
+					mAnimator->CreateAnimation(L"Shoot-Front-Upside-Left-Riple", mImage, Vector2(0.0f, 734.0f), Vector2(58.0f, 63.0f), Vector2(0.0f, 0.0f), 4, 0.1f);
+
+					mAnimator->CreateAnimation(L"Downside-Left-Riple", mImage, Vector2(0.0f, 1315.0f), Vector2(36.0f, 40.0f), Vector2(0.0f, 0.0f), 7, 0.1f);
+					mAnimator->CreateAnimation(L"Shoot-Downside-Left-Riple", mImage, Vector2(0.0f, 1422.0f), Vector2(36.0f, 63.0f), Vector2(0.0f, 0.0f), 4, 0.1f);
+					mAnimator->CreateAnimation(L"Front-Downside-Left-Riple", mImage, Vector2(0.0f, 1099.0f), Vector2(36.0f, 44.0f), Vector2(0.0f, 0.0f), 3, 0.1f);
+					mAnimator->CreateAnimation(L"Shoot-Front-Downside-Left-Riple", mImage, Vector2(0.0f, 1211.0f), Vector2(54.0f, 60.0f), Vector2(0.0f, 0.0f), 4, 0.1f);
+
+					mAnimator->GetCompleteEvent(L"Front-Upside-Left-Riple") = std::bind(&PlayerUpper::OnUpside, this);
+					mAnimator->GetCompleteEvent(L"Front-Downside-Left-Riple") = std::bind(&PlayerUpper::OnDownside, this);
+				}
+			}
+
+			{ //Sit
+				{ //Right
+					mAnimator->CreateAnimation(L"Front-Sit-Right-Riple", mImage, Vector2(0.0f, 1490.0f), Vector2(42.0f, 41.0f), Vector2(0.0f, 0.0f), 3, 0.04f);
+					mAnimator->GetCompleteEvent(L"Front-Sit-Right-Riple") = std::bind(&PlayerUpper::OnSit, this);
+
+					mAnimator->CreateAnimation(L"Sit-Turn-Right-Riple", mImage, Vector2(0.0f, 1688.0f), Vector2(26.0f, 26.0f), Vector2(0.0f, 0.0f), 1, 0.1f);
+					mAnimator->CreateAnimation(L"Sit-Idle-Right-Riple", mImage, Vector2(0.0f, 1580.0f), Vector2(43.0f, 24.0f), Vector2(12.0f, 0.0f), 4, 0.2f);
+					mAnimator->CreateAnimation(L"Sit-Walk-Right-Riple", mImage, Vector2(0.0f, 1189.0f), Vector2(43.0f, 24.0f), Vector2(10.0f, 0.0f), 6, 0.2f);
+
+					mAnimator->CreateAnimation(L"Sit-Shoot-Right-Riple", mImage, Vector2(0.0f, 1745.0f), Vector2(69.0f, 28.0f), Vector2(30.0f, -10.0f), 4, 0.04f);
+					mAnimator->CreateAnimation(L"Sit-Bomb-Right-Riple", mImage, Vector2(0.0f, 1806.0f), Vector2(49.0f, 36.0f), Vector2(0.0f, 0.0f), 6, 0.2f);
+					mAnimator->CreateAnimation(L"Sit-Knife1-Right-Riple", mImage, Vector2(0.0f, 1884.0f), Vector2(46.0f, 36.0f), Vector2(0.0f, 0.0f), 7, 0.2f);
+					mAnimator->CreateAnimation(L"Sit-Knife2-Right-Riple", mImage, Vector2(0.0f, 1962.0f), Vector2(66.0f, 33.0f), Vector2(0.0f, 0.0f), 6, 0.2f);
+				}
+
+				{ //Left
+					mAnimator->CreateAnimation(L"Front-Sit-Left-Riple", mImage, Vector2(0.0f, 1532.0f), Vector2(42.0f, 41.0f), Vector2(0.0f, 0.0f), 3, 0.04f);
+					mAnimator->GetCompleteEvent(L"Front-Sit-Left-Riple") = std::bind(&PlayerUpper::OnSit, this);
+
+					mAnimator->CreateAnimation(L"Sit-Turn-Left-Riple", mImage, Vector2(0.0f, 1715.0f), Vector2(26.0f, 26.0f), Vector2(0.0f, 0.0f), 1, 0.1f);
+					mAnimator->CreateAnimation(L"Sit-Idle-Left-Riple", mImage, Vector2(0.0f, 1605.0f), Vector2(43.0f, 24.0f), Vector2(12.0f, 0.0f), 4, 0.2f);
+					mAnimator->CreateAnimation(L"Sit-Walk-Left-Riple", mImage, Vector2(0.0f, 1634.0f), Vector2(43.0f, 24.0f), Vector2(10.0f, 0.0f), 7, 0.2f);
+
+					mAnimator->CreateAnimation(L"Sit-Shoot-Left-Riple", mImage, Vector2(0.0f, 1774.0f), Vector2(69.0f, 28.0f), Vector2(30.0f, -10.0f), 4, 0.04f);
+					mAnimator->CreateAnimation(L"Sit-Bomb-Left-Riple", mImage, Vector2(0.0f, 1843.0f), Vector2(49.0f, 36.0f), Vector2(0.0f, 0.0f), 6, 0.2f);
+					mAnimator->CreateAnimation(L"Sit-Knife1-Left-Riple", mImage, Vector2(0.0f, 1921.0f), Vector2(46.0f, 36.0f), Vector2(0.0f, 0.0f), 7, 0.2f);
+					mAnimator->CreateAnimation(L"Sit-Knife2-Left-Riple", mImage, Vector2(0.0f, 1996.0f), Vector2(66.0f, 33.0f), Vector2(0.0f, 0.0f), 6, 0.2f);
+				}
+			}
 		}
+	}
+
+	void PlayerUpper::Attacked()
+	{
+		if (mMoveState.bLeft)
+			mAnimator->Play(L"Die-Left", false, true);
+		else
+			mAnimator->Play(L"Die-Right", false);
+
+		mState = State::DIE;
 	}
 
 	void PlayerUpper::Idle()
@@ -250,18 +380,23 @@ namespace ya
 		if (mMoveState.bJump)
 		{
 			mState = State::IDLE;
+			ResetState();
 			return;
 		}
 
 		if (KEY_DOWN(eKeyCode::LEFT))
 		{
 			if (mArms == eArms::Pistol)
-				mAnimator->Play(L"Walk-Left-Pistol", true);
+				mAnimator->Play(L"Walk-Left-Pistol", true, true);
+			else if (mArms == eArms::HeavyMachinegun)
+				mAnimator->Play(L"Walk-Left-Riple", true, true);
 		}
 		else if (KEY_DOWN(eKeyCode::RIGHT))
 		{
 			if (mArms == eArms::Pistol)
 				mAnimator->Play(L"Walk-Right-Pistol", true);
+			else if (mArms == eArms::HeavyMachinegun)
+				mAnimator->Play(L"Walk-Right-Riple", true);
 		}
 
 		if (KEY_PRESS(eKeyCode::LEFT) || KEY_PRESS(eKeyCode::RIGHT))
@@ -279,11 +414,15 @@ namespace ya
 			{
 				if (mArms == eArms::Pistol)
 					mAnimator->Play(L"Jump-Left-Pistol", false, true);
+				else if (mArms == eArms::HeavyMachinegun)
+					mAnimator->Play(L"Jump-Left-Riple", false, true);
 			}
 			else
 			{
 				if (mArms == eArms::Pistol)
 					mAnimator->Play(L"Jump-Right-Pistol", false);
+				else if (mArms == eArms::HeavyMachinegun)
+					mAnimator->Play(L"Jump-Right-Riple", false);
 			}
 		}
 
@@ -293,50 +432,57 @@ namespace ya
 			return;
 		}
 
-		{ // pistol
+		{ // shoot
 			if (KEY_DOWN(eKeyCode::LCTRL))
 			{
-				if (mMoveState.bLeft)
-				{
-					if (mArms == eArms::Pistol)
-						mAnimator->Play(L"Shoot-Front-Left-Pistol", false, true);
-				}
-				else
-				{
-					if (mArms == eArms::Pistol)
-						mAnimator->Play(L"Shoot-Front-Right-Pistol", false);
-				}
+				OnAttack();
 			}
 
 			if (KEY_PRESS(eKeyCode::LCTRL))
 			{
-				mState = State::SHOOT;
-				return;
+				if (mMoveState.bKnife)
+				{
+					mState = State::KNIFE;
+					return;
+				}
+				else
+				{
+					mState = State::SHOOT;
+					return;
+				}
 			}
 		}
 
-		/*if (KEY_PRESS(eKeyCode::LSHIFT))
+		if (KEY_DOWN(eKeyCode::LSHIFT))
+		{
+			if (mMoveState.bLeft)
+			{
+				if (mArms == eArms::Pistol)
+					mAnimator->Play(L"Bomb-Left-Pistol", false, true);
+				else if (mArms == eArms::HeavyMachinegun)
+					mAnimator->Play(L"Bomb-Left-Riple", false, true);
+			}
+			else
+			{
+				if (mArms == eArms::Pistol)
+					mAnimator->Play(L"Bomb-Right-Pistol", false);
+				else if (mArms == eArms::HeavyMachinegun)
+					mAnimator->Play(L"Bomb-Right-Riple", false);
+			}
+		}
+
+		if (KEY_PRESS(eKeyCode::LSHIFT))
 		{
 			mState = State::BOMB;
 			return;
-		}*/
+		}
 	}
 
 	void PlayerUpper::Walk()
 	{
 		if (KEY_UP(eKeyCode::LEFT) || KEY_UP(eKeyCode::RIGHT))
 		{
-			if (mMoveState.bLeft)
-			{
-				if (mArms == eArms::Pistol)
-					mAnimator->Play(L"Idle-Left-Pistol", true, true);
-			}
-			else
-			{
-				if (mArms == eArms::Pistol)
-					mAnimator->Play(L"Idle-Right-Pistol", true);
-			}
-
+			OnIdle();
 			mState = State::IDLE;
 			return;
 		}
@@ -346,22 +492,22 @@ namespace ya
 		{ // shoot
 			if (KEY_DOWN(eKeyCode::LCTRL))
 			{
-				if (mMoveState.bLeft)
-				{
-					if (mArms == eArms::Pistol)
-						mAnimator->Play(L"Shoot-Front-Left-Pistol", false, true);
-				}
-				else
-				{
-					if (mArms == eArms::Pistol)
-						mAnimator->Play(L"Shoot-Front-Right-Pistol", false);
-				}
+				OnAttack();
+				return;
 			}
 
 			if (KEY_PRESS(eKeyCode::LCTRL))
 			{
-				mState = State::SHOOT;
-				return;
+				if (mMoveState.bKnife)
+				{
+					mState = State::KNIFE;
+					return;
+				}
+				else
+				{
+					mState = State::SHOOT;
+					return;
+				}
 			}
 		}
 
@@ -371,11 +517,15 @@ namespace ya
 			{
 				if (mArms == eArms::Pistol)
 					mAnimator->Play(L"Jump-Left-Pistol", false, true);
+				else if (mArms == eArms::HeavyMachinegun)
+					mAnimator->Play(L"Jump-Left-Riple", false, true);
 			}
 			else
 			{
 				if (mArms == eArms::Pistol)
 					mAnimator->Play(L"Jump-Right-Pistol", false);
+				else if (mArms == eArms::HeavyMachinegun)
+					mAnimator->Play(L"Jump-Right-Riple", false);
 			}
 		}
 
@@ -402,17 +552,7 @@ namespace ya
 	{
 		if (!mMoveState.bJump)
 		{
-			if (mMoveState.bLeft)
-			{
-				if (mArms == eArms::Pistol)
-					mAnimator->Play(L"Idle-Left-Pistol", true, true);
-			}
-			else
-			{
-				if (mArms == eArms::Pistol)
-					mAnimator->Play(L"Idle-Right-Pistol", true);
-			}
-
+			OnIdle();
 			mState = State::IDLE;
 			return;
 		}
@@ -429,16 +569,31 @@ namespace ya
 				else
 					mAnimator->Play(L"Downside-Right-Pistol", false);
 			}
+			else if (mArms == eArms::HeavyMachinegun)
+			{
+				if (mMoveState.bLeft)
+					mAnimator->Play(L"Downside-Left-Riple", false, true);
+				else
+					mAnimator->Play(L"Downside-Right-Riple", false);
+			}
 		}
 
 		if (KEY_PRESS(eKeyCode::LCTRL))
 		{
 			mState = State::SHOOT;
+			return;
 		}
 
 		if (KEY_PRESS(eKeyCode::LSHIFT))
 		{
 			mState = State::BOMB;
+			return;
+		}
+
+		if (KEY_UP(eKeyCode::SPACE))
+		{
+			mState = State::IDLE;
+			return;
 		}
 	}
 	
@@ -446,18 +601,28 @@ namespace ya
 	{
 		if (!mMoveState.bJump)
 		{
-			if (mMoveState.bLeft)
+			if (KEY_DOWN(eKeyCode::LEFT))
 			{
 				if (mArms == eArms::Pistol)
-					mAnimator->Play(L"Idle-Left-Pistol", true, true);
+					mAnimator->Play(L"Walk-Left-Pistol", true, true);
+				else if (mArms == eArms::HeavyMachinegun)
+					mAnimator->Play(L"Walk-Left-Riple", true, true);
 			}
-			else
+			else if (KEY_DOWN(eKeyCode::RIGHT))
 			{
 				if (mArms == eArms::Pistol)
-					mAnimator->Play(L"Idle-Right-Pistol", true);
+					mAnimator->Play(L"Walk-Right-Pistol", true);
+				else if (mArms == eArms::HeavyMachinegun)
+					mAnimator->Play(L"Walk-Right-Riple", true);
 			}
 
 			mState = State::WALK;
+			return;
+		}
+
+		if (KEY_UP(eKeyCode::LEFT) || KEY_UP(eKeyCode::RIGHT))
+		{
+			mState = State::JUMP;
 			return;
 		}
 
@@ -468,11 +633,15 @@ namespace ya
 				{
 					if (mArms == eArms::Pistol)
 						mAnimator->Play(L"Shoot-Front-Left-Pistol", false, true);
+					else if (mArms == eArms::HeavyMachinegun)
+						mAnimator->Play(L"Shoot-Front-Left-Riple", false, true);
 				}
 				else
 				{
 					if (mArms == eArms::Pistol)
 						mAnimator->Play(L"Shoot-Front-Right-Pistol", false);
+					else if (mArms == eArms::HeavyMachinegun)
+						mAnimator->Play(L"Shoot-Front-Right-Riple", false);
 				}
 			}
 
@@ -486,6 +655,13 @@ namespace ya
 		if (KEY_PRESS(eKeyCode::LSHIFT))
 		{
 			mState = State::BOMB;
+			return;
+		}
+
+		if (KEY_UP(eKeyCode::SPACE))
+		{
+			mState = State::IDLE;
+			return;
 		}
 	}
 	
@@ -497,11 +673,15 @@ namespace ya
 			{
 				if (mArms == eArms::Pistol)
 					mAnimator->Play(L"Front-Sit-Left-Pistol", false, true);
+				else if (mArms == eArms::HeavyMachinegun)
+					mAnimator->Play(L"Front-Sit-Left-Riple", false, true);
 			}
 			else
 			{
 				if (mArms == eArms::Pistol)
 					mAnimator->Play(L"Front-Sit-Right-Pistol", false);
+				else if (mArms == eArms::HeavyMachinegun)
+					mAnimator->Play(L"Front-Sit-Right-Riple", false);
 			}
 		}
 
@@ -518,11 +698,15 @@ namespace ya
 		{
 			if (mArms == eArms::Pistol)
 				mAnimator->Play(L"Sit-Walk-Left-Pistol", true, true);
+			else if (mArms == eArms::HeavyMachinegun)
+				mAnimator->Play(L"Sit-Walk-Left-Riple", true, true);
 		}
 		else if (KEY_DOWN(eKeyCode::RIGHT))
 		{
 			if (mArms == eArms::Pistol)
 				mAnimator->Play(L"Sit-Walk-Right-Pistol", true);
+			else if (mArms == eArms::HeavyMachinegun)
+				mAnimator->Play(L"Sit-Walk-Right-Riple", true);
 		}
 
 		if (KEY_PRESS(eKeyCode::LEFT) || KEY_PRESS(eKeyCode::RIGHT))
@@ -541,11 +725,15 @@ namespace ya
 			{
 				if (mArms == eArms::Pistol)
 					mAnimator->Play(L"Idle-Left-Pistol", true, true);
+				else if (mArms == eArms::HeavyMachinegun)
+					mAnimator->Play(L"Idle-Left-Riple", true, true);
 			}
 			else
 			{
 				if (mArms == eArms::Pistol)
 					mAnimator->Play(L"Idle-Right-Pistol", true);
+				else if (mArms == eArms::HeavyMachinegun)
+					mAnimator->Play(L"Idle-Right-Riple", true);
 			}
 
 			mState = State::IDLE;
@@ -559,11 +747,15 @@ namespace ya
 				{
 					if (mArms == eArms::Pistol)
 						mAnimator->Play(L"Jump-Left-Pistol", false, true);
+					else if (mArms == eArms::HeavyMachinegun)
+						mAnimator->Play(L"Jump-Left-Riple", false, true);
 				}
 				else
 				{
 					if (mArms == eArms::Pistol)
 						mAnimator->Play(L"Jump-Right-Pistol", false);
+					else if (mArms == eArms::HeavyMachinegun)
+						mAnimator->Play(L"Jump-Right-Riple", false);
 				}
 			}
 
@@ -585,12 +777,16 @@ namespace ya
 				{
 					if (mArms == eArms::Pistol)
 						mAnimator->Play(L"Sit-Shoot-Left-Pistol", false, true);
+					else if (mArms == eArms::HeavyMachinegun)
+						mAnimator->Play(L"Sit-Shoot-Left-Riple", false, true);
 				}
 				else
 				{
 					if (mArms == eArms::Pistol)
 						mAnimator->Play(L"Sit-Shoot-Right-Pistol", false);
-				}
+					else if (mArms == eArms::HeavyMachinegun)
+						mAnimator->Play(L"Sit-Shoot-Right-Riple", false);
+				} 
 			}
 
 			if (KEY_PRESS(eKeyCode::LCTRL))
@@ -613,11 +809,15 @@ namespace ya
 			{
 				if (mArms == eArms::Pistol)
 					mAnimator->Play(L"Sit-Idle-Left-Pistol", true, true);
+				else if (mArms == eArms::HeavyMachinegun)
+					mAnimator->Play(L"Sit-Idle-Left-Riple", true, true);
 			}
 			else
 			{
 				if (mArms == eArms::Pistol)
 					mAnimator->Play(L"Sit-Idle-Right-Pistol", true);
+				else if (mArms == eArms::HeavyMachinegun)
+					mAnimator->Play(L"Sit-Idle-Right-Riple", true);
 			}
 			
 			mState = State::SIT;
@@ -630,11 +830,15 @@ namespace ya
 			{
 				if (mArms == eArms::Pistol)
 					mAnimator->Play(L"Idle-Left-Pistol", true, true);
+				else if (mArms == eArms::HeavyMachinegun)
+					mAnimator->Play(L"Idle-Left-Riple", true, true);
 			}
 			else
 			{
 				if (mArms == eArms::Pistol)
 					mAnimator->Play(L"Idle-Right-Pistol", true);
+				else if (mArms == eArms::HeavyMachinegun)
+					mAnimator->Play(L"Idle-Right-Riple", true);
 			}
 			mState = State::IDLE;
 			return;
@@ -649,11 +853,15 @@ namespace ya
 			{
 				if (mArms == eArms::Pistol)
 					mAnimator->Play(L"Front-Upside-Left-Pistol", false, true);
+				else if (mArms == eArms::HeavyMachinegun)
+					mAnimator->Play(L"Front-Upside-Left-Riple", false, true);
 			}
 			else
 			{
 				if (mArms == eArms::Pistol)
 					mAnimator->Play(L"Front-Upside-Right-Pistol", false);
+				else if (mArms == eArms::HeavyMachinegun)
+					mAnimator->Play(L"Front-Upside-Right-Riple", false);
 			}
 		}
 
@@ -671,11 +879,15 @@ namespace ya
 			{
 				if (mArms == eArms::Pistol)
 					mAnimator->Play(L"Front-Upside-Left-Pistol", false, false);
+				else if (mArms == eArms::HeavyMachinegun)
+					mAnimator->Play(L"Front-Upside-Left-Riple", false, false);
 			}
 			else
 			{
 				if (mArms == eArms::Pistol)
 					mAnimator->Play(L"Front-Upside-Right-Pistol", false, true);
+				else if (mArms == eArms::HeavyMachinegun)
+					mAnimator->Play(L"Front-Upside-Right-Riple", false, true);
 			}
 
 			mState = State::IDLE;
@@ -689,11 +901,15 @@ namespace ya
 				{
 					if (mArms == eArms::Pistol)
 						mAnimator->Play(L"Shoot-Upside-Left-Pistol", false, true);
+					else if (mArms == eArms::HeavyMachinegun)
+						mAnimator->Play(L"Shoot-Upside-Left-Riple", false, true);
 				}
 				else
 				{
 					if (mArms == eArms::Pistol)
 						mAnimator->Play(L"Shoot-Upside-Right-Pistol", false);
+					else if (mArms == eArms::HeavyMachinegun)
+						mAnimator->Play(L"Shoot-Upside-Right-Riple", false);
 				}
 			}
 
@@ -704,11 +920,25 @@ namespace ya
 			}
 		}
 
-		/*
 		if (KEY_PRESS(eKeyCode::LSHIFT))
 		{
+			if (mMoveState.bLeft)
+			{
+				if (mArms == eArms::Pistol)
+					mAnimator->Play(L"Idle-Left-Pistol", true, true);
+				else if (mArms == eArms::HeavyMachinegun)
+					mAnimator->Play(L"Idle-Left-Riple", true, true);
+			}
+			else
+			{
+				if (mArms == eArms::Pistol)
+					mAnimator->Play(L"Idle-Right-Pistol", true);
+				else if (mArms == eArms::HeavyMachinegun)
+					mAnimator->Play(L"Idle-Right-Riple", true);
+			}
 			mState = State::BOMB;
-		}*/
+			return;
+		}
 	}
 
 	void PlayerUpper::UpsideToFront()
@@ -719,11 +949,15 @@ namespace ya
 			{
 				if (mArms == eArms::Pistol)
 					mAnimator->Play(L"Front-Upside-Left-Pistol", false, true);
+				else if (mArms == eArms::HeavyMachinegun)
+					mAnimator->Play(L"Front-Upside-Left-Riple", false, true);
 			}
 			else
 			{
 				if (mArms == eArms::Pistol)
 					mAnimator->Play(L"Front-Upside-Right-Pistol", false);
+				else if (mArms == eArms::HeavyMachinegun)
+					mAnimator->Play(L"Front-Upside-Right-Riple", false);
 			}
 		}
 
@@ -754,11 +988,15 @@ namespace ya
 				{
 					if (mArms == eArms::Pistol)
 						mAnimator->Play(L"Idle-Left-Pistol", true, true);
+					else if (mArms == eArms::HeavyMachinegun)
+						mAnimator->Play(L"Idle-Left-Riple", true, true);
 				}
 				else
 				{
 					if (mArms == eArms::Pistol)
 						mAnimator->Play(L"Idle-Right-Pistol", true);
+					else if (mArms == eArms::HeavyMachinegun)
+						mAnimator->Play(L"Idle-Right-Riple", true);
 				}
 				mState = State::IDLE;
 				return;
@@ -775,11 +1013,15 @@ namespace ya
 		{
 			if (mArms == eArms::Pistol)
 				mAnimator->Play(L"Front-Downside-Left-Pistol", false, true);
+			else if (mArms == eArms::HeavyMachinegun)
+				mAnimator->Play(L"Front-Downside-Left-Riple", false, true);
 		}
 		else
 		{
 			if (mArms == eArms::Pistol)
 				mAnimator->Play(L"Front-Downside-Right-Pistol", false);
+			else if (mArms == eArms::HeavyMachinegun)
+				mAnimator->Play(L"Front-Downside-Right-Riple", false);
 		}
 	}
 
@@ -791,11 +1033,15 @@ namespace ya
 			{
 				if (mArms == eArms::Pistol)
 					mAnimator->Play(L"Front-Upside-Left-Pistol", false, false);
+				else if (mArms == eArms::HeavyMachinegun)
+					mAnimator->Play(L"Front-Upside-Left-Riple", false, false);
 			}
 			else
 			{
 				if (mArms == eArms::Pistol)
 					mAnimator->Play(L"Front-Upside-Right-Pistol", false, true);
+				else if (mArms == eArms::HeavyMachinegun)
+					mAnimator->Play(L"Front-Upside-Right-Riple", false, true);
 			}
 
 			mState = State::DOWNSIDE_TO_FRONT;
@@ -806,11 +1052,15 @@ namespace ya
 		{
 			if (mArms == eArms::Pistol)
 				mAnimator->Play(L"Sit-Walk-Left-Pistol", true, true);
+			else if (mArms == eArms::HeavyMachinegun)
+				mAnimator->Play(L"Sit-Walk-Left-Riple", true, true);
 		}
 		else if (KEY_DOWN(eKeyCode::RIGHT))
 		{
 			if (mArms == eArms::Pistol)
 				mAnimator->Play(L"Sit-Walk-Right-Pistol", true);
+			else if (mArms == eArms::HeavyMachinegun)
+				mAnimator->Play(L"Sit-Walk-Right-Riple", true);
 		}
 
 		if (KEY_PRESS(eKeyCode::LEFT) || KEY_PRESS(eKeyCode::RIGHT))
@@ -825,11 +1075,15 @@ namespace ya
 		{
 			if (mArms == eArms::Pistol)
 				mAnimator->Play(L"Idle-Left-Pistol", true, true);
+			else if (mArms == eArms::HeavyMachinegun)
+				mAnimator->Play(L"Idle-Left-Riple", true, true);
 		}
 		else
 		{
 			if (mArms == eArms::Pistol)
 				mAnimator->Play(L"Idle-Right-Pistol", true);
+			else if (mArms == eArms::HeavyMachinegun)
+				mAnimator->Play(L"Idle-Right-Riple", true);
 		}
 
 		mState = State::IDLE;
@@ -860,32 +1114,6 @@ namespace ya
 		}
 	}
 
-	//void PlayerUpper::ShootSit()
-	//{
-	//	//OnSit();
-	//	mState = State::SIT;
-	//}
-
-	/*void PlayerUpper::ShootUpside()
-	{
-		if (KEY_UP(eKeyCode::UP))
-		{
-			mState = State::SHOOT;
-		}
-
-		if (KEY_UP(eKeyCode::LCTRL))
-		{
-			mState = State::UPSIDE;
-		}
-	}
-	void PlayerUpper::ShootDownside()
-	{
-		if (KEY_UP(eKeyCode::DOWN))
-		{
-			mState = State::SHOOT;
-		}
-	}*/
-
 	void PlayerUpper::Knife()
 	{
 		if (KEY_UP(eKeyCode::LCTRL))
@@ -893,6 +1121,10 @@ namespace ya
 			mState = State::IDLE;
 		}
 	}
+	void PlayerUpper::KnifeSit()
+	{
+	}
+
 	void PlayerUpper::Bomb()
 	{
 		if (KEY_UP(eKeyCode::LSHIFT))
@@ -901,62 +1133,75 @@ namespace ya
 		}
 	}
 
+	void PlayerUpper::BombSit()
+	{
+	}
+
 	void PlayerUpper::Die()
 	{
-		if (mMoveState.bLeft)
+		if (mControlState.bAlive)
 		{
-			if (mArms == eArms::Pistol)
-				mAnimator->Play(L"Die-Left-Pistol", false, true);
+			mAnimator->Play(L"Revival-Pistol", true);
+			mState = State::REVIVAL;
 		}
-		else
-		{
-			if (mArms == eArms::Pistol)
-				mAnimator->Play(L"Die-Right-Pistol", false);
-		}
-
-		mState = State::REVIVAL;
 	}
 
 	void PlayerUpper::Revival()
 	{
-		//if(mControlState.bAlive)
+		mState = State::IDLE;
+	}
+
+	void PlayerUpper::OnIdle()
+	{
+		if (mMoveState.bLeft)
+		{
+			if (mArms == eArms::Pistol)
+				mAnimator->Play(L"Idle-Left-Pistol", true, true);
+			else if (mArms == eArms::HeavyMachinegun)
+				mAnimator->Play(L"Idle-Left-Riple", true, true);
+		}
+		else
+		{
+			if (mArms == eArms::Pistol)
+				mAnimator->Play(L"Idle-Right-Pistol", true);
+			else if (mArms == eArms::HeavyMachinegun)
+				mAnimator->Play(L"Idle-Right-Riple", true);
+		}
 	}
 
 	void PlayerUpper::OnWalk()
 	{
-		if (KEY_DOWN(eKeyCode::LEFT))
+		if (mMoveState.bLeft)
 		{
 			if (mArms == eArms::Pistol)
-				mAnimator->Play(L"Walk-Left-Pistol", true);
+				mAnimator->Play(L"Walk-Left-Pistol", true, true);
+			else if (mArms == eArms::HeavyMachinegun)
+				mAnimator->Play(L"Walk-Left-Riple", true, true);
 		}
-		else if (KEY_DOWN(eKeyCode::RIGHT))
+		else
 		{
 			if (mArms == eArms::Pistol)
 				mAnimator->Play(L"Walk-Right-Pistol", true);
-		}
-
-		if (KEY_PRESS(eKeyCode::LEFT) || KEY_PRESS(eKeyCode::RIGHT))
-		{
-			mState = State::WALK;
-			return;
+			else if (mArms == eArms::HeavyMachinegun)
+				mAnimator->Play(L"Walk-Right-Riple", true);
 		}
 	}
 
 	void PlayerUpper::OnSit()
 	{
-		Vector2 offset = GetOffset();
-		offset.y = 17.0f;
-		SetOffset(offset);
-
 		if (mMoveState.bLeft)
 		{
 			if (mArms == eArms::Pistol)
 				mAnimator->Play(L"Sit-Idle-Left-Pistol", true, true);
+			else if (mArms == eArms::HeavyMachinegun)
+				mAnimator->Play(L"Sit-Idle-Left-Riple", true, true);
 		}
 		else
 		{
 			if (mArms == eArms::Pistol)
 				mAnimator->Play(L"Sit-Idle-Right-Pistol", true);
+			else if (mArms == eArms::HeavyMachinegun)
+				mAnimator->Play(L"Sit-Idle-Right-Riple", true);
 		}
 	}
 
@@ -968,11 +1213,15 @@ namespace ya
 			{
 				if (mArms == eArms::Pistol)
 					mAnimator->Play(L"Upside-Left-Pistol", true, true);
+				else if (mArms == eArms::HeavyMachinegun)
+					mAnimator->Play(L"Upside-Left-Riple", true, true);
 			}
 			else
 			{
 				if (mArms == eArms::Pistol)
 					mAnimator->Play(L"Upside-Right-Pistol", true);
+				else if (mArms == eArms::HeavyMachinegun)
+					mAnimator->Play(L"Upside-Right-Riple", true);
 			}
 		}
 		else
@@ -981,16 +1230,97 @@ namespace ya
 			{
 				if (mArms == eArms::Pistol)
 					mAnimator->Play(L"Idle-Left-Pistol", true, true);
+				else if (mArms == eArms::HeavyMachinegun)
+					mAnimator->Play(L"Idle-Left-Riple", true, true);
 			}
 			else
 			{
 				if (mArms == eArms::Pistol)
 					mAnimator->Play(L"Idle-Right-Pistol", true);
+				else if (mArms == eArms::HeavyMachinegun)
+					mAnimator->Play(L"Idle-Right-Riple", true);
 			}
 		}
 	}
 
 	void PlayerUpper::OnDownside()
+	{
+	}
+
+	void PlayerUpper::OnAttack()
+	{
+		if (mMoveState.bKnife)
+		{
+			if (mMoveState.bLeft)
+			{
+				if (ya::math::Random(2) == 0)
+				{
+					if (mArms == eArms::Pistol)
+						mAnimator->Play(L"Knife1-Left-Pistol", false, true);
+					else if (mArms == eArms::HeavyMachinegun)
+						mAnimator->Play(L"Knife1-Left-Riple", false, true);
+				}
+				else
+				{
+					if (mArms == eArms::Pistol)
+						mAnimator->Play(L"Knife2-Left-Pistol", false, true);
+					else if (mArms == eArms::HeavyMachinegun)
+						mAnimator->Play(L"Knife2-Left-Riple", false, true);
+				}
+				
+			}
+			else
+			{
+				if (ya::math::Random(2) == 0)
+				{
+					if (mArms == eArms::Pistol)
+						mAnimator->Play(L"Knife1-Right-Pistol", false);
+					else if (mArms == eArms::HeavyMachinegun)
+						mAnimator->Play(L"Knife1-Right-Riple", false);
+				}
+				else
+				{
+					if (mArms == eArms::Pistol)
+						mAnimator->Play(L"Knife2-Right-Pistol", false);
+					else if (mArms == eArms::HeavyMachinegun)
+						mAnimator->Play(L"Knife2-Right-Riple", false);
+				}
+			}
+		}
+		else
+		{
+			if (mMoveState.bLeft)
+			{
+				if (mArms == eArms::Pistol)
+					mAnimator->Play(L"Shoot-Front-Left-Pistol", false, true);
+				else if (mArms == eArms::HeavyMachinegun)
+					mAnimator->Play(L"Shoot-Front-Left-Riple", false, true);
+			}
+			else
+			{
+				if (mArms == eArms::Pistol)
+					mAnimator->Play(L"Shoot-Front-Right-Pistol", false);
+				else if (mArms == eArms::HeavyMachinegun)
+					mAnimator->Play(L"Shoot-Front-Right-Riple", false);
+			}
+		}
+	}
+
+	void PlayerUpper::OnDie()
+	{
+	}
+
+	void PlayerUpper::ResetState()
+	{
+		if (mMoveState.bWalk)
+			OnWalk();
+		else if (mMoveState.bSit)
+			OnSit();
+		else
+			OnIdle();
+	}
+
+	void PlayerUpper::PickupArms()
 	{
 	}
 

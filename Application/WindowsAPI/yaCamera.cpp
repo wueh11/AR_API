@@ -122,6 +122,8 @@ namespace ya
 			return;
 		}
 
+		//mLookPosition.x = mTarget->GetPos().x;
+
 		if (KEY_PRESS(eKeyCode::RIGHT))
 		{
 			if (mTarget->GetPos().x > mLookPosition.x - 100.0f)

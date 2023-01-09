@@ -25,11 +25,15 @@ namespace ya
 			return dynamic_cast<T*>(mUIs[type]);
 		}
 
+		static void SetActive(bool active) { mbActive = active; }
+
 	private:
 		static std::unordered_map<eUIType, UIBase*> mUIs; /// 메모리 상에 올라가있는 UI
 		static std::queue<eUIType> mRequestUIQueue; /// UI 메세지큐
 		static std::stack<UIBase*> mUIBases;
 		static UIBase* mCurrentData;	/// 마지막에 있는 UI
+
+		static bool mbActive;
 	};
 }
 

@@ -21,7 +21,7 @@ namespace ya
 
 		{ // 애니메이션
 			if (mImage == nullptr)
-				mImage = Resources::Load<Image>(L"bulletEffect", L"..\\Resources\\Image\\Projecttile\\bulletEffect.bmp");
+				mImage = Resources::Load<Image>(L"bulletEffect", L"..\\Resources\\Image\\Projecttile\\bullet_effect.bmp");
 
 			mAnimator = new Animator();
 			mAnimator->CreateAnimation(L"bulletEffect", mImage, Vector2(0.0f, 0.0f), Vector2(16.0f, 16.0f), Vector2(0.0f, 0.0f), 10, 0.02f);

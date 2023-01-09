@@ -37,12 +37,15 @@ namespace ya
 
 	void SceneManager::Tick()
 	{
-		if (KEY_DOWN(eKeyCode::N))
+		if (GetFocus())
 		{
-			if (mType != eSceneType::MAX)
+			if (KEY_DOWN(eKeyCode::N))
 			{
-				eSceneType type = (eSceneType)((UINT)mType + 1);
-				SceneManager::ChangeScene(type);
+				if (mType != eSceneType::MAX)
+				{
+					eSceneType type = (eSceneType)((UINT)mType + 1);
+					SceneManager::ChangeScene(type);
+				}
 			}
 		}
 

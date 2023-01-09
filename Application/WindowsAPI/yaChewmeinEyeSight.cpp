@@ -60,7 +60,7 @@ namespace ya
 		
 		owner->SetLeft(ownerPos.x >= targetPos.x);
 		
-		if (math::Random(0, 2) % 2 == 0)
+		if (ya::math::Random(2) == 0)
 			owner->SetState(ya::Chewmein::eState::WALK_FRONT);
 		else
 			owner->SetState(ya::Chewmein::eState::ATTACK_BUBBLE);

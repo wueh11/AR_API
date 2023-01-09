@@ -27,14 +27,20 @@ namespace ya
 			DOWNSIDE_TO_FRONT,
 
 			SHOOT,
-			SHOOT_FRONT_UPSIDE,
+			/*SHOOT_FRONT_UPSIDE,
 			SHOOT_UPSIDE,
 			SHOOT_DOWNSIDE,
+			SHOOT_SIT,*/
 
 			KNIFE,
+			/*KNIFE_JUMP,
+			KNIFE_SIT,*/
+
 			BOMB,
+			//BOMB_SIT,
 
 			DIE,
+			REVIVAL,
 
 			RESET,
 			END,
@@ -50,9 +56,10 @@ namespace ya
 
 		struct ControlState
 		{
-			bool bAlive = true;
+			bool bAlive = true;			// 살았는지
 			bool bInvincible = false;	// 무적
 			bool bPlayable = true;		// 조작 가능한지
+			bool bRevival = false;		// 부활중
 		};
 
 		struct MoveState
@@ -64,8 +71,11 @@ namespace ya
 			bool bJump = false;
 			bool bSit = false;
 			bool bFall = true; // 힘을 아래로 받는 상태
+			bool bKnife = false;
 			
-			void clear()
+			//void SetKnife(bool knife) { bKnife = knife; }
+
+			void Clear()
 			{
 				bWalk = false;
 				bUpside = false;
@@ -73,6 +83,7 @@ namespace ya
 				bJump = false;
 				bSit = false;
 				bFall = true;
+				bKnife = false;
 			}
 		};
 
@@ -90,35 +101,47 @@ namespace ya
 	public:
 		void Idle();
 		void Walk();
-		void Jump(Rigidbody* rigidbody);
+		void Jump();
 		void Sit();
 		void Upside();
 		void Downside();
+
 		void Shoot();
-		void ShootFrontUpside();
-		void ShootUpside();
-		void ShootDownside();
 		void Knife();
 		void Bomb();
+
 		void Die();
+		void Revival();
+
 		void Reset();
 
 	private:
-		void OnWalk();
 		void OnShoot();
+		void OnKnife();
 		void OnBomb();
 
 	public:
 		void PickupArms(eArms arms, UINT bulletCount);
-		void WalkComplete();
 
 	public:
+		void Attacked();
+
+		Info GetInfo() { return mInfo; }
 		eArms GetArms() { return mInfo.arms; }
+		void SetArms(eArms arms) { mInfo.arms = arms; }
+		void SetArmsCount(int count) { mInfo.armsCount = count; }
+		void SetBombCount(int count) { mInfo.bombCount = count; }
+
 		MoveState GetMoveState() { return mMoveState; }
 		ControlState GetControlState() { return mControlState; }
+		
+		void SetState(State state) { mState = state; }
+		void SetKnife(bool knife) { mMoveState.bKnife = knife; }
 
 	private:
 		State mState;
+		State mBeforeState;
+
 		MoveState mMoveState;
 		ControlState mControlState;
 		Info mInfo;
@@ -131,5 +154,6 @@ namespace ya
 
 		Image* mImage;
 		Animator* mAnimator;
+		Rigidbody* mRigidbody;
 	};
 }

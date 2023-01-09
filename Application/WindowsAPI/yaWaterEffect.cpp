@@ -20,7 +20,7 @@ namespace ya
 
 			mAnimator->CreateAnimation(L"Walk", mImage, Vector2(0.0f, 0.0f), Vector2(180.0f, 46.0f), Vector2(0.0f, -5.0f), 4, 0.1f);
 			mAnimator->CreateAnimation(L"Jump", mImage, Vector2(0.0f, 72.0f), Vector2(180.0f, 80.0f), Vector2(0.0f, 0.0f), 5, 0.1f);
-			mAnimator->CreateAnimation(L"Fall", mImage, Vector2(0.0f, 170.0f), Vector2(180.0f, 80.0f), Vector2(0.0f, -25.0f), 6, 0.1f);
+			mAnimator->CreateAnimation(L"Fall", mImage, Vector2(0.0f, 170.0f), Vector2(180.0f, 80.0f), Vector2(0.0f, -15.0f), 6, 0.1f);
 
 			mAnimator->GetCompleteEvent(L"Fall") = std::bind(&WaterEffect::Walk, this);
 			mAnimator->GetCompleteEvent(L"Jump") = std::bind(&WaterEffect::Hide, this);

@@ -51,7 +51,7 @@ namespace ya
 
 	void Monster::OnCollisionEnter(Collider* other)
 	{
-		GameObject* object = other->GetOwner();
+		/*GameObject* object = other->GetOwner();
 
 		if (object == nullptr)
 			return;
@@ -67,7 +67,7 @@ namespace ya
 		else
 			newPos.x = GetPos().x - (GetSize().x * GetScale().x / 2) - (otherSize.x * otherScale.x / 2) - 0.01f;
 
-		object->SetPos(newPos);
+		object->SetPos(newPos);*/
 	}
 
 	void Monster::OnCollisionStay(Collider* other)

@@ -7,6 +7,7 @@
 
 #include "yaCollisionManager.h"
 #include "yaSceneManager.h"
+#include "yaUIManager.h"
 
 #include "yaPlayer.h"
 #include "yaImageObject.h"
@@ -24,6 +25,9 @@
 #include "yaWaterFront.h"
 
 #include "yaHeavyMachinegun.h"
+
+#include "yaUIInventory.h"
+#include "yaUIHp.h"
 
 namespace ya
 {
@@ -48,10 +52,6 @@ namespace ya
 		background->SetImage(L"Mission1_part1_background", L"Background\\part1\\2.7\\background.bmp");
 		background->SetPos({ 0.0f, -176.0f });
 
-		ImageObject* backgroundObject = ya::object::Instantiate<ImageObject>(eColliderLayer::Background);
-		backgroundObject->SetImage(L"Mission1_part1_backobject", L"Background\\part1\\2.7\\background_object.bmp");
-		backgroundObject->SetPos({ 0.0f, -10.0f });
-
 		PixelImageObject* backgroundPixel = ya::object::Instantiate<PixelImageObject>(eColliderLayer::Background_pixel);
 		backgroundPixel->SetImage(L"Mission1_part1_background_pixel", L"Background\\part1\\2.7\\background_pixel.bmp");
 		backgroundPixel->SetPos({ 0.0f, -10.0f });
@@ -61,13 +61,16 @@ namespace ya
 		Vector2 bgObjectPos = backgroundPixel->GetPos();
 
 		{ // object
+			ImageObject* backgroundObject = ya::object::Instantiate<ImageObject>(eColliderLayer::Background);
+			backgroundObject->SetImage(L"Mission1_part1_backobject", L"Background\\part1\\2.7\\background_object.bmp");
+			backgroundObject->SetPos({ 0.0f, -10.0f });
 
 			WaterObject* waterObject = ya::object::Instantiate<WaterObject>(eColliderLayer::Event);
 			
-			WaterBackground* waterBackground = ya::object::Instantiate<WaterBackground>(eColliderLayer::Background);
+			/*WaterBackground* waterBackground = ya::object::Instantiate<WaterBackground>(eColliderLayer::Background);
 			waterBackground->SetPos({ bgObjectPos.x + 710.0f, bgObjectPos.y + 431.0f + 35.0f });
 			WaterFront* waterFront = ya::object::Instantiate<WaterFront>(eColliderLayer::Background_front);
-			waterFront->SetPos({ bgObjectPos.x + 710.0f, bgObjectPos.y + 494.0f + 55.0f });
+			waterFront->SetPos({ bgObjectPos.x + 710.0f, bgObjectPos.y + 494.0f + 55.0f });*/
 
 			ImageObject* deadfish1 = ya::object::Instantiate<ImageObject>(eColliderLayer::Background);
 			deadfish1->SetImage(L"Mission1_part1_deadfish1", L"Background\\part1\\2.7\\deadfish1_background.bmp");
@@ -100,10 +103,21 @@ namespace ya
 		chewmein1->SetPos({ 1200.0f, 200.0f });
 		backgroundPixel->AddObject(chewmein1);
 
-		HeavyMachinegun* hm = ya::object::Instantiate<HeavyMachinegun>(eColliderLayer::Item);
-		hm->SetPos({ 400.0f, 400.0f });
+		HeavyMachinegun* hm1 = ya::object::Instantiate<HeavyMachinegun>(eColliderLayer::Item);
+		hm1->SetPos({ 400.0f, 400.0f });
+		
+		/*HeavyMachinegun* hm2 = ya::object::Instantiate<HeavyMachinegun>(eColliderLayer::Item);
+		hm2->SetPos({ 500.0f, 400.0f });*/
 
 		CameraWall* cameraWall = ya::object::Instantiate<CameraWall>(eColliderLayer::Event);
+
+		UIManager::Push(eUIType::INVENTORY);
+		UIInventory* inven = UIManager::GetUIInstant<UIInventory>(eUIType::INVENTORY);
+		inven->SetTarget(player);
+		
+		UIManager::Push(eUIType::HP);
+		UIHp* hp = UIManager::GetUIInstant<UIHp>(eUIType::HP);
+		hp->SetTarget(player);
 
 		Scene::Initialize();
 	}
@@ -120,6 +134,8 @@ namespace ya
 
 	void Mission1Scene::Enter()
 	{
+		UIManager::SetActive(true);
+
 		CollisionManager::SetLayer(eColliderLayer::Monster, eColliderLayer::Player, true);
 		CollisionManager::SetLayer(eColliderLayer::Monster, eColliderLayer::Player_Projecttile, true);
 		CollisionManager::SetLayer(eColliderLayer::Monster, eColliderLayer::Collider, true);

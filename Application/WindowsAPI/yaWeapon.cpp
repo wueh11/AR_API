@@ -3,6 +3,7 @@
 namespace ya
 {
 	Weapon::Weapon()
+		: Item()
 	{
 	}
 	Weapon::~Weapon()

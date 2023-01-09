@@ -65,6 +65,7 @@ namespace ya
 
 		Player* player = dynamic_cast<Player*>(GetOwner());
 		mMoveState = player->GetMoveState();
+		mControlState = player->GetControlState();
 
 		Vector2 pos = player->GetPos() + GetOffset();
 		
@@ -97,7 +98,7 @@ namespace ya
 
 	void PlayerLower::Render(HDC hdc)
 	{
-		if (mMoveState.bSit)
+		if (mMoveState.bSit || !mControlState.bAlive)
 			return;
 
 		/*Player* player = dynamic_cast<Player*>(GetOwner());
@@ -138,8 +139,7 @@ namespace ya
 			mAnimator->Play(L"WalkRight", true);
 		}
 
-		if (KEY_PRESS(eKeyCode::LEFT)
-			|| KEY_PRESS(eKeyCode::RIGHT))
+		if (KEY_PRESS(eKeyCode::LEFT) || KEY_PRESS(eKeyCode::RIGHT))
 		{
 			mState = State::WALK;
 			return;
@@ -161,8 +161,7 @@ namespace ya
 	}
 	void PlayerLower::Walk()
 	{
-		if (KEY_UP(eKeyCode::LEFT)
-			|| KEY_UP(eKeyCode::RIGHT))
+		if (KEY_UP(eKeyCode::LEFT) || KEY_UP(eKeyCode::RIGHT))
 		{
 			if (mMoveState.bLeft)
 				mAnimator->Play(L"IdleLeft", true, true);
@@ -190,6 +189,11 @@ namespace ya
 	{
 		if(!mMoveState.bJump)
 		{
+			if (mMoveState.bLeft)
+				mAnimator->Play(L"IdleLeft", true, true);
+			else
+				mAnimator->Play(L"IdleRight", true);
+
 			mState = State::IDLE;
 			return;
 		}
@@ -219,14 +223,20 @@ namespace ya
 
 	void PlayerLower::JumpMove()
 	{
+		if (KEY_UP(eKeyCode::LEFT) || KEY_UP(eKeyCode::RIGHT))
+		{
+			mState = State::JUMP;
+			return;
+		}
+
 		if (!mMoveState.bJump)
 		{
-			/*if ()
-				mAnimator->Play(L"IdleLeft", true, true);
+			if (mMoveState.bLeft)
+				mAnimator->Play(L"WalkLeft", true, true);
 			else
-				mAnimator->Play(L"IdleRight", true);*/
+				mAnimator->Play(L"WalkRight", true);
 
-			mState = State::IDLE;
+			mState = State::WALK;
 		}
 	}
 }

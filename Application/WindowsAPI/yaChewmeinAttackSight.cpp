@@ -62,9 +62,7 @@ namespace ya
 
 		owner->SetLeft(ownerPos.x >= targetPos.x);
 
-		//if(owner->GetState() == ya::Chewmein::eState::IDLE)
-
-		if (math::Random(0, 2) % 2 == 0)
+		if (ya::math::Random(2) == 0)
 			owner->SetState(ya::Chewmein::eState::ATTACK);
 		else
 			owner->SetState(ya::Chewmein::eState::WALK_BACK);
@@ -72,18 +70,18 @@ namespace ya
 
 	void ChewmeinAttackSight::OnCollisionStay(Collider* other)
 	{
-		mTime += 1.0f * Time::DeltaTime();
+		/*mTime += 1.0f * Time::DeltaTime();
 
 		if (mTime > 2.0f)
 		{
 			mTime = 0.0f;
 
 			Chewmein* owner = dynamic_cast<Chewmein*> (GetOwner());
-			if (math::Random(0, 2) % 2 == 0)
+			if (ya::math::Random(2) == 0)
 				owner->SetState(ya::Chewmein::eState::ATTACK);
 			else
 				owner->SetState(ya::Chewmein::eState::WALK_BACK);
-		}
+		}*/
 	}
 
 	void ChewmeinAttackSight::OnCollisionExit(Collider* other)

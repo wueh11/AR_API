@@ -36,7 +36,10 @@ namespace ya
 			SHOOT_DOWNSIDE,		// 17
 								   
 			KNIFE,				// 18
-			BOMB,				// 19
+			KNIFE_SIT,
+
+			BOMB,
+			BOMB_SIT,
 			
 			DIE,
 			REVIVAL,
@@ -57,7 +60,8 @@ namespace ya
 		virtual void OnCollisionExit(Collider* other);
 
 		void CreateAnimation();
-		
+		void Attacked();
+
 	public:
 		void Idle();
 		void Walk();
@@ -80,20 +84,30 @@ namespace ya
 		void Shoot();
 		
 		void Knife();
+		void KnifeSit();
+
 		void Bomb();
+		void BombSit();
 
 		void Die();
 		void Revival();
 
 	public:
-		//void OnIdle();
+		void OnIdle();
 		void OnWalk();
 		void OnSit();
 		void OnUpside();
 		void OnDownside();
+		void OnAttack();
+
+		void OnDie();
+
+		void ResetState();
+		void PickupArms();
 
 	private:
 		State mState;
+
 		ya::Player::MoveState mMoveState;
 		ya::Player::ControlState mControlState;
 		eArms mArms;

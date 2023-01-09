@@ -204,8 +204,8 @@ namespace ya::math
         return temp;
     }
 
-    inline int Random(int min, int max)
+    inline int Random(int max, int min = 0)
     {
-        return rand() % (max - min) + min;
+        return rand() % ((max - min) + min + 1);
     }
 }

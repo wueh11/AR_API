@@ -21,7 +21,8 @@
 namespace ya
 {
 	Chewmein::Chewmein()
-		: mState(eState::IDLE)
+		: Monster()
+		, mState(eState::IDLE)
 	{
 		SetName(L"Chewmein");
 		SetPos({ 600.0f, 200.0f });
@@ -29,13 +30,13 @@ namespace ya
 		SetSize({ 32.0f, 40.0f });
 
 		mSpeed = 300.0f;
-		mStatus.SetHp(30);
+		mStatus.SetHp(40);
 
 		{ // 애니메이션
 			if (mImage == nullptr)
-				mImage = Resources::Load<Image>(L"Chewmein", L"..\\Resources\\Image\\Monster\\chewmein.bmp");
+				mImage = Resources::Load<Image>(L"Chewmein", L"..\\Resources\\Image\\Monster\\Chewmein\\chewmein.bmp");
 
-			mAnimator = new Animator();
+			mAnimator = AddComponent<Animator>();
 
 			mAnimator->CreateAnimation(L"WalkLeft", mImage, Vector2(0.0f, 11.0f), Vector2(54.0f, 46.0f), Vector2(0.0f, -10.0f), 7, 0.1f);
 			mAnimator->CreateAnimation(L"WalkRight", mImage, Vector2(0.0f, 57.0f), Vector2(54.0f, 46.0f), Vector2(0.0f, -10.0f), 7, 0.1f);
@@ -49,11 +50,8 @@ namespace ya
 			mAnimator->CreateAnimation(L"AttackLeft", mImage, Vector2(0.0f, 357.0f), Vector2(76.0f, 52.0f), Vector2(-20.0f, -22.0f), 13, 0.06f);
 			mAnimator->CreateAnimation(L"AttackRight", mImage, Vector2(0.0f, 411.0f), Vector2(76.0f, 52.0f), Vector2(20.0f, -22.0f), 13, 0.06f);
 
-			mAnimator->GetCompleteEvent(L"AttackLeft") = std::bind(&Chewmein::OnIdle, this);
-			mAnimator->GetCompleteEvent(L"AttackRight") = std::bind(&Chewmein::OnIdle, this);
-
-			//mAnimator->GetCompleteEvent(L"AttackLeft") = std::bind(&Chewmein::OnAttackComplete, this);
-			//mAnimator->GetCompleteEvent(L"AttackRight") = std::bind(&Chewmein::OnAttackComplete, this);
+			mAnimator->GetCompleteEvent(L"AttackLeft") = std::bind(&Chewmein::OnAttackComplete, this);
+			mAnimator->GetCompleteEvent(L"AttackRight") = std::bind(&Chewmein::OnAttackComplete, this);
 			
 			mAnimator->CreateAnimation(L"AttackBubbleLeft", mImage, Vector2(0.0f, 479.0f), Vector2(57.0f, 46.0f), Vector2(0.0f, -12.0f), 4, 0.1f);
 			mAnimator->CreateAnimation(L"AttackBubbleRight", mImage, Vector2(0.0f, 526.0f), Vector2(57.0f, 46.0f), Vector2(0.0f, -12.0f), 4, 0.1f);
@@ -68,8 +66,6 @@ namespace ya
 			mAnimator->GetCompleteEvent(L"DieRight") = std::bind(&Chewmein::Death, this);
 
 			mAnimator->Play(L"WalkLeft", true);
-
-			AddComponent(mAnimator);
 		}
 
 		Scene* playScene = SceneManager::GetPlayScene();
@@ -81,10 +77,6 @@ namespace ya
 		ChewmeinAttackSight* attackSight = new ChewmeinAttackSight();
 		AddChild(attackSight);
 		playScene->AddGameObject(attackSight, eColliderLayer::Event);
-
-		/*mAttack = new ChewmeinAttack();
-		AddChild(mAttack);
-		playScene->AddGameObject(mAttack, eColliderLayer::Monster_Projecttile);*/
 	}
 
 	Chewmein::~Chewmein()
@@ -202,14 +194,13 @@ namespace ya
 		if (mMoveState.bLeft)
 		{
 			pos.x += mSpeed * Time::DeltaTime();
-			
-			if (pos.x > targetPos.x + 300.0f)
+			if (pos.x > targetPos.x + 270.0f)
 				mState = eState::WALK_FRONT;
 		}
 		else
 		{
 			pos.x -= mSpeed * Time::DeltaTime();
-			if (pos.x < targetPos.x - 300.0f)
+			if (pos.x < targetPos.x - 270.0f)
 				mState = eState::WALK_FRONT;
 		}
 
@@ -235,14 +226,6 @@ namespace ya
 		Scene* playScene = SceneManager::GetPlayScene();
 		AddChild(attack);
 		playScene->AddGameObject(attack, eColliderLayer::Monster_Projecttile);
-
-		Vector2 chewmeinPos = GetPos();
-		Vector2 chewmeinSize = GetSize() / 2.0f;
-
-		Vector2 attackSize = attack->GetSize() / 2.0f;
-		Vector2 attackPos = attack->GetPos();
-
-		Vector2 offset = { 0.0f, 0.0f };
 
 		mState = eState::IDLE;
 	}
@@ -288,10 +271,15 @@ namespace ya
 		else
 			mAnimator->Play(L"WalkRight", true, true);
 	}
+
 	void Chewmein::OnAttack()
 	{
 	}
+
 	void Chewmein::OnAttackComplete()
 	{
+		int a = 0;
+		WalkBack();
+		//mState = eState::WALK_FRONT;
 	}
 }

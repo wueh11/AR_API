@@ -21,7 +21,7 @@ namespace ya
 
 		{ // 애니메이션
 			if (mImage == nullptr)
-				mImage = Resources::Load<Image>(L"chewmein_projecttile", L"..\\Resources\\Image\\Monster\\chewmein_projecttile.bmp");
+				mImage = Resources::Load<Image>(L"chewmein_projecttile", L"..\\Resources\\Image\\Monster\\Chewmein\\chewmein_projecttile.bmp");
 
 			mAnimator = new Animator();
 			mAnimator->CreateAnimation(L"projecttile", mImage, Vector2(0.0f, 0.0f), Vector2(19.0f, 16.0f), Vector2(0.0f, 0.0f), 8, 0.08f);

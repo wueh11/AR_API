@@ -18,7 +18,7 @@ namespace ya
 {
 	Bullet::Bullet()
 		: mSpeed(800.0f)
-		, mAliveTime(5.0f)
+		, mAliveTime(1.0f)
 		, mDirection(Vector2::One)
 		, mImage(nullptr)
 	{
@@ -121,14 +121,12 @@ namespace ya
 
 	void Bullet::OnCollisionEnter(Collider* other)
 	{
-		//GameObject* gameObj = other->GetOwner();
 		Monster* monster = dynamic_cast<Monster*>(other->GetOwner());
+
 		if(monster != nullptr)
 		{
 			monster->SetHp(-10);
 		}
-
-		//gameObj->Death();
 
 		BulletEffect* effect = new BulletEffect();
 		Scene* playScene = SceneManager::GetPlayScene();

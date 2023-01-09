@@ -21,7 +21,7 @@ namespace ya
 
 		{ // 애니메이션
 			if (mImage == nullptr)
-				mImage = Resources::Load<Image>(L"GrenadeEffect", L"..\\Resources\\Image\\Projecttile\\grenadeEffect.bmp");
+				mImage = Resources::Load<Image>(L"GrenadeEffect", L"..\\Resources\\Image\\Projecttile\\grenade_effect.bmp");
 
 			mAnimator = new Animator();
 			mAnimator->CreateAnimation(L"GrenadeEffect", mImage, Vector2(0.0f, 0.0f), Vector2(50.0f, 106.0f), Vector2(0.0f, -100.0f), 27, 0.02f);

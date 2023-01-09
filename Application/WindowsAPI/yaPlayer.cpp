@@ -4,7 +4,7 @@
 #include "yaImage.h"
 #include "yaTime.h"
 #include "yaInput.h"
-//#include "yaCamera.h"
+#include "yaCamera.h"
 
 #include "yaAnimator.h"
 #include "yaCollider.h"
@@ -16,6 +16,8 @@
 
 #include "yaPlayerUpper.h"
 #include "yaPlayerLower.h"
+#include "yaPlayerKnifeSight.h"
+#include "yaPlayerKnife.h"
 #include "yaBullet.h"
 #include "yaGrenade.h"
 
@@ -46,13 +48,17 @@ namespace ya
 	{
 		Scene* playScene = SceneManager::GetPlayScene();
 
-		PlayerLower* lower = new PlayerLower();
-		AddChild(lower);
-		playScene->AddGameObject(lower, eColliderLayer::Player);
+		mLower = new PlayerLower();
+		AddChild(mLower);
+		playScene->AddGameObject(mLower, eColliderLayer::Player);
 
-		PlayerUpper* upper = new PlayerUpper();
-		AddChild(upper);
-		playScene->AddGameObject(upper, eColliderLayer::Player);
+		mUpper = new PlayerUpper();
+		AddChild(mUpper);
+		playScene->AddGameObject(mUpper, eColliderLayer::Player);
+		
+		PlayerKnifeSight* knifeSight = new PlayerKnifeSight();
+		AddChild(knifeSight);
+		playScene->AddGameObject(knifeSight, eColliderLayer::Player_Projecttile);
 
 
 		ColliderHorizontal* colliderH = new ColliderHorizontal();
@@ -64,14 +70,19 @@ namespace ya
 		playScene->AddGameObject(colliderV, eColliderLayer::Collider);
 
 		AddComponent(new Collider());
-		AddComponent(new Rigidbody());
+		mRigidbody = AddComponent<Rigidbody>();
 	}
 
 	void Player::Tick()
 	{
 		GameObject::Tick();
 
-		Rigidbody* rigidbody = GetComponent<Rigidbody>();
+		if (mMoveState.bJump && mRigidbody->isGround())
+		{
+			mMoveState.bJump = false;
+			mMoveState.bDownside = false;
+			mState = mBeforeState;
+		}
 
 		switch (mState)
 		{
@@ -82,7 +93,7 @@ namespace ya
 			Walk();
 			break;
 		case ya::Player::State::JUMP:
-			Jump(rigidbody);
+			Jump();
 			break;
 		case ya::Player::State::SIT:
 			Sit();
@@ -104,14 +115,6 @@ namespace ya
 		case ya::Player::State::SHOOT:
 			Shoot();
 			break;
-		case ya::Player::State::SHOOT_FRONT_UPSIDE:
-			break;
-		case ya::Player::State::SHOOT_UPSIDE:
-			ShootUpside();
-			break;
-		case ya::Player::State::SHOOT_DOWNSIDE:
-			ShootDownside();
-			break;
 		case ya::Player::State::KNIFE:
 			Knife();
 			break;
@@ -120,6 +123,9 @@ namespace ya
 			break;
 		case ya::Player::State::DIE:
 			Die();
+			break;
+		case ya::Player::State::REVIVAL:
+			Revival();
 			break;
 		case ya::Player::State::RESET:
 			Reset();
@@ -153,6 +159,10 @@ namespace ya
 		swprintf_s(szFloat, 50, strDownside.c_str());
 		TextOut(hdc, 600, 160, szFloat, strLen);
 
+		std::wstring strKnife = L"Knife : " + std::to_wstring(mMoveState.bKnife);
+		swprintf_s(szFloat, 50, strKnife.c_str());
+		TextOut(hdc, 600, 180, szFloat, strLen);
+
 		GameObject::Render(hdc);
 	}
 
@@ -170,7 +180,8 @@ namespace ya
 
 	void Player::Idle()
 	{
-		mMoveState.clear();
+		//mMoveState.Clear();
+		mBeforeState = State::IDLE;
 
 		if (KEY_PRESS(eKeyCode::LEFT) || KEY_PRESS(eKeyCode::RIGHT))
 		{
@@ -198,7 +209,10 @@ namespace ya
 
 		if (KEY_DOWN(eKeyCode::LCTRL))
 		{
-			mState = State::SHOOT;
+			if (mMoveState.bKnife)
+				mState = State::KNIFE;
+			else
+				mState = State::SHOOT;
 			return;
 		}
 
@@ -226,6 +240,7 @@ namespace ya
 	void Player::Walk()
 	{
 		mMoveState.bWalk = true;
+		mBeforeState = State::WALK;
 
 		Vector2 pos = GetPos();
 
@@ -248,7 +263,11 @@ namespace ya
 
 		if (KEY_DOWN(eKeyCode::LCTRL))
 		{
-			mState = State::SHOOT;
+			if (mMoveState.bKnife)
+				mState = State::KNIFE;
+			else
+				mState = State::SHOOT;
+			return;
 			return;
 		}
 
@@ -260,8 +279,7 @@ namespace ya
 
 		SetPos(pos);
 
-		if (KEY_UP(eKeyCode::LEFT)
-			|| KEY_UP(eKeyCode::RIGHT))
+		if (KEY_UP(eKeyCode::LEFT) || KEY_UP(eKeyCode::RIGHT))
 		{
 			mState = State::IDLE;
 			mMoveState.bWalk = false;
@@ -269,29 +287,34 @@ namespace ya
 		}
 	}
 
-	void Player::Jump(Rigidbody* rigidbody)
+	void Player::Jump()
 	{
 		if (!mMoveState.bJump)
 		{
-			Vector2 velocity = rigidbody->GetVelocity();
+			Vector2 velocity = mRigidbody->GetVelocity();
 			velocity.y = -560.0f;
-			rigidbody->SetVelocity(velocity);
-			rigidbody->SetGround(false);
+			mRigidbody->SetVelocity(velocity);
+			mRigidbody->SetGround(false);
+			
+			mMoveState.bJump = true;
 		}
 
-		mMoveState.bFall = (rigidbody->GetVelocity().y > 0);
+		mMoveState.bFall = (mRigidbody->GetVelocity().y > 0);
 
-		if (rigidbody->isGround())
+	/*	if (mRigidbody->isGround())
 		{
 			mMoveState.bJump = false;
 			mMoveState.bDownside = false;
-			mState = State::IDLE;
+			mState = mBeforeState;
 			return;
-		}
+		}*/
 
 		if (KEY_DOWN(eKeyCode::LCTRL))
 		{
-			mState = State::SHOOT;
+			if (mMoveState.bKnife)
+				mState = State::KNIFE;
+			else
+				mState = State::SHOOT;
 			return;
 		}
 
@@ -300,8 +323,6 @@ namespace ya
 			mState = State::BOMB;
 			return;
 		}
-
-		mMoveState.bJump = true;
 
 		if (KEY_PRESS(eKeyCode::LEFT) || KEY_PRESS(eKeyCode::RIGHT))
 		{
@@ -316,6 +337,7 @@ namespace ya
 
 	void Player::Sit()
 	{
+		mBeforeState = State::SIT;
 		mMoveState.bSit = true;
 
 		if (KEY_UP(eKeyCode::DOWN))
@@ -327,7 +349,10 @@ namespace ya
 
 		if (KEY_DOWN(eKeyCode::LCTRL))
 		{
-			mState = State::SHOOT;
+			if (mMoveState.bKnife)
+				mState = State::KNIFE;
+			else
+				mState = State::SHOOT;
 			return;
 		}
 
@@ -353,6 +378,7 @@ namespace ya
 
 	void Player::Upside()
 	{
+		mBeforeState = State::UPSIDE;
 		mMoveState.bUpside = true;
 
 		if (KEY_UP(eKeyCode::UP))
@@ -364,7 +390,7 @@ namespace ya
 
 		if (KEY_DOWN(eKeyCode::LCTRL))
 		{
-			mState = State::SHOOT_UPSIDE;
+			mState = State::SHOOT;
 			return;
 		}
 
@@ -389,6 +415,7 @@ namespace ya
 
 	void Player::Downside()
 	{
+		mBeforeState = State::DOWNSIDE;
 		mMoveState.bDownside = true;
 
 		if(!mMoveState.bJump)
@@ -407,7 +434,7 @@ namespace ya
 
 		if (KEY_DOWN(eKeyCode::LCTRL))
 		{
-			mState = State::SHOOT_DOWNSIDE;
+			mState = State::SHOOT;
 			return;
 		}
 
@@ -421,41 +448,19 @@ namespace ya
 	void Player::Shoot()
 	{
 		OnShoot();
-
-		mState = State::IDLE;
-	}
-
-	void Player::ShootFrontUpside()
-	{
-	}
-
-	void Player::ShootUpside()
-	{
-		OnShoot();
-
-		mState = State::UPSIDE;
-	}
-
-	void Player::ShootDownside()
-	{
-		OnShoot();
-
-		mState = State::DOWNSIDE;
+		mState = mBeforeState;
 	}
 
 	void Player::Knife()
 	{
-		if (KEY_UP(eKeyCode::LCTRL))
-		{
-			mState = State::IDLE;
-		}
+		OnKnife();
+		mState = mBeforeState;
 	}
 
 	void Player::Bomb()
 	{
 		OnBomb();
-
-		mState = State::IDLE;
+		mState = mBeforeState;
 	}
 
 	void Player::Die()
@@ -466,16 +471,39 @@ namespace ya
 
 		if (Time::Timer(L"die", 3.0f))
 		{
-			mControlState.bInvincible = false;
-			mControlState.bPlayable = true;
-			mControlState.bAlive = true;
-			mState = State::IDLE;                                                                                                                                                                                        
+			mState = State::REVIVAL;
+		}
+	}
+
+	void Player::Revival()
+	{
+		mControlState.bInvincible = false;
+		mControlState.bPlayable = true;
+		mControlState.bAlive = true;
+		mControlState.bRevival = true;
+
+		Collider* collider = GetComponent<Collider>();
+		collider->SetActive(true);
+
+		mInfo.arms = eArms::Pistol;
+		mInfo.armsCount = -1;
+		mInfo.bombCount = 10;
+
+		if (Time::Timer(L"revival", 0.2f))
+		{
+			mControlState.bRevival = false;
+			mState = State::IDLE;
 		}
 	}
 
 	void Player::Reset()
 	{
 		SetPos({ 150.0f, 200.0f });
+
+		//Camera::SetLookPosition();
+		mInfo.arms = eArms::Pistol;
+		mInfo.armsCount = -1;
+		mInfo.bombCount = 10;
 
 		mState = State::IDLE;
 	}
@@ -491,11 +519,6 @@ namespace ya
 		Vector2 playerSize = GetSize() / 2.0f;
 
 		Vector2 bulletSize = bullet->GetSize();
-
-		//mArmsDirection = math::Rotate(mArmsDirection, -10.0f);
-
-		/*if (mArmsDirection.y < 0.0f)
-			mArmsDirection = Vector2({ 1.0f, 0.0f });*/
 
 		mArmsDirection = Vector2({ 1.0f, 0.0f });
 
@@ -516,40 +539,67 @@ namespace ya
 			offset.x = 30.0f;
 
 		if (mMoveState.bSit)
-			offset.y = 10.0f;
+			offset.y = 0.0f;
 		else
 			offset.y = -20.0f;
 
 		bullet->SetPos(playerPos + playerSize - (bulletSize / 2.0f) + offset);
 		bullet->SetDirection(math::Rotate(mArmsDirection, dir));
+
+		if(mInfo.arms != eArms::Pistol)
+			mInfo.armsCount--;
+	}
+
+	void Player::OnKnife()
+	{
+		PlayerKnife* knife = new PlayerKnife();
+
+		Scene* playScene = SceneManager::GetPlayScene();
+		playScene->AddGameObject(knife, eColliderLayer::Player_Projecttile);
+
+		Vector2 playerPos = GetPos();
+		Vector2 playerSize = GetSize() / 2.0f;
+		Vector2 knifeSize = knife->GetSize();
+
+
+		Vector2 offset = Vector2::Zero;
+		if (mMoveState.bLeft)
+			offset.x = -60.0f;
+		else
+			offset.x = 60.0f;
+
+		knife->SetPos(playerPos + playerSize - (knifeSize / 2.0f) + offset);
 	}
 
 	void Player::OnBomb()
 	{
-		Grenade* grenade = new Grenade();
-
-		Scene* playScene = SceneManager::GetPlayScene();
-		playScene->AddGameObject(grenade, eColliderLayer::Player_Projecttile);
-
-		Vector2 playerPos = GetPos();
-		Vector2 playerSize = GetSize() / 2.0f;
-		Vector2 grenadeSize = grenade->GetSize();
+		if (mInfo.bombCount == 0)
+			return;
 		
-		mArmsDirection = Vector2({ 0.5f, -0.5f });
+		mInfo.bombCount--;
+		
+		{
+			Grenade* grenade = new Grenade();
 
-		float dir = 0.0f;
-		if (mMoveState.bLeft)
-			dir = 270.0f;
+			Scene* playScene = SceneManager::GetPlayScene();
+			playScene->AddGameObject(grenade, eColliderLayer::Player_Projecttile);
 
-		Vector2 offset = Vector2::Zero;
-		offset.x = -10.0f;
+			Vector2 playerPos = GetPos();
+			Vector2 playerSize = GetSize() / 2.0f;
+			Vector2 grenadeSize = grenade->GetSize();
 
-		grenade->SetPos(playerPos + playerSize - (grenadeSize / 2.0f) + offset);
-		grenade->SetDirection(math::Rotate(mArmsDirection, dir));
-	}
+			mArmsDirection = Vector2({ 0.5f, -0.5f });
 
-	void Player::OnWalk()
-	{
+			float dir = 0.0f;
+			if (mMoveState.bLeft)
+				dir = 270.0f;
+
+			Vector2 offset = Vector2::Zero;
+			offset.x = -10.0f;
+
+			grenade->SetPos(playerPos + playerSize - (grenadeSize / 2.0f) + offset);
+			grenade->SetDirection(math::Rotate(mArmsDirection, dir));
+		}
 	}
 
 	void Player::PickupArms(eArms arms, UINT bulletCount)
@@ -562,17 +612,13 @@ namespace ya
 		mInfo.arms = arms;
 	}
 
-	void Player::WalkComplete()
+	void Player::Attacked()
 	{
-		/*Effect* effect = new Effect();
+		mState = State::DIE;
 
-		Scene* playScene = SceneManager::GetPlayScene();
-		playScene->AddGameObject(effect, eColliderLayer::Player_Projecttile);
+		mUpper->Attacked();
 
-		Vector2 playerPos = GetPos();
-		Vector2 playerScale = GetScale();
-		Vector2 footprintScale = effect->GetScale();
-
-		effect->SetPos((playerPos + playerScale) - (footprintScale / 2.0f));*/
+		Collider* collider = GetComponent<Collider>();
+		collider->SetActive(false);
 	}
 }

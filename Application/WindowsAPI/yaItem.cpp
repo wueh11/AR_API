@@ -12,7 +12,8 @@
 namespace ya
 {
 	Item::Item()
-		: mImage(nullptr)
+		: GameObject()
+		, mImage(nullptr)
 		, mAnimator(nullptr)
 	{
 		mCollider = AddComponent<Collider>();
